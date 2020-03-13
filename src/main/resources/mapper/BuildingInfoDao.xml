@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.dao.BuildingInfoDao">
+	<select id="getallbuildinginfo" resultType="com.peizhiwei.community.entity.BuildingInfo">
+		SELECT build_id as buildId,build_number as buildNumber,build_layer as buildLayer,
+		build_sum_house as buildSumHouse,build_area as buildArea,build_end_time as buildEndTime,
+		build_start_time as buildStartTime
+		FROM building_info
+	</select>
+	<update id="changebuildinfo" parameterType="com.peizhiwei.community.entity.BuildingInfo">
+		UPDATE building_info
+		<set>
+			<if test="buildNumber!=null">build_number=#{buildNumber},</if>
+			<if test="buildLayer!=null">build_layer=#{buildLayer},</if>
+			<if test="buildSumHouse!=null">build_sum_house=#{buildSumHouse},</if>
+			<if test="buildArea!=null">build_area=#{buildArea},</if>
+			<if test="buildEndTime!=null">build_end_time=#{buildEndTime},</if>
+			<if test="buildStartTime!=null">build_start_time=#{buildStartTime}</if>
+		</set>
+		where build_id=#{buildId}
+	</update>
+	<delete id="deletebuildinfo">
+		DELETE FROM building_info WHERE build_id=#{buildId}
+	</delete>
+	<select id="selectbuildhouseisowner" parameterType="int" resultType="boolean">
+		select count(house_id) from house_info where house_state=1 and build_id=#{buildId}
+	</select>
+	<insert id="insertbuildinfo" parameterType="com.peizhiwei.community.entity.BuildingInfo" useGeneratedKeys="true" keyProperty="buildId">
+		INSERT INTO building_info(build_number,build_layer,build_sum_house,build_area,build_start_time,build_end_time) 
+		VALUES(#{buildNumber},#{buildLayer},#{buildSumHouse},#{buildArea},#{buildStartTime},#{buildEndTime})
+	</insert>
+	<insert id="inserthouseinfolist" parameterType="java.util.List">
+		insert into house_info(
+    		house_number,build_id,house_area,house_type_id,house_use_id,house_state
+   		)
+    	values
+    	<foreach collection="houseinfolist" item="item" index="index" separator=",">
+      	(
+      		#{item.houseNumber},#{item.buildInfo.buildId},#{item.houseArea},#{item.houseType.houseTypeId},#{item.houseUse.houseUseId},#{item.houseState}
+      	)
+    	</foreach>
+	</insert>
+</mapper>
