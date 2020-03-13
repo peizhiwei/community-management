@@ -47,7 +47,7 @@ public class BuildingInfoServiceImpl implements BuildingInfoService {
 		return flag;
 	}
 	/**
-	 * 删除一条楼栋信息
+	 * 删除一条楼栋信息,如果楼中有住户，则不能删除，如果没有住户，则同时删除所有属于盖楼的房间信息
 	 */
 	@Override
 	public boolean deletebuildinfoishouseowner(int buildId) {
@@ -59,6 +59,7 @@ public class BuildingInfoServiceImpl implements BuildingInfoService {
 			} else {
 				// 没有住户，可以删除
 				flag = true;
+				buildinginfodao.deletehouseinfoofbuild(buildId);
 				buildinginfodao.deletebuildinfo(buildId);
 			}
 		} catch (Exception e) {

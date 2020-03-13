@@ -1,9 +1,7 @@
 html,body {
     height: 100%;
 }
-body{
-    overflow-x: hidden;
-}
+
 .f1,.f2,.f3,.f4 {
     height: 100%;
 }

@@ -9,11 +9,12 @@
 <title>房间信息</title>
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../static/css/bootstrap-table.min.css" rel="stylesheet">
 </head>
 <body>
 	<div class="container-fluid" id="vue">
 		<div class="row-fluid">
-			<table class="table table-bordered table-hover text-center">
+			<table class="table table-bordered table-hover text-center" id="mytb">
 				<div>
 					<h1 style="text-align: center;">房间信息</h1>
 					<button type="button" class="btn btn-default" style="float:right;" data-toggle="modal" data-target="#myModal2">新增</button>
@@ -159,6 +160,8 @@
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 	<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
 	<script	src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+	<script src="../static/js/bootstrap-table.min.js"></script>
+	<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
 	<script>
 		var app = new Vue({
 			el : '#vue',

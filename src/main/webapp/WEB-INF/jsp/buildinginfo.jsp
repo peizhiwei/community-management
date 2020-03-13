@@ -280,7 +280,6 @@
 					var buildEndTime=$("#newendtime").val();
 					var houseArea=$("#housearea").val();
 					var houseType=$("#housetype").val();
-					console.log(buildNumber);
 					$.ajax({
 						type:'POST',
 						dataType:'JSON',

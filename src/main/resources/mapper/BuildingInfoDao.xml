@@ -42,4 +42,8 @@
       	)
     	</foreach>
 	</insert>
+	<!-- 删除房间信息 -->
+	<delete id="deletehouseinfoofbuild">
+		DELETE FROM house_info WHERE build_id=#{buildId}
+	</delete>
 </mapper>
