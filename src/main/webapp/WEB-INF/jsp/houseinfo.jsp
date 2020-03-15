@@ -14,11 +14,11 @@
 <body>
 	<div class="container-fluid" id="vue">
 		<div class="row-fluid">
+			<div>
+				<h1 style="text-align: center;">房间信息</h1>
+				<button type="button" class="btn btn-default" style="float:right;" data-toggle="modal" data-target="#myModal2">新增</button>
+			</div>
 			<table class="table table-bordered table-hover text-center" id="mytb">
-				<div>
-					<h1 style="text-align: center;">房间信息</h1>
-					<button type="button" class="btn btn-default" style="float:right;" data-toggle="modal" data-target="#myModal2">新增</button>
-				</div>
 				<thead>
 					<tr>
 						<th class="col-md-1 text-center">房间号</th>

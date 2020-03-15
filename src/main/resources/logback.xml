@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 	<!-- 定义参数常量 -->
 	<!-- TRACE<DEBUG<INFO<WARN<ERROR -->

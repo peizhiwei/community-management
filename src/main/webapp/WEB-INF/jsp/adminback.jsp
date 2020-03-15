@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class="col-xs-1s2 col-md-12 subpage">
-                        <iframe src="/community/in/buildinginfo" name="iframe_a" width="100%" height="100%" scrolling="yes"></iframe>
+                        <iframe src="/community/in/buildinginfo" name="iframe_a" width="100%" height="100%"></iframe>
                     </div>
             </div>
 

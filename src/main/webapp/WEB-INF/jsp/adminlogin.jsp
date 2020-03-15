@@ -23,7 +23,7 @@
           <input id="username" type="text" class="form-control">
         </div>
         <div class="form-group">
-          <h3>密&nbsp&nbsp&nbsp&nbsp码</h3>
+          <h3>密&nbsp;&nbsp;&nbsp;&nbsp;码</h3>
           <input id="password" type="password" class="form-control">
         </div>
       </div>

@@ -1,13 +1,11 @@
 package com.peizhiwei.community.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.peizhiwei.community.dao.HouseInfoDao;
-import com.peizhiwei.community.entity.BuildingInfo;
 import com.peizhiwei.community.entity.HouseInfo;
 import com.peizhiwei.community.entity.HouseType;
 import com.peizhiwei.community.service.HouseInfoService;

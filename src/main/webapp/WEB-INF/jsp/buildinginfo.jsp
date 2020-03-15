@@ -13,11 +13,11 @@
 <body>
 	<div class="container-fluid" id="vue">
 		<div class="row-fluid">
-			<table class="table table-bordered table-hover text-center">
 				<div>
 					<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
 					<h1 style="text-align: center;">楼栋信息</h1>
 				</div>
+			<table class="table table-bordered table-hover text-center">
 				<thead>
 					<tr>
 						<th class="col-md-1 text-center">编号</th>
