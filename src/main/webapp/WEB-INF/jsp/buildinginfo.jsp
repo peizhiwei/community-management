@@ -15,8 +15,8 @@
 		<div class="row-fluid">
 			<table class="table table-bordered table-hover text-center">
 				<div>
+					<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
 					<h1 style="text-align: center;">楼栋信息</h1>
-					<button type="button" class="btn btn-default" style="float:right;" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
 				</div>
 				<thead>
 					<tr>

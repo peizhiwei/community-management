@@ -10,11 +10,31 @@ public class HouseOwner {
 	private String ownerPassword;//密码
 	private String ownerName;//业主姓名
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
-	private Date ownerbirthday;//业主出生日期
+	private Date ownerBirthday;//业主出生日期
 	private String ownerIdCard;//业主身份证号码
 	private String ownerWorkPlace;//工作地点
 	private String ownerNativePlace;//籍贯
 	private int ownerSex;//性别
+	private HouseInfo houseInfo;
+	private BuildingInfo buildingInfo;
+	public Date getOwnerBirthday() {
+		return ownerBirthday;
+	}
+	public void setOwnerBirthday(Date ownerBirthday) {
+		this.ownerBirthday = ownerBirthday;
+	}
+	public BuildingInfo getBuildingInfo() {
+		return buildingInfo;
+	}
+	public void setBuildingInfo(BuildingInfo buildingInfo) {
+		this.buildingInfo = buildingInfo;
+	}
+	public HouseInfo getHouseInfo() {
+		return houseInfo;
+	}
+	public void setHouseInfo(HouseInfo houseInfo) {
+		this.houseInfo = houseInfo;
+	}
 	public Integer getOwnerId() {
 		return ownerId;
 	}
@@ -38,12 +58,6 @@ public class HouseOwner {
 	}
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
-	}
-	public Date getOwnerbirthday() {
-		return ownerbirthday;
-	}
-	public void setOwnerbirthday(Date ownerbirthday) {
-		this.ownerbirthday = ownerbirthday;
 	}
 	public String getOwnerIdCard() {
 		return ownerIdCard;

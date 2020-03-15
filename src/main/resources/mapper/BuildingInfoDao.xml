@@ -3,12 +3,15 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.peizhiwei.community.dao.BuildingInfoDao">
+	<!-- 查询所有楼栋信息 -->
 	<select id="getallbuildinginfo" resultType="com.peizhiwei.community.entity.BuildingInfo">
 		SELECT build_id as buildId,build_number as buildNumber,build_layer as buildLayer,
 		build_sum_house as buildSumHouse,build_area as buildArea,build_end_time as buildEndTime,
 		build_start_time as buildStartTime
 		FROM building_info
+		ORDER BY buildNumber
 	</select>
+	<!-- 更新楼栋信息 -->
 	<update id="changebuildinfo" parameterType="com.peizhiwei.community.entity.BuildingInfo">
 		UPDATE building_info
 		<set>
@@ -21,16 +24,20 @@
 		</set>
 		where build_id=#{buildId}
 	</update>
+	<!-- 删除楼栋信息 -->
 	<delete id="deletebuildinfo">
 		DELETE FROM building_info WHERE build_id=#{buildId}
 	</delete>
+	<!-- 根据楼栋id查询该栋楼是否有业主 -->
 	<select id="selectbuildhouseisowner" parameterType="int" resultType="boolean">
 		select count(house_id) from house_info where house_state=1 and build_id=#{buildId}
 	</select>
+	<!-- 新增楼栋信息 -->
 	<insert id="insertbuildinfo" parameterType="com.peizhiwei.community.entity.BuildingInfo" useGeneratedKeys="true" keyProperty="buildId">
 		INSERT INTO building_info(build_number,build_layer,build_sum_house,build_area,build_start_time,build_end_time) 
 		VALUES(#{buildNumber},#{buildLayer},#{buildSumHouse},#{buildArea},#{buildStartTime},#{buildEndTime})
 	</insert>
+	<!-- 批量增加房间信息 -->
 	<insert id="inserthouseinfolist" parameterType="java.util.List">
 		insert into house_info(
     		house_number,build_id,house_area,house_type_id,house_use_id,house_state

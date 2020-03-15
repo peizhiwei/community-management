@@ -25,11 +25,11 @@
 						<th class="col-md-1 text-center">楼栋</th>
 						<th class="col-md-1 text-center">业主</th>
 						<th class="col-md-1 text-center">面积(m²)</th>
-						<th class="col-md-1 text-center">房型</th>
+						<th class="col-md-2 text-center">房型</th>
 						<th class="col-md-1 text-center">用途</th>
 						<th class="col-md-1 text-center">状态</th>
 						<th class="col-md-2 text-center">入住时间</th>
-						<th class="col-md-3 text-center">操作</th>
+						<th class="col-md-2 text-center">操作</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -45,7 +45,6 @@
 						<td>
 							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#myModal1" @click="changeinfo(list.houseId,list.houseNumber,list.houseArea,list.houseType.houseTypeName,list.houseInTime)">修改</button>
-                            <button type="button" class="btn btn-danger btn-sm" @click="deleteinfo(list.buildId)">删除</button>
 						</td>
 					</tr>
 				</tbody>

@@ -133,7 +133,7 @@ public class BuildingInfoController {
 		JspResult rs = new JspResult();
 		BuildingInfo buildinginfo=new BuildingInfo();
 		List<HouseInfo> houseinfolist=new ArrayList<HouseInfo>();
-		HouseInfo houseinfo=new HouseInfo();
+		
 		List<HouseType> listhousetype=new ArrayList<HouseType>();
 		HouseType nhousetype=new HouseType();
 		HouseUse houseuse = new HouseUse();
@@ -146,11 +146,12 @@ public class BuildingInfoController {
 			buildinginfo.setBuildEndTime(buildEndTime);
 			if(buildinginfoservice.insertbuildinginfo(buildinginfo)==true) {
 				for(int i=0;i<buildSumHouse;i++) {//插入房间信息
+					HouseInfo houseinfo=new HouseInfo();//每次循环的时候都要重新new一个对象，否则list.add方法会将前面插入的数据覆盖掉，只保留最后一个
 					String num=String.format("%03d", i+1);
 					String housenumber=buildNumber+num;//拼接房间号
 					houseinfo.setHouseNumber(housenumber);
 					BuildingInfo buildinfo = new BuildingInfo();
-					buildinfo.setBuildId(buildinginfo.getBuildId());
+					buildinfo.setBuildId(buildinginfo.getBuildId());//获取刚插入的楼栋信息id
 					houseinfo.setBuildInfo(buildinfo);
 					houseinfo.setHouseArea(houseArea);
 					listhousetype= houseinfoservice.getallhousetype();

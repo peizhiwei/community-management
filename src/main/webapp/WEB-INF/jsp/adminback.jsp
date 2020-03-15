@@ -37,10 +37,10 @@
                                 data-toggle="collapse" data-parent="#accordion">业主信息管理</a></div>
                         <div id="community_manager2" class="collapse" style="margin-left: 50px;">
                             <div>
-                                <a href="../admin/wodexiaoqu.html" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">业主信息</a>
+                                <a href="/community/in/houseownerinfo" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">业主信息</a>
                             </div>
                             <div style="margin-top: 12px;">
-                                <a href="../admin/nidexiaoqu.html" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">家庭成员</a>
+                                <a href="/community/in/family" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">家庭成员</a>
                             </div>
                         </div>
                     </div>

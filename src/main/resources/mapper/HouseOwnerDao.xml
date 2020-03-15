@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.peizhiwei.community.dao.HouseOwnerDao">
+ 	<!-- 查询所有业主信息 -->
+ 	<select id="getallhouseownerinfo" resultType="com.peizhiwei.community.entity.HouseOwner">
+ 		SELECT house_owner.*,building_info.build_number as `buildingInfo.buildNumber`,house_info.house_number as `houseInfo.houseNumber`,house_info.house_state as `houseInfo.houseState`,house_info.house_id as `houseInfo.houseId`
+		FROM house_owner 
+		left join house_info on house_owner.house_id=house_info.house_id
+		left join building_info on house_info.build_id=building_info.build_id
+ 	</select>
+ 	<!-- 更新业主信息 -->
+ 	<update id="updatehouseownerinfo" parameterType="com.peizhiwei.community.entity.HouseOwner">
+ 		UPDATE house_owner
+		set owner_name=#{ownerName},owner_sex=#{ownerSex},owner_phone=#{ownerPhone},owner_birthday=#{ownerBirthday},owner_id_card=#{ownerIdCard},
+		owner_native_place=#{ownerNativePlace},owner_work_place=#{ownerWorkPlace}
+		where owner_id=#{ownerId}
+ 	</update>
+ 	<!-- 新增业主信息 -->
+ 	<insert id="inserthouseownerinfo" parameterType="com.peizhiwei.community.entity.HouseOwner" useGeneratedKeys="true" keyProperty="ownerId">
+ 		INSERT INTO house_owner(owner_phone,owner_password,owner_name,owner_birthday,
+ 		owner_id_card,owner_work_place,owner_native_place,owner_sex,house_id) 
+		VALUES(#{ownerPhone},#{ownerPassword},#{ownerName},#{ownerBirthday},
+		#{ownerIdCard},#{ownerWorkPlace},#{ownerNativePlace},#{ownerSex},#{houseInfo.houseId})
+ 	</insert>
+ </mapper>

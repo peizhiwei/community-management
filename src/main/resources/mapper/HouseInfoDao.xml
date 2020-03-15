@@ -3,18 +3,23 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.peizhiwei.community.dao.HouseInfoDao">
+	<!-- 查询所有的房间信息，并按房间号升序排序 -->
 	<select id="getallhouseinfo" resultType="com.peizhiwei.community.entity.HouseInfo">
-		SELECT h.*,b.build_number as `buildInfo.buildNumber`,o.owner_name as `houseOwner.ownerName`,
+		SELECT h.house_id as houseId,h.house_number as houseNumber,h.house_area as houseArea,h.house_in_time as houseInTime,h.house_state as houseState,
+				b.build_number as `buildInfo.buildNumber`,o.owner_name as `houseOwner.ownerName`,
 			   t.house_type_name as `houseType.houseTypeName`, u.house_use_name as `houseUse.houseUseName`
 		FROM house_info h
 		LEFT JOIN building_info b on h.build_id=b.build_id
 		LEFT JOIN house_owner o on h.owner_id=o.owner_id
 		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
 		LEFT JOIN house_use u on h.house_use_id=u.house_use_id
+		ORDER BY houseNumber
 	</select>
+	<!-- 查询所有房间用途 -->
 	<select id="getallhousetype" resultType="com.peizhiwei.community.entity.HouseType">
 		SELECT * FROM house_type
 	</select>
+	<!-- 更新房间信息 -->
 	<update id="updatehouseinfo" parameterType="com.peizhiwei.community.entity.HouseInfo">
 		UPDATE house_info,house_type
 		<set>
@@ -24,5 +29,20 @@
 			<if test="houseType.houseTypeId!=null">house_info.house_type_id=#{houseType.houseTypeId}</if>
 		</set>
 		where house_id=#{houseId}
+	</update>
+	<!-- 根据楼号查询所有房间信息 -->
+	<select id="getallhouseinfoofbuild" resultType="com.peizhiwei.community.entity.HouseInfo">
+		SELECT house_info.*
+		FROM house_info
+		LEFT JOIN building_info on house_info.build_id=building_info.build_id 
+		where building_info.build_number=#{buildNumber} and house_state=0
+	</select>
+	<!-- 根据房间号查询该房间的id -->
+	<select id="gethouseidaccordinghousenumber" resultType="int" parameterType="String">
+		SELECT house_id as houseId FROM house_info WHERE house_number=#{houseNumber}
+	</select>
+	<!-- 新增业主的时候在房间信息表中添加业主id,入住时间（默认为系统当前时间） -->
+	<update id="updatehouseinfoofownerid" parameterType="com.peizhiwei.community.entity.HouseInfo">
+		UPDATE house_info SET owner_id=#{houseOwner.ownerId},house_in_time=#{houseInTime},house_state=1 WHERE house_id=#{houseId}
 	</update>
 </mapper>

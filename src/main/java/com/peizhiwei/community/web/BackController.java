@@ -18,4 +18,8 @@ public class BackController {
 	private String houseownerinfo() {
 		return "/houseownerinfo";
 	}
+	@RequestMapping("/family")
+	private String family() {
+		return "/family";
+	}
 }

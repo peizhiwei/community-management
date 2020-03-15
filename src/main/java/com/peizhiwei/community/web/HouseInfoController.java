@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.peizhiwei.community.entity.BuildingInfo;
 import com.peizhiwei.community.entity.HouseInfo;
 import com.peizhiwei.community.entity.HouseType;
 import com.peizhiwei.community.entity.JspResult;
@@ -42,6 +43,18 @@ public class HouseInfoController {
 		List<HouseInfo> listhouseinfo = houseinfoservice.getallhouseinfo();
 		return listhouseinfo;
 	}
+	/**
+	 * 根据楼号，查询该楼所有的房间信息
+	 * @param buildNumber
+	 * @return
+	 */
+	@RequestMapping("getallhouseinfoofbuild")
+	@ResponseBody
+	public List<HouseInfo> getallhouseinfoofbuild(String buildNumber){
+		List<HouseInfo> listhouseinfoofbuild = houseinfoservice.getallhouseinfoofbuild(buildNumber);
+		return listhouseinfoofbuild;
+	}
+	
 	/**
 	 * 获取所有房型信息，并传递个jsp页面
 	 * @return
