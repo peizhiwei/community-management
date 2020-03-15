@@ -46,6 +46,14 @@ public class HouseOwnerController {
 		List<HouseOwner> listhouseownerinfo=houseownerservice.getallhouseownerinfo();
 		return listhouseownerinfo;
 	}
+	
+	@RequestMapping("/getallonlyhouseownername")
+	@ResponseBody
+	public List<HouseOwner> getallonlyhouseownername(){
+		List<HouseOwner> listonlyhouseownername = houseownerservice.getallonluhouseownername();
+		return listonlyhouseownername;
+	}
+	
 	/**
 	 * 更新业主信息
 	 * @param ownerId

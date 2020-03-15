@@ -15,6 +15,12 @@
 		LEFT JOIN house_use u on h.house_use_id=u.house_use_id
 		ORDER BY houseNumber
 	</select>
+	<!-- 根据业主名称查询所有的房间信息 -->
+	<select id="getallhouseinfoaccordingownername" resultType="com.peizhiwei.community.entity.HouseInfo" parameterType="String">
+		SELECT house_info.* FROM house_info
+		LEFT JOIN house_owner ON house_info.owner_id=house_owner.owner_id
+		WHERE house_owner.owner_name=#{ownerName}
+	</select>
 	<!-- 查询所有房间用途 -->
 	<select id="getallhousetype" resultType="com.peizhiwei.community.entity.HouseType">
 		SELECT * FROM house_type

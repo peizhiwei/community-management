@@ -24,4 +24,14 @@
 		VALUES(#{ownerPhone},#{ownerPassword},#{ownerName},#{ownerBirthday},
 		#{ownerIdCard},#{ownerWorkPlace},#{ownerNativePlace},#{ownerSex},#{houseInfo.houseId})
  	</insert>
+ 	<!-- 获取所有业主名称，去掉重复的 -->
+ 	<select id="getallonlyhouseownername" resultType="com.peizhiwei.community.entity.HouseOwner">
+ 		SELECT DISTINCT owner_name FROM house_owner
+ 	</select>
+ 	<!-- 根据房间号查询业主信息 -->
+ 	<select id="gethouseownerinfoaccordinghousenumber" parameterType="String" resultType="com.peizhiwei.community.entity.HouseOwner">
+ 		SELECT * FROM house_owner
+		LEFT JOIN house_info ON house_owner.owner_id=house_info.owner_id
+		WHERE house_info.house_number=#{houseNumber}
+ 	</select>
  </mapper>

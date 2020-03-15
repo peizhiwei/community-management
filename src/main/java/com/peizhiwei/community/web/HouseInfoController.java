@@ -43,6 +43,14 @@ public class HouseInfoController {
 		List<HouseInfo> listhouseinfo = houseinfoservice.getallhouseinfo();
 		return listhouseinfo;
 	}
+	
+	@RequestMapping("/getallhouseinfoaccordingownername")
+	@ResponseBody
+	public List<HouseInfo> getallhouseinfoaccordingownername(String ownerName){
+		List<HouseInfo> listhouseinfo = houseinfoservice.getallhouseinfoaccordingownername(ownerName);
+		return listhouseinfo;
+	}
+	
 	/**
 	 * 根据楼号，查询该楼所有的房间信息
 	 * @param buildNumber

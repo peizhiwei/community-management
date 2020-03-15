@@ -31,6 +31,20 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 	public void inserthouseownerinfo(HouseOwner houseownerinfo) {
 		houseownerdao.inserthouseownerinfo(houseownerinfo);
 	}
+	/**
+	 * 获取所有业主名称，去掉重复的
+	 */
+	@Override
+	public List<HouseOwner> getallonluhouseownername() {
+		List<HouseOwner> onluhouseownername = houseownerdao.getallonlyhouseownername();
+		return onluhouseownername;
+	}
+
+	@Override
+	public HouseOwner gethouseownerinfoaccordinghousenumber(String houseNumber) {
+		HouseOwner houseonwer = houseownerdao.gethouseownerinfoaccordinghousenumber(houseNumber);
+		return houseonwer;
+	}
 	
 
 }

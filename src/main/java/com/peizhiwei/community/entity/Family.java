@@ -1,5 +1,9 @@
 package com.peizhiwei.community.entity;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Family {
 	private Integer familyId;//家庭成员id
 	private String familyName;//家庭成员姓名
@@ -8,7 +12,15 @@ public class Family {
 	private String familyPhone;//电话，也是登录账号，可以为空
 	private String familyWorkPlace;//工作地点，可以为空
 	private String familyRelation;//与业主的关系
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	private Date familyBirthday;//出生日期
 	private HouseOwner houseOwner;//外键，业主
+	public Date getFamilyBirthday() {
+		return familyBirthday;
+	}
+	public void setFamilyBirthday(Date familyBirthday) {
+		this.familyBirthday = familyBirthday;
+	}
 	public Integer getFamilyId() {
 		return familyId;
 	}

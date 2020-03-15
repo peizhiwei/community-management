@@ -218,7 +218,6 @@
 			el : '#app',
 			data : {
 				listhouseownerinfo:[],//所有业主信息
-				infotomodal:[],
 				changeid:0,
 				listbuildinginfo:[],//所有的楼栋信息
 				listhouseinfoofbuild:[]//根据楼栋号查出的所有的房间信息

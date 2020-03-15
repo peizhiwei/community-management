@@ -68,5 +68,10 @@ public class HouseInfoServiceImpl implements HouseInfoService {
 	public void updatehouseinfoofownerid(HouseInfo houseinfo) {
 		houseinfodao.updatehouseinfoofownerid(houseinfo);
 	}
+	@Override
+	public List<HouseInfo> getallhouseinfoaccordingownername(String ownerName) {
+		List<HouseInfo> listhouseinfo = houseinfodao.getallhouseinfoaccordingownername(ownerName);
+		return listhouseinfo;
+	}
 
 }

@@ -7,7 +7,6 @@ package com.peizhiwei.community.service;
 
 import java.util.List;
 
-import com.peizhiwei.community.entity.BuildingInfo;
 import com.peizhiwei.community.entity.HouseInfo;
 import com.peizhiwei.community.entity.HouseType;
 
@@ -17,6 +16,10 @@ public interface HouseInfoService {
 	 * @return
 	 */
 	List<HouseInfo> getallhouseinfo();
+	/**
+	 * 根据业主名称查询所有的房间信息
+	 */
+	List<HouseInfo> getallhouseinfoaccordingownername(String ownerName);
 	/**
 	 * 获取所有房型信息
 	 * @return
