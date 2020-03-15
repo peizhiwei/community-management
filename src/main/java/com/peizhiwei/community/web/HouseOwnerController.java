@@ -110,26 +110,31 @@ public class HouseOwnerController {
 		HouseOwner houseownerinfo = new HouseOwner();
 		HouseInfo houseinfo= new HouseInfo();
 		JspResult rs = new JspResult();
-		houseownerinfo.setOwnerName(ownerName);
-		houseinfo.setHouseId(houseinfoservice.gethouseidaccordinghousenumber(houseNumber));
-		houseownerinfo.setHouseInfo(houseinfo);
+		try {
+			houseownerinfo.setOwnerName(ownerName);
+			houseinfo.setHouseId(houseinfoservice.gethouseidaccordinghousenumber(houseNumber));
+			houseownerinfo.setHouseInfo(houseinfo);
+			
+			houseownerinfo.setOwnerSex(ownerSex);
+			houseownerinfo.setOwnerPhone(ownerPhone);
+			houseownerinfo.setOwnerPassword("000000");
+			houseownerinfo.setOwnerBirthday(ownerBirthday);
+			houseownerinfo.setOwnerIdCard(ownerIdCard);
+			houseownerinfo.setOwnerNativePlace(ownerNativePlace);
+			houseownerinfo.setOwnerWorkPlace(ownerWorkPlace);
+			houseownerservice.inserthouseownerinfo(houseownerinfo);//添加业主
+			
+			HouseInfo updatehouseinfo= new HouseInfo();
+			updatehouseinfo.setHouseInTime(new Date());
+			updatehouseinfo.setHouseId(houseinfoservice.gethouseidaccordinghousenumber(houseNumber));
+			HouseOwner houseowner=new HouseOwner();
+			houseowner.setOwnerId(houseownerinfo.getOwnerId());//获取刚刚添加的业主id
+			updatehouseinfo.setHouseOwner(houseowner);
+			houseinfoservice.updatehouseinfoofownerid(updatehouseinfo);//添加业主时，在房间信息表中添加业主id,入住时间（默认为系统当前时间）
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		houseownerinfo.setOwnerSex(ownerSex);
-		houseownerinfo.setOwnerPhone(ownerPhone);
-		houseownerinfo.setOwnerPassword("000000");
-		houseownerinfo.setOwnerBirthday(ownerBirthday);
-		houseownerinfo.setOwnerIdCard(ownerIdCard);
-		houseownerinfo.setOwnerNativePlace(ownerNativePlace);
-		houseownerinfo.setOwnerWorkPlace(ownerWorkPlace);
-		houseownerservice.inserthouseownerinfo(houseownerinfo);//添加业主
-		
-		HouseInfo updatehouseinfo= new HouseInfo();
-		updatehouseinfo.setHouseInTime(new Date());
-		updatehouseinfo.setHouseId(houseinfoservice.gethouseidaccordinghousenumber(houseNumber));
-		HouseOwner houseowner=new HouseOwner();
-		houseowner.setOwnerId(houseownerinfo.getOwnerId());//获取刚刚添加的业主id
-		updatehouseinfo.setHouseOwner(houseowner);
-		houseinfoservice.updatehouseinfoofownerid(updatehouseinfo);//添加业主时，在房间信息表中添加业主id,入住时间（默认为系统当前时间）
 		rs.setFlag(true);
 		rs.setMsg("添加成功");
 		return rs;
