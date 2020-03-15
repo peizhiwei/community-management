@@ -134,7 +134,6 @@ public class HouseOwnerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		rs.setFlag(true);
 		rs.setMsg("Ìí¼Ó³É¹¦");
 		return rs;
