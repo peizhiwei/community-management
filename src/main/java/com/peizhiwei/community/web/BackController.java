@@ -22,4 +22,16 @@ public class BackController {
 	private String family() {
 		return "/family";
 	}
+	@RequestMapping("/parking")
+	private String parking() {
+		return "/parking";
+	}
+	@RequestMapping("/complaint")
+	private String complaint() {
+		return "/complaint";
+	}
+	@RequestMapping("/repair")
+	private String repair() {
+		return "/repair";
+	}
 }

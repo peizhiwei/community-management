@@ -1,5 +1,6 @@
 package com.peizhiwei.community.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,7 +11,7 @@ public class Parking {
 	private int parkingstate;//车位当前状态，1表示已售，0表示未售
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date parkingSellTime;//车位卖出时间，可以为空
-	private double parkingPrice;//车位出售价格
+	private BigDecimal parkingPrice;//车位出售价格
 	private HouseOwner houseOwner;
 	public Integer getParkingId() {
 		return parkingId;
@@ -36,10 +37,10 @@ public class Parking {
 	public void setParkingSellTime(Date parkingSellTime) {
 		this.parkingSellTime = parkingSellTime;
 	}
-	public double getParkingPrice() {
+	public BigDecimal getParkingPrice() {
 		return parkingPrice;
 	}
-	public void setParkingPrice(double parkingPrice) {
+	public void setParkingPrice(BigDecimal parkingPrice) {
 		this.parkingPrice = parkingPrice;
 	}
 	public HouseOwner getHouseOwner() {

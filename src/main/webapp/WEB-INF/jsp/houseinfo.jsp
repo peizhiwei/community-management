@@ -11,29 +11,31 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../static/css/bootstrap-table.min.css" rel="stylesheet">
 </head>
-<body>
+<body style="background-color: rgb(245,245,245)">
 	<div class="container-fluid" id="vue">
-		<div class="row-fluid">
+		<div class="row">
 			<div>
 				<h1 style="text-align: center;">房间信息</h1>
 				<button type="button" class="btn btn-default" style="float:right;" data-toggle="modal" data-target="#myModal2">新增</button>
 			</div>
-			<table class="table table-bordered table-hover text-center" id="mytb">
+			<table class="table table-bordered table-hover text-center col-md-12" id="mytb" style="background-color: white;">
 				<thead>
 					<tr>
-						<th class="col-md-1 text-center">房间号</th>
-						<th class="col-md-1 text-center">楼栋</th>
-						<th class="col-md-1 text-center">业主</th>
-						<th class="col-md-1 text-center">面积(m²)</th>
-						<th class="col-md-2 text-center">房型</th>
-						<th class="col-md-1 text-center">用途</th>
-						<th class="col-md-1 text-center">状态</th>
-						<th class="col-md-2 text-center">入住时间</th>
-						<th class="col-md-2 text-center">操作</th>
+						<th class="text-center">序号</th>
+						<th class="text-center">房间号</th>
+						<th class="text-center">楼栋</th>
+						<th class="text-center">业主</th>
+						<th class="text-center">面积(m²)</th>
+						<th class="text-center">房型</th>
+						<th class="text-center">用途</th>
+						<th class="text-center">状态</th>
+						<th class="text-center">入住时间</th>
+						<th class="text-center">操作</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="list in houseinfolist">
+					<tr v-for="(list,index) in houseinfolist">
+						<td>{{index+1}}</td>
 						<td>{{list.houseNumber}}</td>
 						<td>{{list.buildInfo.buildNumber}}</td>
 						<td>{{list.houseOwner==null?'':list.houseOwner.ownerName}}</td>

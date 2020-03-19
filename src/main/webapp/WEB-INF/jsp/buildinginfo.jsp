@@ -10,14 +10,14 @@
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body style="background-color: rgb(245,245,245)">
 	<div class="container-fluid" id="vue">
-		<div class="row-fluid">
+		<div class="row">
 				<div>
 					<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
 					<h1 style="text-align: center;">楼栋信息</h1>
 				</div>
-			<table class="table table-bordered table-hover text-center">
+			<table class="table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="col-md-1 text-center">编号</th>

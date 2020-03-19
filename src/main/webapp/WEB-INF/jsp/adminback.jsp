@@ -12,7 +12,7 @@
     <link href="../static/css/adminback.css" rel="stylesheet">
 </head>
 
-<body>
+<body style="overflow: hidden;">
     <div class="container-fluid f1">
         <div class="row f2">
             <div class="col-xs-2 col-md-2 f3">
@@ -42,6 +42,9 @@
                             <div style="margin-top: 12px;">
                                 <a href="/community/in/family" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">家庭成员</a>
                             </div>
+                            <div style="margin-top: 12px;">
+                                <a href="/community/in/parking" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">停车位</a>
+                            </div>
                         </div>
                     </div>
                     <div onclick="changecolor(this)">
@@ -49,17 +52,15 @@
                                 data-toggle="collapse" data-parent="#accordion">小区管理</a></div>
                         <div id="community_manager3" class="collapse" style="margin-left: 50px;">
                             <div>
-                                <a href="../admin/wodexiaoqu.html" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">我的小区</a>
+                                <a href="/community/in/complaint" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">投诉管理</a>
                             </div>
                             <div style="margin-top: 12px;">
-                                <a href="../admin/nidexiaoqu.html" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">你的小区</a>
+                                <a href="/community/in/repair" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">报修管理</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
             <div class="col-xs-10 col-md-10 f4">
                     <div class="col-xs-12 col-md-12 top">
                         <div class="col-xs-2 col-md-2"></div>
@@ -69,8 +70,8 @@
                             <a href="#" class="signout" style="text-decoration: none;">退出</a>
                         </div>
                     </div>
-                    <div class="col-xs-1s2 col-md-12 subpage">
-                        <iframe src="/community/in/buildinginfo" name="iframe_a" width="100%" height="100%"></iframe>
+                    <div class="col-xs-12 col-md-12 subpage" style="background-color: rgb(245,245,245)">
+                        <iframe src="/community/in/buildinginfo" name="iframe_a" width="100%" height="100%" frameborder="0" allowTransparency="true" style="background-color:#red;"></iframe>
                     </div>
             </div>
 
