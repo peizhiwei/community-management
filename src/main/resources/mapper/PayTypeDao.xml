@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.dao.PayTypeDao">
+	<!-- 获取所有收费类型 -->
+	<select id="getallpaytype" resultType="com.peizhiwei.community.entity.PayType">
+		select * from pay_type
+	</select>
+	<!-- 修改类别信息 -->
+	<update id="updatepaytypeinfo" parameterType="com.peizhiwei.community.entity.PayType">
+		update pay_type
+		set pay_type_name=#{payTypeName},pay_type_remarks=#{payTypeRemarks}
+		where pay_type_id=#{payTypeId}
+	</update>
+	<!-- 删除类别信息 -->
+	<delete id="deletepaytypeinfo" parameterType="int">
+		delete from pay_type
+		where pay_type_id=#{payTypeId}
+	</delete>
+	<!-- 新增收费类别信息 -->
+	<insert id="insertpaytypeinfo" parameterType="com.peizhiwei.community.entity.PayType">
+		INSERT INTO `pay_type`(`pay_type_name`, `pay_type_remarks`) 
+		VALUES (#{payTypeName},#{payTypeRemarks});
+	</insert>
+	<!-- 根据收费类别名称查询表中是否已存在 -->
+	<select id="selectpaytypename" parameterType="String" resultType="boolean">
+		select count(pay_type_id) from pay_type where pay_type_name=#{payTypeName}
+	</select>
+</mapper>

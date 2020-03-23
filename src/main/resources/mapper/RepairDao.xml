@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.dao.RepairDao">
+	<!-- 获取所有报修信息 -->
+	<select id="getallrepairinfo" resultType="com.peizhiwei.community.entity.Repair">
+		select r.*,h.owner_name as `houseOwner.ownerName`,h.owner_phone as `houseOwner.ownerPhone`,
+				i.house_number as `houseOwner.houseInfo.houseNumber`,a.admin_name as `admin.adminName`
+		from repair r
+		left join house_owner h on h.owner_id=r.owner_id
+		left join house_info i on i.house_id=h.house_id
+		left join admin a on a.admin_id=r.admin_id
+	</select>
+	<!-- 受理报修信息，添加受理人，修改状态为1，已受理 -->
+	<update id="acceptancerepair" parameterType="com.peizhiwei.community.entity.Repair">
+		UPDATE repair
+		SET admin_id=#{admin.adminId},repair_state=1
+		WHERE repair_id=#{repairId}
+	</update>
+	<!-- 已解决投诉信息，修改投诉状态为2已解决 -->
+	<update id="settledrepair" parameterType="com.peizhiwei.community.entity.Repair">
+		UPDATE repair
+		SET repair_state=2,repair_settle_time=#{repairSettleTime}
+		WHERE repair_id=#{repairId}
+	</update>
+	<!-- 根据投诉信息id获取受理人的id -->
+	<select id="getrepairinfo" resultType="int">
+		select admin_id as `admin.adminId` from repair
+		where repair_id=#{repairId}
+	</select>
+</mapper>

@@ -34,4 +34,16 @@ public class BackController {
 	private String repair() {
 		return "/repair";
 	}
+	@RequestMapping("/paytype")
+	private String paytype() {
+		return "/paytype";
+	}
+	@RequestMapping("/payinfo")
+	private String payinfo() {
+		return "/payinfo";
+	}
+	@RequestMapping("/paymethod")
+	private String paymethod() {
+		return "/paymethod";
+	}
 }

@@ -59,6 +59,21 @@
                             </div>
                         </div>
                     </div>
+                    <div onclick="changecolor(this)">
+                        <div class="manage"><a href="#community_manager4"
+                                data-toggle="collapse" data-parent="#accordion">缴费管理</a></div>
+                        <div id="community_manager4" class="collapse" style="margin-left: 50px;">
+                            <div>
+                                <a href="/community/in/paytype" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费类别</a>
+                            </div>
+                            <div style="margin-top: 12px;">
+                                <a href="/community/in/paymethod" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费方式</a>
+                            </div>
+                            <div style="margin-top: 12px;">
+                                <a href="/community/in/payinfo" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费信息</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-xs-10 col-md-10 f4">
