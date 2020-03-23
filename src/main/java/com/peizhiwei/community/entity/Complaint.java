@@ -2,10 +2,14 @@ package com.peizhiwei.community.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Complaint {
 	private Integer complaintId;
 	private String complaintReason;//投诉原因\投诉内容
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date complaintTime;//投诉时间
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date complaintSettleTime;//投诉解决时间
 	private int complaintState;//投诉状态，0未受理，1未解决(已受理)，2已解决
 	private HouseOwner houseOwner;//投诉人信息

@@ -67,7 +67,7 @@
                         <div class="col-xs-10 col-md-10">
                             <span>欢迎访问香溪花园小区管理系统，裴志伟</span>
                             <span style="margin-left: 50px;">当前为超级管理员</span>
-                            <a href="#" class="signout" style="text-decoration: none;">退出</a>
+                            <a href="#" class="signout" style="text-decoration: none;color: black;" onclick="sign_out()">退出</a>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12 subpage" style="background-color: rgb(245,245,245)">
@@ -86,6 +86,20 @@
             if(perDiv)perDiv.style.backgroundColor='';
             _this.style.backgroundColor='rgb(41,56,70)';
             perDiv=_this;
+        }
+        function sign_out(){
+        	$.ajax({
+				type:'POST',
+				dataType:'JSON',
+				url:'/community/admin/signout',
+				success:function(result){
+					console.log("why");
+					window.location.href=result.msg;
+				},
+				error:function(){
+					console.log("请求失败处理！");
+				}
+			});
         }
     </script>
 </body>

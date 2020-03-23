@@ -51,7 +51,6 @@
   	  				data:{"username":username,"password":password},
   	  				url:"/community/admin/checklogin",
   	  				type:"POST",
-  	  				async:false,
   	  				dataType:'json',
   	  				success:function(result){
   	  					if(result.flag==true){
