@@ -47,7 +47,7 @@
 							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#myModal1" @click="change(ownerlist.ownerId,ownerlist.ownerName,ownerlist.ownerSex,ownerlist.ownerPhone,
                                 ownerlist.ownerBirthday,ownerlist.ownerIdCard,ownerlist.ownerNativePlace,ownerlist.ownerWorkPlace)">修改</button>
-                            <button type="button" class="btn btn-danger btn-sm">迁出</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click="deleteowner(ownerlist.ownerId)">迁出</button>
 						</td>
 					</tr>
 				</tbody>
@@ -332,6 +332,22 @@
 						dataType : 'JSON',
 						data:{"ownerName":ownerName,"houseNumber":houseNumber,"ownerSex":ownerSex,"ownerPhone":ownerPhone,"ownerBirthday":ownerBirthday,
 							"ownerIdCard":ownerIdCard,"ownerNativePlace":ownerNativePlace,"ownerWorkPlace":ownerWorkPlace},
+						success : function(result) {
+							alert(result.msg);
+							app.get();
+						},
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
+				},
+				//业主迁出
+				deleteowner:function(ownerId){
+					$.ajax({
+						url : '/community/houseownerinfo/deleteowner',
+						type : 'POST',
+						dataType : 'JSON',
+						data:{"ownerId":ownerId},
 						success : function(result) {
 							alert(result.msg);
 							app.get();

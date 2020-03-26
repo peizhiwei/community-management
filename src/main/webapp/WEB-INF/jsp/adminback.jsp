@@ -85,10 +85,10 @@
             <div class="col-xs-10 col-md-10 f4">
                     <div class="col-xs-12 col-md-12 top">
                         <div class="col-xs-2 col-md-2"></div>
-                        <div class="col-xs-10 col-md-10">
+                        <div class="col-xs-10 col-md-10" style="border: black;">
                             <span>欢迎访问香溪花园小区管理系统，裴志伟</span>
                             <span style="margin-left: 50px;">当前为超级管理员</span>
-                            <a href="#" class="signout" style="text-decoration: none;color: black;" onclick="sign_out()">退出</a>
+                            <button type="button" class="btn btn-primary" style="margin-left: 400px" onclick="sign_out()">退出</button>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12 subpage" style="background-color: rgb(245,245,245)">
@@ -114,7 +114,6 @@
 				dataType:'JSON',
 				url:'/community/admin/signout',
 				success:function(result){
-					console.log("why");
 					window.location.href=result.msg;
 				},
 				error:function(){

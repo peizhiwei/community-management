@@ -75,7 +75,7 @@
 			<onMismatch>DENY</onMismatch>
 		</filter>
 	</appender>
-	<logger name="com.imooc.o2o" level="${log.level}" additivity="true">
+	<logger name="com.peizhiwei.community" level="${log.level}" additivity="true">
 		<appender-ref ref="debugAppender"/>
 		<appender-ref ref="infoAppender"/>
 		<appender-ref ref="errorAppender"/>

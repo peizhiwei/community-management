@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.admin.dao.PayInfoDao">
+	<!-- 获取所有的缴费信息 -->
+	<select id="getallpayinfo" resultType="com.peizhiwei.community.admin.entity.PayInfo">
+		SELECT i.*,t.pay_type_name as `payType.payTypeName`
+		FROM pay_info i
+		LEFT JOIN pay_type t ON t.pay_type_id=i.pay_type_id
+	</select>
+	<!-- 发布新的缴费信息 -->
+	<insert id="insertnewpayinfo" parameterType="com.peizhiwei.community.admin.entity.PayInfo" useGeneratedKeys="true" keyProperty="payInfoId">
+		INSERT INTO `pay_info`(`pay_type_id`, `pay_info_money`, `pay_info_start_time`, `pay_info_end_time`) 
+		VALUES (#{payType.payTypeId}, #{payInfoMoney}, #{payInfoStartTime}, #{payInfoEndTime});
+	</insert>
+	<!-- 发布信息的同时批量插入缴费详情 -->
+	<insert id="insertpayinfodetailslist" parameterType="java.util.List">
+		insert into pay_info_details(
+    		`pay_time`, `pay_state`, `owner_id`, `method_id`, `pay_info_id`
+   		)
+    	values
+    	<foreach collection="list" item="item" index="index" separator=",">
+      	(
+      		#{item.payTime},#{item.payState},#{item.houseOwner.ownerId},#{item.payMethod.methodId},#{item.payInfo.payInfoId}
+      	)
+    	</foreach>
+	</insert>
+	<!-- 删除缴费信息 -->
+	<delete id="deletepayinfo" parameterType="int">
+		delete from `pay_info`
+		where `pay_info_id`=#{payInfoId}
+	</delete>
+	<!-- 删除缴费信息时，同时删除缴费详情 -->
+	<delete id="deletepaydetailsofpayinfo" parameterType="int">
+		delete from `pay_info_details`
+		where `pay_info_id`=#{payInfoId}
+	</delete>
+	<!-- 修改缴费信息 -->
+	<update id="updatepayinfo" parameterType="com.peizhiwei.community.admin.entity.PayInfo">
+		UPDATE `pay_info` 
+		SET `pay_type_id` = #{payType.payTypeId}, `pay_info_money` = #{payInfoMoney}, `pay_info_end_time` = #{payInfoEndTime} 
+		WHERE `pay_info_id` = #{payInfoId}
+	</update>
+</mapper>

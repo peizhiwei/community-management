@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>缴费详情</title>
+    <title>汇总</title>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   </head>
@@ -14,7 +14,7 @@
     <div class="container-fluid" id="app">
 		<div class="row">
 			<div>
-				<h1 style="text-align: center;">缴费详情</h1>
+				<h1 style="text-align: center;">汇总</h1>
 			</div>
 			<table class="col-xs-12 col-sm-12 col-md-12 table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>

@@ -13,7 +13,6 @@
   <body style="background-color: rgb(245,245,245)">
     <div class="container-fluid" id="app">
 		<div class="row">
-			<h1>投诉页面</h1>
 			<div>
 				<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
 				<h1 style="text-align: center;">投诉信息</h1>
@@ -79,7 +78,7 @@
     			get:function(){
     				$.ajax({
     					url:'/community/complaintinfo/getallcomplaintinfo',
-    					type:'GET',
+    					type:'POST',
     					dataType:'JSON',
     					success:function(result){
     						app.listcomplaintinfo=result;

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.admin.dao.ParkingDao">
+	<!-- 获取所有停车位信息 -->
+	<select id="getallparkinginfo" resultType="com.peizhiwei.community.admin.entity.Parking">
+		select parking.*,house_owner.owner_name as `houseOwner.ownerName`,
+				house_owner.owner_phone as `houseOwner.ownerPhone`,house_info.house_number as `houseOwner.houseInfo.houseNumber`
+		from parking
+		left join house_owner on parking.owner_id=house_owner.owner_id
+		left join house_info on house_info.owner_id=house_owner.owner_id
+	</select>
+	<!-- 查询当前停车位编号最大的一个 -->
+	<select id="getparkinginfomaxparkingnumber" resultType="String">
+		SELECT MAX(parking_number) FROM parking
+	</select>
+	<!-- 更新停车位业主 -->
+	<update id="updateparkinginfo" parameterType="com.peizhiwei.community.admin.entity.Parking">
+		UPDATE parking
+		set owner_id=#{houseOwner.ownerId},parking_sell_time=#{parkingSellTime}
+		where parking_id=#{parkingId}
+	</update>
+	<!-- 调整停车位价格 -->
+	<update id="updateparkingprice" parameterType="com.peizhiwei.community.admin.entity.Parking">
+		update parking
+		set parking_price=#{parkingPrice}
+		where parking_id=#{parkingId}
+	</update>
+	<!-- 出售停车位，更新该停车位信息 -->
+	<update id="sellupdateparkinginfo" parameterType="com.peizhiwei.community.admin.entity.Parking">
+		UPDATE parking
+		set owner_id=#{houseOwner.ownerId},parking_sell_time=#{parkingSellTime},parking_price=#{parkingPrice},parking_state=1
+		where parking_id=#{parkingId}
+	</update>
+	<!-- 收回停车位 -->
+	<update id="takebackupdateparkinginfo" parameterType="com.peizhiwei.community.admin.entity.Parking">
+		UPDATE parking
+		set owner_id=null,parking_sell_time=null,parking_state=0
+		where parking_id=#{parkingId}
+	</update>
+	<!-- 根据业主id收回该业主的车位 -->
+	<update id="takebackownerofparking" parameterType="int">
+		UPDATE parking
+		SET `owner_id` = null, `parking_state` = 0, `parking_sell_time` = null
+		WHERE owner_id=#{ownerId}
+	</update>
+	<!-- 批量增加停车位信息 -->
+	<insert id="insertparkinginfo" parameterType="com.peizhiwei.community.admin.entity.Parking">
+		insert into parking(
+    		parking_number,parking_price
+   		)
+    	values
+    	<foreach collection="parkinglist" item="item" index="index" separator=",">
+      	(
+      		#{item.parkingNumber},#{item.parkingPrice}
+      	)
+    	</foreach>
+	</insert>
+</mapper>

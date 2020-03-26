@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.admin.dao.FamilyDao">
+	<!-- 查询所有家庭成员信息 -->
+	<select id="getallfamilyinfo" resultType="com.peizhiwei.community.admin.entity.Family">
+		SELECT family.*,house_owner.owner_name as `houseOwner.ownerName`,house_info.house_number as `houseOwner.houseInfo.houseNumber` FROM family
+		LEFT JOIN house_owner ON family.owner_id=house_owner.owner_id
+		LEFT JOIN house_info ON house_owner.house_id=house_info.house_id
+	</select>
+	<!-- 更改家庭成员信息 -->
+	<update id="updatefamilyinfo" parameterType="com.peizhiwei.community.admin.entity.Family">
+		UPDATE family
+		set family_name=#{familyName},family_sex=#{familySex},family_phone=#{familyPhone},family_birthday=#{familyBirthday},family_relation=#{familyRelation},
+		family_native_place=#{familyNativePlace},family_work_place=#{familyWorkPlace}
+		where family_id=#{familyId}
+	</update>
+	<!-- 新增家庭成员 -->
+	<insert id="insertfamilyinfo" parameterType="com.peizhiwei.community.admin.entity.Family">
+		INSERT INTO family(family_name,family_sex,family_native_place,family_phone,family_work_place,family_relation,family_birthday,owner_id) 
+		VALUES(#{familyName},#{familySex},#{familyNativePlace},#{familyPhone},#{familyWorkPlace},#{familyRelation},#{familyBirthday},#{houseOwner.ownerId})
+	</insert>
+	<!-- 删除家庭成员信息 -->
+	<delete id="deletefamilyinfo" parameterType="int">
+		delete from family where family_id=#{familyId} 
+	</delete>
+	<!-- 业主迁出时删除家庭成员信息 -->
+	<delete id="deletefamilyofowner" parameterType="int">
+		delete from family
+		where owner_id=#{ownerId}
+	</delete>
+</mapper>
