@@ -38,9 +38,9 @@ public class BackController {
 	private String paytype() {
 		return "/paytype";
 	}
-	@RequestMapping("/payinfo")
+	@RequestMapping("/payinfodetails")
 	private String payinfo() {
-		return "/payinfo";
+		return "/payinfodetails";
 	}
 	@RequestMapping("/paymethod")
 	private String paymethod() {

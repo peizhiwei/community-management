@@ -72,6 +72,12 @@
                             <div style="margin-top: 12px;">
                                 <a href="/community/in/payinfo" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费信息</a>
                             </div>
+                            <div style="margin-top: 12px;">
+                                <a href="/community/in/payinfodetails" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费详情</a>
+                            </div>
+                            <div style="margin-top: 12px;">
+                                <a href="/community/in/payinfosummary" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">汇总</a>
+                            </div>
                         </div>
                     </div>
                 </div>
