@@ -98,4 +98,18 @@ public class ComplaintController {
 		}
 		return rs;
 	}
+	/**
+	 * 根据投诉信息id删除投诉信息
+	 * @param complaintId
+	 * @return
+	 */
+	@RequestMapping("/deletecomplaint")
+	@ResponseBody
+	public JspResult deletecomplaint(Integer complaintId) {
+		JspResult rs = new JspResult();
+		complaintservice.deletecomplaint(complaintId);
+		rs.setFlag(true);
+		rs.setMsg("删除成功！");
+		return rs;
+	}
 }

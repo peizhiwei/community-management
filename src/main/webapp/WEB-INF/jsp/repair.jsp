@@ -52,9 +52,10 @@
 						<td>{{list.repairSettleTime==null?'':list.repairSettleTime}}</td>
 						<td>
 							<button type="button" class="btn btn-primary btn-sm" @click="Acceptance(list.repairId)" v-if="list.repairState==0">受理</button>
-							<button type="button" class="btn btn-primary btn-sm" @click="Acceptance(list.repairId)" disabled="disabled" v-else>受理</button>
+							<button type="button" class="btn btn-primary btn-sm" disabled="disabled" v-else>受理</button>
                             <button type="button" class="btn btn-success btn-sm" @click="settled(list.repairId)" v-if="list.repairState==1">已解决</button>
-                            <button type="button" class="btn btn-success btn-sm" @click="settled(list.repairId)" disabled="disabled" v-else>已解决</button>
+                            <button type="button" class="btn btn-success btn-sm" disabled="disabled" v-else>已解决</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click="deleterepair(list.repairId)">删除</button>
 						</td>
 					</tr>
 				</tbody>
@@ -109,6 +110,22 @@
     			settled:function(repairId){
     				$.ajax({
     					url:'/community/repairinfo/settled',
+    					type:'POST',
+    					dataType:'JSON',
+    					data:{"repairId":repairId},
+    					success:function(result){
+    						alert(result.msg);
+    						app.get();
+    					},
+    					error:function(){
+    						console.log("请求失败处理");
+    					}
+    				});
+    			},
+    			//根据报修id删除报修信息
+    			deleterepair:function(repairId){
+    				$.ajax({
+    					url:'/community/repairinfo/deleterepair',
     					type:'POST',
     					dataType:'JSON',
     					data:{"repairId":repairId},

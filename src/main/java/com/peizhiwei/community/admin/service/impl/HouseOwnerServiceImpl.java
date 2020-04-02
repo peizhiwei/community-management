@@ -11,7 +11,11 @@ import com.peizhiwei.community.admin.dao.HouseInfoDao;
 import com.peizhiwei.community.admin.dao.HouseOwnerDao;
 import com.peizhiwei.community.admin.dao.ParkingDao;
 import com.peizhiwei.community.admin.entity.HouseOwner;
+import com.peizhiwei.community.admin.service.ComplaintService;
 import com.peizhiwei.community.admin.service.HouseOwnerService;
+import com.peizhiwei.community.admin.service.PayInfoDetailsService;
+import com.peizhiwei.community.admin.service.PayInfoSumService;
+import com.peizhiwei.community.admin.service.RepairService;
 @Service
 public class HouseOwnerServiceImpl implements HouseOwnerService {
 	@Autowired
@@ -22,6 +26,14 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 	ParkingDao parkingdao;
 	@Autowired
 	HouseInfoDao houseinfodao;
+	@Autowired
+	ComplaintService complaintservice;
+	@Autowired
+	RepairService repairservice;
+	@Autowired
+	PayInfoDetailsService payinfodetailsservice;
+	@Autowired
+	PayInfoSumService payinfosumservice;
 	
 	/**
 	 * 获取所有业主信息
@@ -65,6 +77,10 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 			familydao.deletefamilyofowner(ownerId);//先删除该业主的家庭成员信息
 			parkingdao.takebackownerofparking(ownerId);//收回该业主的停车位信息
 			houseinfodao.updatehouseinfoofowner(ownerId);//将房间信息中该业主的id置为空，入住时间为空，状态置为0待售
+			complaintservice.deletecomplaintofowner(ownerId);//删除该业主的所有投诉信息
+			repairservice.deleterepairofowner(ownerId);//删除该业主的偶有报修信息
+			payinfodetailsservice.deletepayinfodetailsofowner(ownerId);//删除改业主的所有缴费信息
+			payinfosumservice.deletepayinfosumofowner(ownerId);//删除该业主的缴费汇总信息
 			houseownerdao.deleteowner(ownerId);//删除业主
 		} catch (Exception e) {
 			e.printStackTrace();

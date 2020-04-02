@@ -14,7 +14,7 @@
     <div class="container-fluid" id="app">
 		<div class="row">
 			<div>
-				<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
+				<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2">新增</button>
 				<h1 style="text-align: center;">停车位信息</h1>
 			</div>
 			<table class="table table-bordered table-hover text-center" style="background-color: white;">

@@ -23,8 +23,8 @@
 							<input type="checkbox" value="">
 						</th>
 						<th class="text-center">序号</th>
-						<th class="text-center">业主</th>
 						<th class="text-center">房间号</th>
+						<th class="text-center">业主</th>
 						<th class="text-center">缴费项目</th>
 						<th class="text-center">金额(元)</th>
 						<th class="text-center">发布时间</th>
@@ -41,8 +41,8 @@
 							<input type="checkbox" value="">
 						</td>
 						<td>{{index+1}}</td>
-						<td>{{list.houseOwner.ownerName}}</td>
 						<td>{{list.houseOwner.houseInfo.houseNumber}}</td>
+						<td>{{list.houseOwner.ownerName}}</td>
 						<td>{{list.payInfo.payType.payTypeName}}</td>
 						<td>{{list.payInfo.payInfoMoney}}</td>
 						<td>{{list.payInfo.payInfoStartTime}}</td>

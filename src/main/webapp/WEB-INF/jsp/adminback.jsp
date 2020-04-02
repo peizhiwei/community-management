@@ -21,63 +21,76 @@
                 </div>
                 <div class="accordion" id="accordion">
                     <div onclick="changecolor(this)">
-                        <div class="manage"><a href="#community_manager"
-                                data-toggle="collapse" data-parent="#accordion">楼房信息管理</a></div>
-                        <div id="community_manager" class="collapse" style="margin-left: 50px;">
-                            <div>
-                                <a href="/community/in/buildinginfo" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">楼栋信息</a>
+                        <div class="manage"><a href="#community_manager" data-toggle="collapse" data-parent="#accordion">楼房信息管理</a></div>
+                        <div id="community_manager" class="collapse">
+                        	<div style="width: 5px;height:100%;background-color: rgb(25,170,141);color: rgb(25,170,141);float: left"></div>
+                        	<div style="margin-left: 50px;">
+                        		<div>
+                                	<a href="/community/in/buildinginfo" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">楼栋信息</a>
+                           	 	</div>
+	                            <div style="margin-top: 12px;">
+	                                <a href="/community/in/houseinfo" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">房间信息</a>
+	                            </div>
                             </div>
-                            <div style="margin-top: 12px;">
-                                <a href="/community/in/houseinfo" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">房间信息</a>
-                            </div>
+                            
                         </div>
                     </div>
                     <div onclick="changecolor(this)">
-                        <div class="manage"><a href="#community_manager2"
-                                data-toggle="collapse" data-parent="#accordion">业主信息管理</a></div>
-                        <div id="community_manager2" class="collapse" style="margin-left: 50px;">
-                            <div>
-                                <a href="/community/in/houseownerinfo" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">业主信息</a>
-                            </div>
-                            <div style="margin-top: 12px;">
-                                <a href="/community/in/family" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">家庭成员</a>
-                            </div>
-                            <div style="margin-top: 12px;">
-                                <a href="/community/in/parking" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">停车位</a>
-                            </div>
+                        <div class="manage"><a href="#community_manager2" data-toggle="collapse" data-parent="#accordion">业主信息管理</a></div>
+                        <div id="community_manager2" class="collapse">
+                        	<div style="width: 5px;height:100%;background-color: rgb(25,170,141);color: rgb(25,170,141);float: left"></div>
+                       		<div style="margin-left: 50px;">
+                       			<div>
+                               		<a href="/community/in/houseownerinfo" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">业主信息</a>
+	                           	</div>
+	                            <div style="margin-top: 12px;">
+	                                <a href="/community/in/family" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">家庭成员</a>
+	                            </div>
+	                            <div style="margin-top: 12px;">
+	                                <a href="/community/in/parking" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">停车位</a>
+	                            </div>
+                       		</div>
+                       		
                         </div>
                     </div>
                     <div onclick="changecolor(this)">
-                        <div class="manage"><a href="#community_manager3"
-                                data-toggle="collapse" data-parent="#accordion">小区管理</a></div>
-                        <div id="community_manager3" class="collapse" style="margin-left: 50px;">
-                            <div>
-                                <a href="/community/in/complaint" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">投诉管理</a>
-                            </div>
-                            <div style="margin-top: 12px;">
-                                <a href="/community/in/repair" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">报修管理</a>
-                            </div>
-                        </div>
+                        <div class="manage"><a href="#community_manager3" data-toggle="collapse" data-parent="#accordion">小区管理</a></div>
+                            
+                     		<div id="community_manager3" class="collapse">
+                     			<div style="width: 5px;height:100%;background-color: rgb(25,170,141);color: rgb(25,170,141);float: left"></div>
+                           		<div style="margin-left: 50px;">
+                           			<div>
+                               			<a href="/community/in/complaint" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">投诉管理</a>
+	                           		</div>
+	                           		<div style="margin-top: 12px;">
+	                               		<a href="/community/in/repair" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">报修管理</a>
+	                           		</div>
+                           		</div>
+                    		</div>
                     </div>
                     <div onclick="changecolor(this)">
-                        <div class="manage"><a href="#community_manager4"
-                                data-toggle="collapse" data-parent="#accordion">缴费管理</a></div>
-                        <div id="community_manager4" class="collapse" style="margin-left: 50px;">
-                            <div>
-                                <a href="/community/in/paytype" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费类别</a>
+                        <div class="manage"><a href="#community_manager4" data-toggle="collapse" data-parent="#accordion">缴费管理</a></div>
+                        
+                        <div id="community_manager4" class="collapse">
+                        	<div style="width: 5px;height:100%;background-color: rgb(25,170,141);color: rgb(25,170,141);float: left"></div>
+                            <div style="margin-left: 50px;">
+                            	<div>
+	                                <a href="/community/in/paytype" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">缴费类别</a>
+	                            </div>
+	                            <div style="margin-top: 12px;">
+	                                <a href="/community/in/paymethod" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">缴费方式</a>
+	                            </div>
+	                            <div style="margin-top: 12px;">
+	                                <a href="/community/in/payinfo" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">缴费信息</a>
+	                            </div>
+	                            <div style="margin-top: 12px;">
+	                                <a href="/community/in/payinfodetails" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">缴费详情</a>
+	                            </div>
+	                            <div style="margin-top: 12px;">
+	                                <a href="/community/in/payinfosummary" target="iframe_a" style="color: rgb(167,177,194);text-decoration: none;">汇总</a>
+	                            </div>
                             </div>
-                            <div style="margin-top: 12px;">
-                                <a href="/community/in/paymethod" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费方式</a>
-                            </div>
-                            <div style="margin-top: 12px;">
-                                <a href="/community/in/payinfo" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费信息</a>
-                            </div>
-                            <div style="margin-top: 12px;">
-                                <a href="/community/in/payinfodetails" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">缴费详情</a>
-                            </div>
-                            <div style="margin-top: 12px;">
-                                <a href="/community/in/payinfosummary" target="iframe_a" style="color: rgb(206, 212, 218);text-decoration: none;">汇总</a>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

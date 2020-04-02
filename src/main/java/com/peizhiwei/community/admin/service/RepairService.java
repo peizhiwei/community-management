@@ -26,4 +26,14 @@ public interface RepairService {
 	 * @return
 	 */
 	int getrepairinfo(int repairId);
+	/**
+	 * 根据报修信息的id删除报修信息
+	 * @param repairId
+	 */
+	void deleterepair(int repairId);
+	/**
+	 * 根据业主id删除该业主的所有报修信息
+	 * @param ownerId
+	 */
+	void deleterepairofowner(int ownerId);
 }

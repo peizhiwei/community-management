@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.admin.dao.PayInfoSumDao">
+	<!-- 获取所有汇总信息 -->
+	<select id="getallpayinfosum" resultType="com.peizhiwei.community.admin.entity.PayInfoSum">
+		SELECT s.*,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		FROM pay_info_sum s
+		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+	</select>
+	<!-- 添加业主时添加该业主的缴费汇总信息 -->
+	<insert id="insertpayinfosum" parameterType="com.peizhiwei.community.admin.entity.PayInfoSum">
+		INSERT INTO `pay_info_sum`(`owner_id`, `pay_info_sum_payable`, `pay_info_sum_paid`) 
+		VALUES (#{houseOwner.ownerId}, 0, 0)
+	</insert>
+	<!-- 发布缴费信息时更新缴费汇总信息 -->
+	<update id="updatepayinfosum" parameterType="java.util.List">
+		<foreach collection="list" item="item" separator=";">
+			UPDATE `pay_info_sum` 
+			SET `pay_info_sum_payable` = #{item.payInfoSumPayable} ,`pay_info_sum_paid`=#{item.payInfoSumPaid}
+			where `owner_id` = #{item.houseOwner.ownerId}
+		</foreach>
+	</update>
+	<!-- 一键缴费 -->
+	<update id="updatepayinfodetailsstate" parameterType="com.peizhiwei.community.admin.entity.PayInfoDetails">
+		UPDATE `pay_info_details` 
+		SET `pay_time` = #{payTime}, `pay_state` = 1,`method_id` = #{methodId}
+		WHERE `owner_id` = #{ownerId}
+	</update>
+	<!-- 根据业主id删除该业主的缴费汇总信息 -->
+	<delete id="deletepayinfosumofowner" parameterType="int">
+		delete from pay_info_sum where owner_id=#{ownerId}
+	</delete>
+</mapper>

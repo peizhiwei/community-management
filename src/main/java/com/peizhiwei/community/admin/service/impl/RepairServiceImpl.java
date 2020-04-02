@@ -44,7 +44,18 @@ public class RepairServiceImpl implements RepairService {
 		int adminid = repairdao.getrepairinfo(repairId);
 		return adminid;
 	}
-	
-	
-	
+	/**
+	 * 根据报修信息id删除报修信息
+	 */
+	@Override
+	public void deleterepair(int repairId) {
+		repairdao.deleterepair(repairId);
+	}
+	/**
+	 * 根据业主id删除该业主的所有报修信息
+	 */
+	@Override
+	public void deleterepairofowner(int ownerId) {
+		repairdao.deleterepairofowner(ownerId);
+	}
 }

@@ -30,4 +30,12 @@
 		select admin_id as `admin.adminId` from complaint
 		where complaint_id=#{complaintId}
 	</select>
+	<!-- 根据投诉信息的id删除投诉信息 -->
+	<delete id="deletecomplaint" parameterType="int">
+		delete from complaint where complaint_id=#{complaintId}
+	</delete>
+	<!-- 根据业主id删除该业主的所有投诉信息 -->
+	<delete id="deletecomplaintofowner" parameterType="int">
+		delete from complaint where owner_id=#{ownerId}
+	</delete>
 </mapper>

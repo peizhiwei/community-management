@@ -28,4 +28,12 @@ public interface ComplaintService {
 	 * @return
 	 */
 	int getcomplaintinfo(int complaintId);
+	/**
+	 * 根据投诉信息的id删除投诉信息
+	 */
+	void deletecomplaint(int complaintId);
+	/**
+	 * 根据业主id删除该业主的所有投诉信息
+	 */
+	void deletecomplaintofowner(int ownerId);
 }

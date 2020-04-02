@@ -23,36 +23,28 @@
 							<input type="checkbox" value="">
 						</th>
 						<th class="text-center">序号</th>
-						<th class="text-center">业主</th>
 						<th class="text-center">房间号</th>
-						<th class="text-center">缴费项目</th>
-						<th class="text-center">金额(元)</th>
-						<th class="text-center">发布时间</th>
-						<th class="text-center">截止时间</th>
-						<th class="text-center">实际缴费时间</th>
-						<th class="text-center">状态</th>
-						<th class="text-center">缴费方式</th>
+						<th class="text-center">业主</th>
+						<th class="text-center">应缴金额(元)</th>
+						<th class="text-center">实缴金额(元)</th>
+						<th class="text-center">欠费金额(元)</th>
 						<th class="text-center">操作</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(list,index) in listpayinfo">
+					<tr v-for="(list,index) in listpaysuminfo">
 						<td>
 							<input type="checkbox" value="">
 						</td>
 						<td>{{index+1}}</td>
-						<td>{{list.houseOwner.ownerName}}</td>
 						<td>{{list.houseOwner.houseInfo.houseNumber}}</td>
-						<td>{{list.payInfo.payType.payTypeName}}</td>
-						<td>{{list.payInfo.payInfoMoney}}</td>
-						<td>{{list.payInfo.payInfoStartTime}}</td>
-						<td>{{list.payInfo.payInfoEndTime}}</td>
-						<td>{{list.payTime==null?'':list.payTime}}</td>
-						<td>{{list.payState==0?'未缴费':'已缴费'}}</td>
-						<td>{{list.payMethod==null?'':list.payMethod.methodName}}</td>
+						<td>{{list.houseOwner.ownerName}}</td>
+						<td>{{list.payInfoSumPayable==null?0:list.payInfoSumPayable}}</td>
+						<td>{{list.payInfoSumPaid==null?0:list.payInfoSumPaid}}</td>
+						<td>{{list.payInfoSumPayable-list.payInfoSumPaid}}</td>
 						<td>
 							<button type="button" class="btn btn-success btn-sm" v-if="list.payState==1" disabled="disabled">已缴费</button>
-							<button type="button" class="btn btn-success btn-sm" v-else @click="Paid(list.payId)">已缴费</button>
+							<button type="button" class="btn btn-success btn-sm" v-else @click="Paid(list.payId)">一键缴费</button>
 						</td>
 					</tr>
 				</tbody>
@@ -68,7 +60,7 @@
 		var app = new Vue({
 			el : '#app',
 			data : {
-				listpayinfo:[]//所有支付方式
+				listpaysuminfo:[]//所有汇总信息
 			},
 			mounted : function() {
 				this.get();
@@ -76,11 +68,11 @@
 			methods : {
 				get : function() {
 					$.ajax({
-						url : '/community/payinfodetails/getallpayinfodetails',
+						url : '/community/payinfosum/getallpayinfosum',
 						type : 'GET',
 						dataType : 'JSON',
 						success : function(result) {
-							app.listpayinfo = result;
+							app.listpaysuminfo = result;
 						},							
 						error : function() {
 							console.log("请求失败处理");
@@ -90,7 +82,7 @@
 				//点击已缴费按钮，修改缴费状态为已缴费，由管理员操作的缴费方式默认为现金
 				Paid:function(payId){
 					$.ajax({
-						url : '/community/payinfodetails/updatepaystate',
+						url : '/community/payinfosum/updatepaystate',
 						type : 'POST',
 						dataType : 'JSON',
 						data:{"payId":payId},

@@ -162,6 +162,9 @@ public class ParkingController {
 		JspResult rs = new JspResult();
 		List<Parking> listparkinginfo = new ArrayList<Parking>();
 		String maxNumber = parkingservice.getparkinginfomaxparkingnumber();
+		if(maxNumber==null) {
+			maxNumber = "000";
+		}
 		int maxnumber = Integer.parseInt(maxNumber);//将字符串转成数字
 		try {
 			for(int i=0;i<parkingSum;i++) {

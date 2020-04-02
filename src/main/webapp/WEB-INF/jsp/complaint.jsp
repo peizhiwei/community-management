@@ -14,7 +14,6 @@
     <div class="container-fluid" id="app">
 		<div class="row">
 			<div>
-				<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
 				<h1 style="text-align: center;">投诉信息</h1>
 			</div>
 			<table class="table table-bordered table-hover text-center" style="background-color: white;">
@@ -51,9 +50,10 @@
 						<td>{{list.complaintState==0?'未受理':(list.complaintState==1?'已受理':'已解决')}}</td>
 						<td>
 							<button type="button" class="btn btn-primary btn-sm" @click="Acceptance(list.complaintId)" v-if="list.complaintState==0">受理</button>
-							<button type="button" class="btn btn-primary btn-sm" @click="Acceptance(list.complaintId)" disabled="disabled" v-else>受理</button>
+							<button type="button" class="btn btn-primary btn-sm" disabled="disabled" v-else>受理</button>
                             <button type="button" class="btn btn-success btn-sm" @click="settled(list.complaintId)" v-if="list.complaintState==1">已解决</button>
-                            <button type="button" class="btn btn-success btn-sm" @click="settled(list.complaintId)" disabled="disabled" v-else>已解决</button>
+                            <button type="button" class="btn btn-success btn-sm" disabled="disabled" v-else>已解决</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click="deletecomplaint(list.complaintId)">删除</button>
 						</td>
 					</tr>
 				</tbody>
@@ -108,6 +108,22 @@
     			settled:function(complaintId){
     				$.ajax({
     					url:'/community/complaintinfo/settled',
+    					type:'POST',
+    					dataType:'JSON',
+    					data:{"complaintId":complaintId},
+    					success:function(result){
+    						alert(result.msg);
+    						app.get();
+    					},
+    					error:function(){
+    						console.log("请求失败处理");
+    					}
+    				});
+    			},
+    			//根据投诉信息id删除投诉信息
+    			deletecomplaint:function(complaintId){
+    				$.ajax({
+    					url:'/community/complaintinfo/deletecomplaint',
     					type:'POST',
     					dataType:'JSON',
     					data:{"complaintId":complaintId},

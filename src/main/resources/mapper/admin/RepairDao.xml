@@ -29,4 +29,12 @@
 		select admin_id as `admin.adminId` from repair
 		where repair_id=#{repairId}
 	</select>
+	<!-- 根据报修信息id删除报修信息 -->
+	<delete id="deleterepair" parameterType="int">
+		delete from repair where repair_id=#{repairId}
+	</delete>
+	<!-- 根据业主id删除该业主的所有报修信息 -->
+	<delete id="deleterepairofowner" parameterType="int">
+		delete from repair where owner_id=#{ownerId}
+	</delete>
 </mapper>

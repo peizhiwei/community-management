@@ -19,9 +19,12 @@ import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.entity.PayInfo;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
+import com.peizhiwei.community.admin.entity.PayInfoSum;
 import com.peizhiwei.community.admin.entity.PayType;
 import com.peizhiwei.community.admin.service.HouseOwnerService;
+import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 import com.peizhiwei.community.admin.service.PayInfoService;
+import com.peizhiwei.community.admin.service.PayInfoSumService;
 import com.peizhiwei.community.admin.service.PayTypeService;
 @Controller
 @RequestMapping("/payinfo")
@@ -32,6 +35,10 @@ public class PayInfoController {
 	PayTypeService paytypeservice;
 	@Autowired
 	HouseOwnerService houseownerservice;
+	@Autowired
+	PayInfoDetailsService payinfodetailsservice;
+	@Autowired
+	PayInfoSumService payinfosumservice;
 	
 	/**
 	 * 日期格式，在每一个日期实体上添加一个注解，再在这里添加一下语句，这样可以保证后台和页面间交互的日期格式是标准的，不需要再进行格式化
@@ -53,6 +60,8 @@ public class PayInfoController {
 	}
 	/**
 	 * 发布缴费信息
+	 * 同时批量插入缴费详情
+	 * 批量插入缴费汇总信息到汇总表中
 	 * @param payTypeName
 	 * @param payMoney
 	 * @param payEndTime
@@ -74,27 +83,24 @@ public class PayInfoController {
 			payinfo.setPayInfoMoney(payMoney);
 			payinfo.setPayInfoStartTime(new Date());
 			payinfo.setPayInfoEndTime(payEndTime);
-			if(payinfoservice.insertnewpayinfo(payinfo)==true) {//添加缴费信息成功
+			if(payinfoservice.insertnewpayinfo(payinfo)==true) {
+				//添加缴费信息成功
 				List<PayInfoDetails> payinfodetailslist = new ArrayList<PayInfoDetails>();
 				List<HouseOwner> houseownerlist = new ArrayList<HouseOwner>();
 				houseownerlist = houseownerservice.getallhouseownerinfo();
 				int size = houseownerlist.size();
-				System.out.println(payinfo.getPayType().getPayTypeName());
-				System.out.println(payinfo.getPayInfoMoney());
-				System.out.println(payinfo.getPayInfoStartTime());
-				System.out.println(payinfo.getPayInfoEndTime());
-				System.out.println(payinfo.getPayInfoId());
 				for(int i=0;i<size;i++) {//批量插入缴费详情
 					PayInfoDetails payinfodetails = new PayInfoDetails();
 					payinfodetails.setHouseOwner(houseownerlist.get(i));
 					PayInfo ipayinfo = new PayInfo();
 					ipayinfo.setPayInfoId(payinfo.getPayInfoId());//获取刚刚插入的缴费信息的id
-//					System.out.println(payinfo.getPayInfoId());
 					payinfodetails.setPayInfo(ipayinfo);
 					payinfodetails.setPayState(0);
 					payinfodetailslist.add(payinfodetails);
 				}
 				payinfoservice.insertpayinfodetailslist(payinfodetailslist);
+				//批量更新缴费汇总信息
+				payinfosumservice.updatepayinfosum();
 				rs.setFlag(true);
 				rs.setMsg("发布成功！");
 			}else {
@@ -133,6 +139,7 @@ public class PayInfoController {
 			payinfo.setPayInfoMoney(payMoney);
 			payinfo.setPayInfoEndTime(payEndTime);
 			payinfoservice.updatepayinfo(payinfo);
+			payinfosumservice.updatepayinfosum();//更新缴费汇总信息
 			rs.setFlag(true);
 			rs.setMsg("修改成功！");
 		} catch (Exception e) {
@@ -143,6 +150,7 @@ public class PayInfoController {
 	
 	/**
 	 * 删除缴费信息
+	 * 批量修改缴费汇总信息
 	 * @param payInfoId
 	 * @return
 	 */
@@ -152,6 +160,7 @@ public class PayInfoController {
 		JspResult rs = new JspResult();
 		try {
 			payinfoservice.deletepayinfo(payInfoId);
+			payinfosumservice.updatepayinfosum();//更新缴费汇总信息
 			rs.setFlag(true);
 			rs.setMsg("删除成功！");
 		} catch (Exception e) {

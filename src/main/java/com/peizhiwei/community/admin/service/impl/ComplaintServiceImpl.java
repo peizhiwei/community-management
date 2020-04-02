@@ -43,5 +43,19 @@ public class ComplaintServiceImpl implements ComplaintService {
 		int complaint = complaintdao.getcomplaintinfo(complaintId);
 		return complaint;
 	}
+	/**
+	 * 根据投诉信息id删除投诉信息
+	 */
+	@Override
+	public void deletecomplaint(int complaintId) {
+		complaintdao.deletecomplaint(complaintId);
+	}
+	/**
+	 * 根据业主id删除该业主的所有投诉信息
+	 */
+	@Override
+	public void deletecomplaintofowner(int ownerId) {
+		complaintdao.deletecomplaintofowner(ownerId);
+	}
 	
 }

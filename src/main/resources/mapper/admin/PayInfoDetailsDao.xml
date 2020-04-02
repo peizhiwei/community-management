@@ -15,6 +15,7 @@
 		LEFT JOIN pay_method m ON m.method_id=i.method_id
 		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
 		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
+		order by i.pay_state,i.pay_info_id,hi.house_number
 	</select>
 	<!-- 已缴费，修改缴费状态为已缴费，由管理员操作的缴费方式默认为现金 -->
 	<update id="updatepaystate" parameterType="com.peizhiwei.community.admin.entity.PayInfoDetails">
@@ -27,4 +28,22 @@
 		SELECT method_id FROM pay_method
 		WHERE method_name=#{methodName}
 	</select>
+	<!-- 获取业主应缴金额总和 -->
+	<select id="getsumpaymoney" parameterType="int" resultType="BigDecimal">
+		SELECT SUM(i.pay_info_money)
+		FROM pay_info_details d
+		LEFT JOIN pay_info i ON i.pay_info_id=d.pay_info_id
+		WHERE owner_id=#{ownerId}
+	</select>
+	<!-- 获取业主已缴费金额 -->
+	<select id="getpaysumpid" parameterType="int" resultType="BigDecimal">
+		SELECT SUM(i.pay_info_money)
+		FROM pay_info_details d
+		LEFT JOIN pay_info i ON i.pay_info_id=d.pay_info_id
+		WHERE pay_state=1 and owner_id=#{ownerId}
+	</select>
+	<!-- 根据业主id删除该业主的所有缴费详情信息 -->
+	<delete id="deletepayinfodetailsofowner" parameterType="int">
+		delete from pay_info_details where owner_id=#{ownerId}
+	</delete>
 </mapper>

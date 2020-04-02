@@ -1,5 +1,6 @@
 package com.peizhiwei.community.admin.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
@@ -21,4 +22,21 @@ public interface PayInfoDetailsDao {
 	 * @return
 	 */
 	int getpaymethodid(String methodName);
+	/**
+	 * 获取业主应缴金额总和
+	 * @param ownerId
+	 * @return
+	 */
+	BigDecimal getsumpaymoney(int ownerId);
+	/**
+	 * 获取业主已缴费金额
+	 * @param ownerId
+	 * @return
+	 */
+	BigDecimal getpaysumpid(int ownerId);
+	/**
+	 * 根据业主id删除该业主的所有缴费详情
+	 * @param ownerId
+	 */
+	void deletepayinfodetailsofowner(int ownerId);
 }

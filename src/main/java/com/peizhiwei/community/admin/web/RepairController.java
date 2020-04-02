@@ -93,4 +93,18 @@ public class RepairController {
 		}
 		return rs;
 	}
+	/**
+	 * 根据报修信息id删除报修信息
+	 * @param repairId
+	 * @return
+	 */
+	@RequestMapping("/deleterepair")
+	@ResponseBody
+	public JspResult deleterepair(Integer repairId) {
+		JspResult rs = new JspResult();
+		repairservice.deleterepair(repairId);
+		rs.setFlag(true);
+		rs.setMsg("删除成功！");
+		return rs;
+	}
 }
