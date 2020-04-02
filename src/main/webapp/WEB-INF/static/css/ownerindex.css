@@ -1,0 +1,45 @@
+html,body {
+    height: 100%;
+}
+.f1,.f2,.f3,.f4 {
+    height: 100%;
+}
+.f3 {
+    background-color: rgb(47,64,80);
+}
+.co_text {
+    height: 100px;
+    text-align: center;
+}
+.co_text span{
+    line-height: 100px;
+    font-size: 19px;
+    color: #ffffffea;
+}
+.manage a{
+    color: rgb(167,177,194);
+    text-decoration: none;
+    line-height: 50px;
+    font-size: 18px;
+}
+.manage{
+    height: 50px;
+    margin-left: 45px;
+}
+.top{
+    background-color: #ffffff;
+    height: 6%;
+    line-height: 43px;
+    font-size: 18px;
+    margin-left: -15px;
+    width: 102.6%;
+}
+.subpage{
+    height: 94%;
+    margin-left: -15px;
+    width: 102.6%;
+}
+.accordion{
+    margin-left: -15px;
+    width: 113.1%;
+}

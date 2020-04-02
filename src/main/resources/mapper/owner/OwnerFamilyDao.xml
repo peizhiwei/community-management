@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.owner.dao.OwnerFamilyDao">
+	<!-- 根据业主id查询业主家庭成员 -->
+	<select id="selectfamilyofowner" resultType="com.peizhiwei.community.admin.entity.Family" parameterType="int">
+		SELECT * 
+		FROM family
+		WHERE owner_id=#{ownerId}
+	</select>
+	<!-- 新增家庭成员 -->
+	<insert id="insertfamily" parameterType="com.peizhiwei.community.admin.entity.Family">
+		INSERT INTO `family`(`family_name`, `family_sex`, `family_native_place`, `family_phone`, `family_work_place`, `family_relation`, `owner_id`, `family_birthday`) 
+		VALUES (#{familyName}, #{familySex}, #{familyNativePlace}, #{familyPhone}, #{familyWorkPlace}, #{familyRelation}, #{houseOwner.ownerId}, #{familyBirthday});
+	</insert>
+</mapper>

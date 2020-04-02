@@ -159,8 +159,7 @@
 
 	<script	src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
-	<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
-	<script	src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+	<script src="../static/js/vue.min.js"></script>
 	<script src="../static/js/bootstrap-table.min.js"></script>
 	<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
 	<script>

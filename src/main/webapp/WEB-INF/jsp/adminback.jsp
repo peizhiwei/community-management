@@ -13,7 +13,7 @@
 </head>
 
 <body style="overflow: hidden;">
-    <div class="container-fluid f1">
+    <div class="container-fluid f1" id="app">
         <div class="row f2">
             <div class="col-xs-2 col-md-2 f3">
                 <div class="co_text">
@@ -97,11 +97,12 @@
             </div>
             <div class="col-xs-10 col-md-10 f4">
                     <div class="col-xs-12 col-md-12 top">
-                        <div class="col-xs-2 col-md-2"></div>
-                        <div class="col-xs-10 col-md-10" style="border: black;">
-                            <span>欢迎访问香溪花园小区管理系统，裴志伟</span>
-                            <span style="margin-left: 50px;">当前为超级管理员</span>
-                            <button type="button" class="btn btn-primary" style="margin-left: 400px" onclick="sign_out()">退出</button>
+                        <div class="col-xs-6 col-md-6"></div>
+                        <div class="col-xs-6 col-md-6">
+                        	<div class="col-xs-10 col-md-10"><span>欢迎访问香溪花园小区管理系统，</span><span>{{username}}</span></div>
+                            <div class="col-xs-2 col-md-2">
+                            	<button type="button" class="btn btn-primary" @click="sign_out()">退出</button>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12 subpage" style="background-color: rgb(245,245,245)">
@@ -114,27 +115,55 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <script src="../static/js/bootstrap-collapse.js"></script>
-    <script type="text/javascript">
+    <script src="../static/js/vue.min.js"></script>
+    <script>
         var perDiv=null;
         function changecolor(_this){
             if(perDiv)perDiv.style.backgroundColor='';
             _this.style.backgroundColor='rgb(41,56,70)';
             perDiv=_this;
         }
-        function sign_out(){
-        	$.ajax({
-				type:'POST',
-				dataType:'JSON',
-				url:'/community/admin/signout',
-				success:function(result){
-					window.location.href=result.msg;
-				},
-				error:function(){
-					console.log("请求失败处理！");
-				}
-			});
-        }
     </script>
+    <script>
+		var app = new Vue({
+			el : '#app',
+			data:{
+				username:''
+			},
+			mounted : function() {
+				this.get();
+			},
+			methods : {
+				get : function() {
+					$.ajax({
+						type:'POST',
+						dataType:'JSON',
+						url:'/community/admin/getusername',
+						success:function(result){
+							app.username = result.msg
+						},
+						error:function(){
+							console.log("请求失败处理！");
+						}
+					});
+				},
+				//退出
+				sign_out:function(){
+					$.ajax({
+						type:'POST',
+						dataType:'JSON',
+						url:'/community/admin/signout',
+						success:function(result){
+							window.location.href=result.msg;
+						},
+						error:function(){
+							console.log("请求失败处理！");
+						}
+					});
+				}
+			}
+		});
+	</script>
 </body>
 
 </html>

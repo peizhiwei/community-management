@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.owner.dao.OwnerRepairDao">
+	<!-- 根据业主id查询该业主的报喜信息 -->
+	<select id="getrepairinfo" resultType="com.peizhiwei.community.admin.entity.Repair" parameterType="int">
+		SELECT * FROM `repair` WHERE owner_id=#{ownerId}
+	</select>
+	<!-- 新增报修信息 -->
+	<insert id="insertrepair" parameterType="com.peizhiwei.community.admin.entity.Repair">
+		INSERT INTO `repair`(`owner_id`, `repair_goods`, `repair_time`, `repair_reason`, `repair_state`) 
+		VALUES (#{houseOwner.ownerId}, #{repairGoods}, #{repairTime}, #{repairReason}, 0)
+	</insert>
+	<!-- 修改报修信息 -->
+	<update id="updaterepair" parameterType="com.peizhiwei.community.admin.entity.Repair">
+		UPDATE `repair` 
+		SET `repair_goods` = #{repairGoods}, `repair_reason` = #{repairReason}
+		WHERE `repair_id` = #{repairId}
+	</update>
+</mapper>

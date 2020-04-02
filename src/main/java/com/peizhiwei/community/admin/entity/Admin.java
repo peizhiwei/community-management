@@ -12,7 +12,7 @@ public class Admin {
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date adminEntryTime;
 	private String adminPhone;
-	private String password;
+	private String adminPassword;
 	private Integer adminMan;
 	private String adminNativePlace;
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
@@ -54,11 +54,11 @@ public class Admin {
 	public void setAdminPhone(String adminPhone) {
 		this.adminPhone = adminPhone;
 	}
-	public String getPassword() {
-		return password;
+	public String getAdminPassword() {
+		return adminPassword;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setAdminPassword(String adminPassword) {
+		this.adminPassword = adminPassword;
 	}
 	public Integer getAdminMan() {
 		return adminMan;

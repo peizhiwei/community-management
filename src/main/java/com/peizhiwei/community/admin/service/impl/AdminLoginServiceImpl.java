@@ -16,7 +16,7 @@ public class AdminLoginServiceImpl implements AdminLoginService {
 	public Admin checkAdminLogin(String username, String password) {
 		Admin admin = new Admin();
 		admin = adminLoginDao.selectUsername(username);
-		if (admin != null && admin.getPassword().equals(password)) {
+		if (admin != null && admin.getAdminPassword().equals(password)) {
 			return admin;
 		} else {
 			return null;

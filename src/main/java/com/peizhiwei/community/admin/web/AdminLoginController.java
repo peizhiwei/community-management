@@ -70,6 +70,24 @@ public class AdminLoginController {
 		logger.info("=====end=====");
 		return rs;
 	}
+	
+	@RequestMapping("/getusername")
+	@ResponseBody
+	public JspResult getusername(HttpSession session) {
+		JspResult rs = new JspResult();
+		Object adminsession = session.getAttribute("admin");
+		Admin admin = (Admin) adminsession;
+		String username = admin.getAdminName();
+		rs.setFlag(true);
+		rs.setMsg(username);
+		return rs;
+	}
+	
+	/**
+	 * ÍË³ö
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping("/signout")
 	@ResponseBody
 	public JspResult signout(HttpSession session) {

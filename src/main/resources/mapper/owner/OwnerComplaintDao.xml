@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.owner.dao.OwnerComplaintDao">
+	<!-- 根据业主id查询该业主的投诉信息 -->
+	<select id="getcomplaint" resultType="com.peizhiwei.community.admin.entity.Complaint" parameterType="int">
+		SELECT * FROM complaint WHERE owner_id=#{ownerId}
+	</select>
+	<!-- 新增投诉信息 -->
+	<insert id="insertcomplaint" parameterType="com.peizhiwei.community.admin.entity.Complaint">
+		INSERT INTO `complaint`(`owner_id`, `complaint_reason`, `complaint_time`,`complaint_state`) 
+		VALUES (#{houseOwner.ownerId},#{complaintReason},#{complaintTime},0);
+	</insert>
+	<!-- 修改投诉信息 -->
+	<update id="updatecomplaint" parameterType="com.peizhiwei.community.admin.entity.Complaint">
+		UPDATE `complaint` 
+		SET `complaint_reason` = #{complaintReason}
+		WHERE `complaint_id` = #{complaintId}
+	</update>
+</mapper>

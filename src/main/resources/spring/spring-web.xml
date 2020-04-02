@@ -28,6 +28,7 @@
 
 	<!-- 4.扫描web相关的bean -->
 	<context:component-scan base-package="com.peizhiwei.community.admin.web" />
+	<context:component-scan base-package="com.peizhiwei.community.owner.web" />
 	
 	<!-- 5.拦截器 -->
 	<mvc:interceptors>
@@ -37,6 +38,13 @@
 			<mvc:exclude-mapping path="/admin/adminlogin"/>
 			<mvc:exclude-mapping path="/admin/checklogin"/>
 			<bean id="AdminLoginInterceptor" class="com.peizhiwei.community.interceptor.admin.AdminLoginInterceptor" />
+		</mvc:interceptor>
+		<!-- 校验业主是否已登录的拦截器 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/owner/**"/>
+			<mvc:exclude-mapping path="/owner/ownerlogin"/>
+			<mvc:exclude-mapping path="/owner/checklogin"/>
+			<bean id="OwnerLoginInterceptor" class="com.peizhiwei.community.interceptor.owner.OwnerLoginInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
 </beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.owner.dao.OwnerPayDao">
+	<!-- 根据业主id查询该业主的缴费情况 -->
+	<select id="getpayinfodetails" resultType="com.peizhiwei.community.admin.entity.PayInfoDetails" parameterType="int">
+		SELECT i.*,h.owner_name as `houseOwner.ownerName`,t.pay_type_name as `payInfo.payType.payTypeName`,
+				pi.pay_info_money as `payInfo.payInfoMoney`,pi.pay_info_start_time as `payInfo.payInfoStartTime`,
+			   pi.pay_info_end_time as `payInfo.payInfoEndTime`,
+			   m.method_name as `payMethod.methodName`
+		FROM pay_info_details i
+		LEFT JOIN house_owner h ON h.owner_id=i.owner_id
+		LEFT JOIN pay_method m ON m.method_id=i.method_id
+		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
+		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
+		WHERE h.owner_id=#{ownerId}
+	</select>
+</mapper>

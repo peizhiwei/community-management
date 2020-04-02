@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/main/webapp/WEB-INF/jsp/adminback.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/jsp/family.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/ownerlogin.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/jsp/paytype.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/jsp/superadminback.jsp=UTF-8
