@@ -17,6 +17,13 @@ public class HouseOwner {
 	private int ownerSex;//ÐÔ±ð
 	private HouseInfo houseInfo;
 	private BuildingInfo buildingInfo;
+	private Parking parking;
+	public Parking getParking() {
+		return parking;
+	}
+	public void setParking(Parking parking) {
+		this.parking = parking;
+	}
 	public Date getOwnerBirthday() {
 		return ownerBirthday;
 	}

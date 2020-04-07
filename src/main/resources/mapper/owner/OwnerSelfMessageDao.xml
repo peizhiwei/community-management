@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.owner.dao.OwnerSelfMessageDao">
+	<!-- 获取所有的个人基本信息 -->
+	<select id="getmessageofowner" resultType="com.peizhiwei.community.admin.entity.HouseOwner" parameterType="int">
+		SELECT o.*,i.house_number as `houseInfo.houseNumber`,p.parking_number as `parking.parkingNumber`,b.build_number as `buildingInfo.buildNumber`
+		FROM house_owner o
+		LEFT JOIN house_info i ON i.owner_id=o.owner_id
+		LEFT JOIN parking p ON p.owner_id=o.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE o.owner_id=#{ownerId}
+	</select>
+	<!-- 业主修改个人信息 -->
+	<update id="changeownerinfo" parameterType="com.peizhiwei.community.admin.entity.HouseOwner">
+		UPDATE `house_owner` 
+		SET `owner_name` = #{ownerName},`owner_birthday` = #{ownerBirthday}, `owner_id_card` = #{ownerIdCard}, `owner_work_place` = #{ownerWorkPlace}, `owner_native_place` = #{ownerNativePlace}, `owner_sex` = #{ownerSex}
+		WHERE `owner_id` = #{ownerId}
+	</update>
+	<!-- 用户修改密码 -->
+	<update id="updateownerpassword" parameterType="com.peizhiwei.community.admin.entity.HouseOwner">
+		UPDATE `house_owner` SET
+		`owner_password` = #{ownerPassword}
+		WHERE `owner_id` = #{ownerId}
+	</update>
+	<!-- 更换手机号 -->
+	<update id="updateownerphone" parameterType="com.peizhiwei.community.admin.entity.HouseOwner">
+		UPDATE `house_owner` SET
+		`owner_phone` = #{ownerPhone}
+		WHERE `owner_id` = #{ownerId}
+	</update>
+</mapper>
