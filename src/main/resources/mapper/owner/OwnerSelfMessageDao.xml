@@ -30,4 +30,10 @@
 		`owner_phone` = #{ownerPhone}
 		WHERE `owner_id` = #{ownerId}
 	</update>
+	<!-- 查询用户输入的手机号是否已存在 -->
+	<select id="selectownerphone" parameterType="String" resultType="com.peizhiwei.community.admin.entity.HouseOwner">
+		SELECT * 
+		FROM house_owner 
+		WHERE owner_phone=#{ownerPhone}
+	</select>
 </mapper>

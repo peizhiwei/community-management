@@ -13,10 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.peizhiwei.community.admin.entity.HouseOwner;
+import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
+import com.peizhiwei.community.admin.entity.PayMethod;
 import com.peizhiwei.community.owner.service.OwnerPayService;
 
 @RequestMapping("/ownerpay")
@@ -53,5 +56,41 @@ public class OwnerPayController {
 			// TODO: handle exception
 		}
 		return listpayinfodetails;
+	}
+	/**
+	 * 查询除了现金以外的所有支付方式
+	 * @return
+	 */
+	@RequestMapping("/getallpaymethod")
+	@ResponseBody
+	public List<PayMethod> getallpaymethod(){
+		List<PayMethod> listpaymethod = ownerpayservice.getallpaymethod();
+		return listpaymethod;
+	}
+	/**
+	 * 业主缴费，更改缴费状态，由业主选择缴费方式
+	 * @return
+	 */
+	@RequestMapping("/paid")
+	@ResponseBody
+	public JspResult updatepaystate(
+			@RequestParam(value = "payId",required = false)int payId,
+			@RequestParam(value = "methodId",required = false)int methodId) {
+		JspResult rs = new JspResult();
+		PayInfoDetails payinfodetails = new PayInfoDetails();
+		PayMethod method = new PayMethod();
+		try {
+			payinfodetails.setPayState(1);
+			payinfodetails.setPayTime(new Date());
+			method.setMethodId(methodId);
+			payinfodetails.setPayMethod(method);
+			payinfodetails.setPayId(payId);
+			ownerpayservice.paid(payinfodetails);
+			rs.setFlag(true);
+			rs.setMsg("缴费成功！");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return rs;
 	}
 }

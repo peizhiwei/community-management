@@ -54,4 +54,8 @@ public class BackController {
 	private String payinfosummary() {
 		return "/payinfosummary";
 	}
+	@RequestMapping("/adminselfmessage")
+	private String adminselfmessage() {
+		return "/adminselfmessage";
+	}
 }

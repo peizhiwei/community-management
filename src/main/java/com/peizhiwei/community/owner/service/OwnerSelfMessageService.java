@@ -20,6 +20,12 @@ public interface OwnerSelfMessageService {
 	 */
 	void updateownerpassword(HouseOwner owner);
 	/**
+	 * 查询输入的手机号是否已存在
+	 * @param ownerPhone
+	 * @return
+	 */
+	boolean selectownerphone(String ownerPhone);
+	/**
 	 * 更换手机号
 	 * @param owner
 	 */

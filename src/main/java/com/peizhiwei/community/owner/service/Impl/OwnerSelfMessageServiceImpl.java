@@ -44,4 +44,18 @@ public class OwnerSelfMessageServiceImpl implements OwnerSelfMessageService {
 	public void updateownerphone(HouseOwner owner) {
 		ownerselfmessagedao.updateownerphone(owner);
 	}
+	/**
+	 * 查询用户输入的手机号是否已经存在，存在返回true,不存在返回false
+	 */
+	@Override
+	public boolean selectownerphone(String ownerPhone) {
+		boolean flag = true;
+		HouseOwner owner = ownerselfmessagedao.selectownerphone(ownerPhone);
+		if(owner!=null) {
+			flag = true;
+		}else {
+			flag = false;
+		}
+		return flag;
+	}
 }

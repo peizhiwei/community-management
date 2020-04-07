@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.JspResult;
+import com.peizhiwei.community.owner.service.OwnerLoginService;
 import com.peizhiwei.community.owner.service.OwnerSelfMessageService;
 
 @Controller
@@ -42,9 +43,7 @@ public class OwnerSelfMessageController {
 	public HouseOwner getmessageofowner(HttpSession session) {
 		HouseOwner owner = new HouseOwner();
 		Object ownersession = session.getAttribute("owner");
-		HouseOwner ownerinfo = (HouseOwner) ownersession;
-		int ownerId = ownerinfo.getOwnerId();
-		owner = ownerselfmessageservice.getmessageofowner(ownerId);
+		owner = (HouseOwner) ownersession;
 		return owner;
 	}
 	/**
@@ -128,10 +127,16 @@ public class OwnerSelfMessageController {
 				rs.setFlag(false);
 				rs.setMsg("您输入的手机号与原来的手机号相同，无需更换！");
 			}else {
-				owner.setOwnerPhone(ownerPhone);
-				ownerselfmessageservice.updateownerphone(owner);
-				rs.setFlag(true);
-				rs.setMsg("修改成功，请重新登录！");
+				boolean flag = ownerselfmessageservice.selectownerphone(ownerPhone);
+				if(flag == true) {
+					rs.setFlag(false);
+					rs.setMsg("该手机号已存在，请重新输入！");
+				}else {
+					owner.setOwnerPhone(ownerPhone);
+					ownerselfmessageservice.updateownerphone(owner);
+					rs.setFlag(true);
+					rs.setMsg("修改成功，请重新登录！");
+				}
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

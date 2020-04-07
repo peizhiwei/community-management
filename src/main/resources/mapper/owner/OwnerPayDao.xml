@@ -15,5 +15,17 @@
 		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
 		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
 		WHERE h.owner_id=#{ownerId}
+		order by i.pay_state,i.pay_info_id
 	</select>
+	<!-- 查询除了现金外的支付方式 -->
+	<select id="getallpaymethod" resultType="com.peizhiwei.community.admin.entity.PayMethod">
+		SELECT * FROM pay_method
+        WHERE method_name!='现金'
+	</select>
+	<!-- 业主缴费，修改缴费状态，由业主选择缴费方式 -->
+	<update id="paid" parameterType="com.peizhiwei.community.admin.entity.PayInfoDetails">
+		UPDATE `pay_info_details` SET 
+		`pay_time` = #{payTime}, `pay_state` = #{payState}, `method_id` = #{payMethod.methodId}
+		WHERE `pay_id` = #{payId}
+	</update>
 </mapper>

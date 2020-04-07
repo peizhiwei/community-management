@@ -24,4 +24,10 @@ public interface OwnerSelfMessageDao {
 	 * @param owner
 	 */
 	void updateownerphone(HouseOwner owner);
+	/**
+	 * 查询输入的手机号是否已存在
+	 * @param ownerPhone
+	 * @return
+	 */
+	HouseOwner selectownerphone(String ownerPhone);
 }
