@@ -9,4 +9,20 @@
 		SET `admin_name` = #{adminName}, `admin_sex` = #{adminSex}, `admin_native_place` = #{adminNativePlace}, `admin_id_card` = #{adminIdCard}, `admin_birthday` = #{adminBirthday}
 		WHERE `admin_id` =#{adminId}
 	</update>
+	<!-- 管理员修改密码 -->
+	<update id="updateadminpassword" parameterType="com.peizhiwei.community.admin.entity.Admin">
+		UPDATE `admin` 
+		SET `admin_password` = #{adminPassword}
+		WHERE `admin_id` = #{adminId}
+	</update>
+	<!-- 查询输入的手机号是否已存在 -->
+	<select id="selectadminphone" parameterType="String" resultType="com.peizhiwei.community.admin.entity.Admin">
+		SELECT * FROM admin WHERE admin_phone=#{adminPhone}
+	</select>
+	<!-- 更换手机号 -->
+	<update id="updateadminphone" parameterType="com.peizhiwei.community.admin.entity.Admin">
+		UPDATE `admin` 
+		SET `admin_phone` = #{adminPhone}
+		WHERE `admin_id` = #{adminId}
+	</update>
 </mapper>

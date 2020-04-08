@@ -164,7 +164,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">新手机号</label>
 									<div class="col-sm-9">
-										<input type="password" class="form-control" id="newphone">
+										<input type="text" class="form-control" id="newphone">
 									</div>
 								</div>
 								<div style="text-align: center;color: red;">
@@ -199,7 +199,7 @@
 			methods : {
 				get : function(){
 					$.ajax({
-						url : '/community/adminselfmessage/getmessageofadmin',
+						url : '/community/admin/getadminsession',
 						type : 'GET',
 						dataType : 'JSON',
 						success : function(result) {
@@ -256,7 +256,7 @@
 						alert("新密码与原密码不能相同！")
 					}else{
 						$.ajax({
-							url : '/community/ownerselfmessage/changepassword',
+							url : '/community/adminselfmessage/updatepassword',
 							type : 'POST',
 							dataType : 'JSON',
 							data:{"oldPassword":oldPassword,"newPassword":newPassword},
@@ -266,7 +266,7 @@
 									$.ajax({
 										type:'POST',
 										dataType:'JSON',
-										url:'/community/owner/signout',
+										url:'/community/admin/signout',
 										success:function(result){
 											top.location.href=result.msg;
 										},
@@ -284,19 +284,19 @@
 				},
 				//更换手机号
 				savechangephonenumber :function(){
-					var ownerPhone = $("#newphone").val();
+					var adminPhone = $("#newphone").val();
 					$.ajax({
-						url : '/community/ownerselfmessage/changephone',
+						url : '/community/adminselfmessage/changephone',
 						type : 'POST',
 						dataType : 'JSON',
-						data:{"ownerPhone":ownerPhone},
+						data:{"adminPhone":adminPhone},
 						success : function(result) {
 							alert(result.msg);
 							if(result.flag==true){
 								$.ajax({
 									type:'POST',
 									dataType:'JSON',
-									url:'/community/owner/signout',
+									url:'/community/admin/signout',
 									success:function(result){
 										top.location.href=result.msg;
 									},

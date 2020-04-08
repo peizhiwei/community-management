@@ -49,13 +49,11 @@ public class OwnerSelfMessageServiceImpl implements OwnerSelfMessageService {
 	 */
 	@Override
 	public boolean selectownerphone(String ownerPhone) {
-		boolean flag = true;
 		HouseOwner owner = ownerselfmessagedao.selectownerphone(ownerPhone);
 		if(owner!=null) {
-			flag = true;
+			return true;
 		}else {
-			flag = false;
+			return false;
 		}
-		return flag;
 	}
 }

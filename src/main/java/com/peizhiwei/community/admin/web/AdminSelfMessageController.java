@@ -31,22 +31,7 @@ public class AdminSelfMessageController {
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
-	}
-	
-	/**
-	 * 获取个人信息(从session中获取)
-	 * @param session
-	 * @return
-	 */
-	@RequestMapping("/getmessageofadmin")
-	@ResponseBody
-	public Admin getmessageofadmin(HttpSession session) {
-		Object adminsession = session.getAttribute("admin");
-		Admin admin = new Admin();
-		admin = (Admin) adminsession;
-		return admin;
-	}
-	
+	}	
 	/**
 	 * 管理员修改个人信息
 	 * @return
@@ -72,6 +57,63 @@ public class AdminSelfMessageController {
 			adminselfmessageservice.updateadmininfo(admin);
 			rs.setFlag(true);
 			rs.setMsg("修改成功！");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return rs;
+	}
+	/**
+	 * 修改密码
+	 * @param oldPassword
+	 * @param newPassword
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/updatepassword")
+	@ResponseBody
+	public JspResult updatepassword(
+			@RequestParam(value = "oldPassword",required = false)String oldPassword,
+			@RequestParam(value = "newPassword",required = false)String newPassword,
+			HttpSession session) {
+		JspResult rs = new JspResult();
+		Object adminsession = session.getAttribute("admin");
+		Admin admin = (Admin) adminsession;
+		if(admin.getAdminPassword().equals(oldPassword)) {
+			admin.setAdminPassword(newPassword);
+			adminselfmessageservice.updateadminpassword(admin);
+			rs.setFlag(true);
+			rs.setMsg("修改成功，请重新登录！");
+		}else {
+			rs.setFlag(false);
+			rs.setMsg("原密码错误！");
+		}
+		return rs;
+	}
+	/**
+	 * 更换手机号
+	 * @return
+	 */
+	@RequestMapping("/changephone")
+	@ResponseBody
+	public JspResult changephone(String adminPhone,HttpSession session) {
+		JspResult rs = new JspResult();
+		Object adminsession = session.getAttribute("admin");
+		Admin admin = (Admin) adminsession;
+		try {
+			if(admin.getAdminPhone().equals(adminPhone)) {
+				rs.setFlag(false);
+				rs.setMsg("您输入的手机号与原来的手机号相同，无需更换！");
+			}else {
+				if(adminselfmessageservice.selectadminphone(adminPhone)==true) {
+					rs.setFlag(false);
+					rs.setMsg("该手机号已存在，请重新输入！");
+				}else {
+					admin.setAdminPhone(adminPhone);
+					adminselfmessageservice.updateadminphone(admin);
+					rs.setFlag(true);
+					rs.setMsg("修改成功，请重新登录！");
+				}
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

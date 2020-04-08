@@ -55,11 +55,7 @@ public class AdminLoginController {
 		if(admin!=null) {
 			request.getSession().setAttribute("admin",admin);
 			rs.setFlag(true);
-			if(admin.getAdminMan()==1) {
-				rs.setMsg("/community/admin/superadminback");
-			}else {
-				rs.setMsg("/community/admin/adminback");
-			}
+			rs.setMsg("/community/admin/adminback");
 		}else {
 			rs.setMsg("用户名或密码错误");
 			rs.setFlag(false);
@@ -70,17 +66,17 @@ public class AdminLoginController {
 		logger.info("=====end=====");
 		return rs;
 	}
-	
-	@RequestMapping("/getusername")
+	/**
+	 * 获取管理员session
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/getadminsession")
 	@ResponseBody
-	public JspResult getusername(HttpSession session) {
-		JspResult rs = new JspResult();
+	public Admin getusername(HttpSession session) {
 		Object adminsession = session.getAttribute("admin");
 		Admin admin = (Admin) adminsession;
-		String username = admin.getAdminName();
-		rs.setFlag(true);
-		rs.setMsg(username);
-		return rs;
+		return admin;
 	}
 	
 	/**

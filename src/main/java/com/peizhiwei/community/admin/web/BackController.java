@@ -58,4 +58,8 @@ public class BackController {
 	private String adminselfmessage() {
 		return "/adminselfmessage";
 	}
+	@RequestMapping("/adminmanage")
+	private String adminmanage() {
+		return "/adminmanage";
+	}
 }

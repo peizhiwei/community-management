@@ -123,6 +123,16 @@
 							<a href="/community/in/adminselfmessage" target="iframe_a">基本信息</a>
 						</div>
 					</div>
+					<div onclick="changecolor(this)" v-if="admin.adminMan==0" >
+						<div class="manage" style="display: none;">
+							<a href="/community/in/adminmanage" target="iframe_a">管理员管理</a>
+						</div>
+					</div>
+					<div onclick="changecolor(this)" v-else>
+						<div class="manage">
+							<a href="/community/in/adminmanage" target="iframe_a">管理员管理</a>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="col-xs-10 col-md-10 f4">
@@ -130,7 +140,7 @@
 					<div class="col-xs-6 col-md-6"></div>
 					<div class="col-xs-6 col-md-6">
 						<div class="col-xs-10 col-md-10">
-							<span>欢迎访问香溪花园小区管理系统，</span><span>{{username}}</span>
+							<span>欢迎访问香溪花园小区管理系统，</span><span>{{admin.adminName}}</span>
 						</div>
 						<div class="col-xs-2 col-md-2">
 							<button type="button" class="btn btn-primary" @click="sign_out()">退出</button>
@@ -161,7 +171,7 @@
 		var app = new Vue({
 			el : '#app',
 			data : {
-				username : ''
+				admin:[]//从session中获取的管理员的信息
 			},
 			mounted : function() {
 				this.get();
@@ -171,9 +181,9 @@
 					$.ajax({
 						type : 'POST',
 						dataType : 'JSON',
-						url : '/community/admin/getusername',
+						url : '/community/admin/getadminsession',
 						success : function(result) {
-							app.username = result.msg
+							app.admin = result
 						},
 						error : function() {
 							console.log("请求失败处理！");

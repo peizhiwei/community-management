@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peizhiwei.community.admin.dao.AdminManageDao">
+	<!-- 获取所有管理员信息 -->
+	<select id="getalladmininfo" resultType="com.peizhiwei.community.admin.entity.Admin">
+		SELECT * FROM admin WHERE admin_man=0
+	</select>
+</mapper>

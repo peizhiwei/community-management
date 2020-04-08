@@ -176,7 +176,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">新手机号</label>
 									<div class="col-sm-9">
-										<input type="password" class="form-control" id="newphone">
+										<input type="text" class="form-control" id="newphone">
 									</div>
 								</div>
 								<div style="text-align: center;color: red;">

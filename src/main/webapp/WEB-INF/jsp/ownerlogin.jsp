@@ -30,6 +30,7 @@
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary btn-lg btn-block" id="login">登录</button>
                             </div>
+                            <div style="color: red;">注：初始密码为‘000000’，请及时更改</div>
                         </form>
                     </div>
                 </div>
