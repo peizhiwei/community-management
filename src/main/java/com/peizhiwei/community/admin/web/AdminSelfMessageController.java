@@ -31,7 +31,7 @@ public class AdminSelfMessageController {
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
-	}	
+	}
 	/**
 	 * 管理员修改个人信息
 	 * @return

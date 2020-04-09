@@ -1,11 +1,13 @@
 html,body {
     height: 100%;
+    width: 100%
 }
-.f1,.f2,.f3,.f4 {
+.container-fluid,.firstrow,.rightcontent,.subpage,.top{
     height: 100%;
 }
-.f3 {
+.leftmenu {
     background-color: rgb(47,64,80);
+    min-height: 100%;
 }
 .co_text {
     height: 100px;
@@ -26,20 +28,16 @@ html,body {
     height: 50px;
     margin-left: 45px;
 }
-.top{
+.toprow{
     background-color: #ffffff;
-    height: 6%;
-    line-height: 43px;
+    height: 43px;
+    line-height:43px;
     font-size: 18px;
-    margin-left: -15px;
-    width: 102.6%;
 }
-.subpage{
-    height: 94%;
-    margin-left: -15px;
-    width: 102.6%;
+.subpagerow{
+    height:calc(100% - 43px);
+    min-height: calc(100% - 43px);
 }
 .accordion{
-    margin-left: -15px;
-    width: 113.1%;
+	width: 130%;
 }

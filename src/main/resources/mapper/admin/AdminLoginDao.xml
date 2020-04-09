@@ -8,4 +8,8 @@
 		FROM admin 
 		WHERE admin_phone=#{username}
 	</select>
+	<!-- 查询数据库中是否存在管理员，存在返回true,不存在返回false -->
+	<select id="checkadminexit" resultType="com.peizhiwei.community.admin.entity.Admin">
+		SELECT * FROM admin
+	</select>
 </mapper>

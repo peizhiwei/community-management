@@ -13,15 +13,14 @@
 	rel="stylesheet">
 <link href="../static/css/adminback.css" rel="stylesheet">
 </head>
-
-<body style="overflow: hidden;">
-	<div class="container-fluid f1" id="app">
-		<div class="row f2">
-			<div class="col-xs-2 col-md-2 f3">
+<body>
+	<div class="container-fluid" id="app">
+		<div class="row firstrow">
+			<div class="col-xs-2 col-md-2 leftmenu">
 				<div class="co_text">
 					<span>小区物业管理系统</span>
 				</div>
-				<div class="accordion" id="accordion">
+				<div class="col-xs-12 col-md-12 accordion" id="accordion" style="width: 125.5%;margin-left: -13.6%;">
 					<div onclick="changecolor(this)">
 						<div class="manage">
 							<a href="#community_manager" data-toggle="collapse"
@@ -135,21 +134,26 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-10 col-md-10 f4">
-				<div class="col-xs-12 col-md-12 top">
-					<div class="col-xs-6 col-md-6"></div>
-					<div class="col-xs-6 col-md-6">
-						<div class="col-xs-10 col-md-10">
-							<span>欢迎访问香溪花园小区管理系统，</span><span>{{admin.adminName}}</span>
-						</div>
-						<div class="col-xs-2 col-md-2">
-							<button type="button" class="btn btn-primary" @click="sign_out()">退出</button>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-12 col-md-12 subpage" style="background-color: rgb(245, 245, 245)">
-					<iframe src="/community/in/buildinginfo" name="iframe_a" width="100%" height="100%" frameborder="0" allowTransparency="true" style="background-color: #red;"></iframe>
-				</div>
+			<div class="col-xs-10 col-md-10 rightcontent">
+                <div class="row toprow">
+                    <div class="col-xs-12 col-md-12 top">
+                        <div class="col-xs-6 col-md-6"></div>
+                        <div class="col-xs-6 col-md-6">
+                            <div class="col-xs-10 col-md-10">
+                                <span>欢迎访问香溪花园小区管理系统，</span><span>{{admin.adminName}}</span>
+                            </div>
+                            <div class="col-xs-2 col-md-2">
+                                <button type="button" class="btn btn-primary" @click="sign_out()">退出</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="row subpagerow">
+                    <div class="col-xs-12 col-md-12 subpage" style="background-color: rgb(245, 245, 245)">
+                        <iframe src="/community/in/buildinginfo" name="iframe_a" width="100%" height="100%" frameborder="0" allowTransparency="true" style="background-color: #red;"></iframe>
+                    </div>
+                </div>
+				
 			</div>
 		</div>
 	</div>

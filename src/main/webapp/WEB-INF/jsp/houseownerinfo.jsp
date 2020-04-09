@@ -287,7 +287,6 @@
 						url : '/community/buildinginfo/getallbuildinginfo',
 						type : 'GET',
 						dataType : 'JSON',
-						async:false,
 						success : function(result) {
 							app.listbuildinginfo = result;
 							//点击新增按钮时，同时查询默认显示的楼号所属的房间号的所有信息

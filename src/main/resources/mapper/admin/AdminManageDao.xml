@@ -7,4 +7,29 @@
 	<select id="getalladmininfo" resultType="com.peizhiwei.community.admin.entity.Admin">
 		SELECT * FROM admin WHERE admin_man=0
 	</select>
+	<!-- 修改管理员信息 -->
+	<update id="updateadmininfo" parameterType="com.peizhiwei.community.admin.entity.Admin">
+		UPDATE `admin` 
+		SET `admin_name` = #{adminName}, `admin_sex` = #{adminSex}, `admin_number` = #{adminNumber},
+		 `admin_entry_time` = #{adminEntryTime}, `admin_native_place` = #{adminNativePlace}, 
+		 `admin_id_card` = #{adminIdCard}, `admin_birthday` = #{adminBirthday} 
+		 WHERE `admin_id` = #{adminId}
+	</update>
+	<!-- 查询输入的管理员编号是否存在，存在返回true，不存在返回false -->
+	<select id="selectnumberofadmin" parameterType="String" resultType="com.peizhiwei.community.admin.entity.Admin">
+		SELECT * FROM admin WHERE admin_number=#{adminNumber}
+	</select>
+	<!-- 新增管理员 -->
+	<insert id="insertadmininfo" parameterType="com.peizhiwei.community.admin.entity.Admin">
+		INSERT INTO `admin`(`admin_name`, `admin_sex`, `admin_number`, `admin_phone`, `admin_entry_time`, `admin_native_place`, `admin_id_card`, `admin_birthday`, `admin_password`, `admin_man`) 
+		VALUES (#{adminName}, #{adminSex}, #{adminNumber}, #{adminPhone}, #{adminEntryTime}, #{adminNativePlace}, #{adminIdCard}, #{adminBirthday}, #{adminPassword}, #{adminMan})
+	</insert>
+	<!-- 获取管理员编号最大的那个 -->
+	<select id="selectmaxadminnumber" resultType="String">
+		SELECT MAX(admin_number) FROM admin
+	</select>
+	<!-- 删除管理员 -->
+	<delete id="deleteadmininfo" parameterType="int">
+		DELETE FROM admin WHERE admin_id=#{adminId}
+	</delete>
 </mapper>

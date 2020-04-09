@@ -37,6 +37,7 @@
 			<mvc:mapping path="/admin/**" />
 			<mvc:exclude-mapping path="/admin/adminlogin"/>
 			<mvc:exclude-mapping path="/admin/checklogin"/>
+			<mvc:exclude-mapping path="/admin/checkadmin"/>
 			<bean id="AdminLoginInterceptor" class="com.peizhiwei.community.interceptor.admin.AdminLoginInterceptor" />
 		</mvc:interceptor>
 		<!-- 校验业主是否已登录的拦截器 -->
