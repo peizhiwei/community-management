@@ -137,7 +137,7 @@
 			<div class="col-xs-10 col-md-10 rightcontent">
                 <div class="row toprow">
                     <div class="col-xs-12 col-md-12 top">
-                        <div class="col-xs-6 col-md-6"></div>
+                        <div class="col-xs-6 col-md-6"><button type="button" class="btn btn-primary" onclick="window.location.href ='/community/admin/adminback'">首页</button></div>
                         <div class="col-xs-6 col-md-6">
                             <div class="col-xs-10 col-md-10">
                                 <span>欢迎访问香溪花园小区管理系统，</span><span>{{admin.adminName}}</span>
@@ -150,7 +150,7 @@
                 </div>
 				<div class="row subpagerow">
                     <div class="col-xs-12 col-md-12 subpage" style="background-color: rgb(245, 245, 245)">
-                        <iframe src="/community/in/buildinginfo" name="iframe_a" width="100%" height="100%" frameborder="0" allowTransparency="true" style="background-color: #red;"></iframe>
+                        <iframe src="/community/in/adminindex" name="iframe_a" width="100%" height="100%" frameborder="0" allowTransparency="true" style="background-color: #red;"></iframe>
                     </div>
                 </div>
 				

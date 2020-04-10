@@ -62,4 +62,8 @@ public class BackController {
 	private String adminmanage() {
 		return "/adminmanage";
 	}
+	@RequestMapping("/adminindex")
+	private String adminindex() {
+		return "/adminindex";
+	}
 }
