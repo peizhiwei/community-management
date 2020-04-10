@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.peizhiwei.community.admin.dao.BuildingInfoDao;
 import com.peizhiwei.community.admin.entity.BuildingInfo;
@@ -11,6 +12,7 @@ import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.service.BuildingInfoService;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class BuildingInfoServiceImpl implements BuildingInfoService {
 	@Autowired
 	private BuildingInfoDao buildinginfodao;
@@ -22,29 +24,22 @@ public class BuildingInfoServiceImpl implements BuildingInfoService {
 	}
 
 	/**
+	 * 根据楼房编号判断数据库中是否已存在该编号,存在返回true,不存在返回false
+	 */
+	@Override
+	public boolean selectnumberisnull(String buildNumber) {
+		if(buildinginfodao.selectnumberisnull(buildNumber)==1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	/**
 	 * 修改楼栋信息
 	 */
 	@Override
-	public boolean changebuildinfo(BuildingInfo buildinginfo) {
-		boolean flag = true;
-		try {
-			List<BuildingInfo> listbuildinfo = buildinginfodao.getallbuildinginfo();
-			int list = listbuildinfo.size();
-			int i;
-			for(i=0;i<list;i++) {
-				if(listbuildinfo.get(i).getBuildNumber().equals(buildinginfo.getBuildNumber())) {
-					flag=false;
-					break;
-				}
-			}
-			if(i==list) {
-				flag=true;
-				buildinginfodao.changebuildinfo(buildinginfo);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return flag;
+	public void changebuildinfo(BuildingInfo buildinginfo) {
+		buildinginfodao.changebuildinfo(buildinginfo);
 	}
 	/**
 	 * 删除一条楼栋信息,如果楼中有住户，则不能删除，如果没有住户，则同时删除所有属于盖楼的房间信息
@@ -99,4 +94,12 @@ public class BuildingInfoServiceImpl implements BuildingInfoService {
 	public void inserthouseinfolist(List<HouseInfo> houseinfolist) {
 		buildinginfodao.inserthouseinfolist(houseinfolist);		
 	}
+
+	@Override
+	public String selectbuildnumber(int buildId) {
+		String number = buildinginfodao.selectbuildnumber(buildId);
+		return number;
+	}
+	
+
 }

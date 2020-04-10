@@ -11,11 +11,17 @@ public interface BuildingInfoService {
 	 * @return
 	 */
 	List<BuildingInfo> getallbuildinginfo();
+	/**
+	 * 根据楼房编号判断数据库中是否已存在该编号,存在返回true,不存在返回false
+	 * @param buildNumber
+	 * @return
+	 */
+	boolean selectnumberisnull(String buildNumber);
 
 	/**
-	 * 修改楼栋信息，如果修改的编号已存在，则修改失败
+	 * 修改楼栋信息
 	 */
-	boolean changebuildinfo(BuildingInfo buildinginfo);
+	void changebuildinfo(BuildingInfo buildinginfo);
 
 	/**
 	 * 先判断楼栋中是否有住户，如果有住户则不能删除,true能删除，false不能删除
@@ -35,4 +41,10 @@ public interface BuildingInfoService {
 	 * @param houseinfolist
 	 */
 	void inserthouseinfolist(List<HouseInfo> houseinfolist);
+	/**
+	 * 通过id查询楼栋编号
+	 * @param buildId
+	 * @return
+	 */
+	String selectbuildnumber(int buildId);
 }

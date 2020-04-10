@@ -11,26 +11,37 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body style="background-color: rgb(245,245,245)">
+	<div>
+		<h1 style="text-align: center;">楼栋信息</h1>
+	</div>
 	<div class="container-fluid" id="vue">
 		<div class="row">
-				<div>
-					<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
-					<h1 style="text-align: center;">楼栋信息</h1>
-				</div>
-			<table class="table table-bordered table-hover text-center" style="background-color: white;">
+			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
+			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
+		</div>
+		<div class="row">
+			<table class="col-sm-12 col-md-12 table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
-						<th class="col-md-1 text-center">编号</th>
-						<th class="col-md-1 text-center">层数</th>
-						<th class="col-md-1 text-center">房间数</th>
-						<th class="col-md-2 text-center">建筑面积(单位:平方米)</th>
-						<th class="col-md-2 text-center">开工时间</th>
-						<th class="col-md-2 text-center">竣工时间</th>
-						<th class="col-md-3 text-center">操作</th>
+						<th class="text-center">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
+						</th>
+						<th class="text-center">序号</th>
+						<th class="text-center">编号</th>
+						<th class="text-center">层数</th>
+						<th class="text-center">房间数</th>
+						<th class="text-center">建筑面积(m²)</th>
+						<th class="text-center">开工时间</th>
+						<th class="text-center">竣工时间</th>
+						<th class="text-center">操作</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="list in infolist">
+					<tr v-for="(list,index) in infolist">
+						<td>
+							<input type="checkbox" v-model="arr" :value="list.buildId">
+						</td>
+						<td>{{index+1}}</td>
 						<td>{{list.buildNumber}}</td>
 						<td>{{list.buildLayer}}</td>
 						<td>{{list.buildSumHouse}}</td>
@@ -38,8 +49,7 @@
 						<td>{{list.buildStartTime}}</td>
 						<td>{{list.buildEndTime}}</td>
 						<td>
-							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                data-target="#myModal1" @click="changeinfo(list.buildId,list.buildNumber,list.buildLayer,list.buildSumHouse,list.buildArea,list.buildEndTime,list.buildStartTime)">修改</button>
+							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal1" @click="changeinfo(list.buildId,list.buildNumber,list.buildLayer,list.buildSumHouse,list.buildArea,list.buildEndTime,list.buildStartTime)">修改</button>
                             <button type="button" class="btn btn-danger btn-sm" @click="deleteinfo(list.buildId)">删除</button>
 						</td>
 					</tr>
@@ -78,7 +88,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label">建筑面积(单位:m²)</label>
+									<label class="col-sm-3 control-label">建筑面积(m²)</label>
 									<div class="col-sm-9">
 										<input type="text" class="form-control" id="area">
 									</div>
@@ -86,13 +96,13 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">开工时间</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" id="starttime">
+										<input id="starttime" class="form-control" type="text" onclick="WdatePicker({skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">竣工时间</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" id="endtime">
+										<input id="endtime" class="form-control" type="text" onclick="WdatePicker({skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
 									</div>
 								</div>
 							</form>
@@ -137,13 +147,13 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label">建筑面积(单位:m²)</label>
+									<label class="col-sm-3 control-label">建筑面积(m²)</label>
 									<div class="col-sm-9">
 										<input type="text" class="form-control" id="newarea">
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label">房间面积(单位:m²)</label>
+									<label class="col-sm-3 control-label">房间面积(m²)</label>
 									<div class="col-sm-9">
 										<input type="text" class="form-control" id="housearea">
 									</div>
@@ -160,13 +170,13 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">开工时间</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" id="newstarttime">
+										<input id="newstarttime" class="form-control" type="text" onclick="WdatePicker({skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">竣工时间</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" id="newendtime">
+										<input id="newendtime" class="form-control" type="text" onclick="WdatePicker({skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
 									</div>
 								</div>
 							</form>
@@ -185,13 +195,17 @@
 	<script	src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 	<script src="../static/js/vue.min.js"></script>
+	<script src="../static/datepicker/WdatePicker.js"></script>
 	<script>
 		var app = new Vue({
 			el : '#vue',
 			data : {
 				infolist : [],
 				changeinfoid:0,
-				housetypelist:[]
+				housetypelist : [],
+				oldbuildNumber:'',
+				checked:false,
+				arr:[]
 			},
 			mounted : function() {
 				this.get();
@@ -211,9 +225,10 @@
 						}
 					});
 				},
-				//设置弹出的模态框相对应的内容
+				//点击修改按钮，显示信息在模态框中
 				changeinfo:function(buildId,buildNumber,buildLayer,buildSumHouse,buildArea,buildEndTime,buildStartTime){
 					this.changeinfoid=buildId;
+					this.oldbuildNumber = buildNumber;
 					$("#number").val(buildNumber);
 					$("#layer").val(buildLayer);
 					$("#sum").val(buildSumHouse);
@@ -224,22 +239,27 @@
 				//修改楼栋信息
 				savechange:function(){
 					var buildId=app.changeinfoid;
+					var oldbuildNumber = app.oldbuildNumber;
 					var buildNumber=$("#number").val();
 					var buildLayer=$("#layer").val();
 					var buildSumHouse=$("#sum").val();
 					var buildArea=$("#area").val();
 					var buildStartTime=$("#starttime").val();
 					var buildEndTime=$("#endtime").val();
-					$.ajax({
-						url:'/community/buildinginfo/changebuildinginfo',
-						type:'POST',
-						dataType:'JSON',
-						data:{"buildId":buildId,"buildNumber":buildNumber,"buildLayer":buildLayer,"buildSumHouse":buildSumHouse,"buildArea":buildArea,"buildStartTime":buildStartTime,"buildEndTime":buildEndTime},
-						success : function(result) {
-							alert(result.msg);
-							app.get();
-						}
-					});
+					if(buildNumber==''||buildLayer==''||buildSumHouse==''||buildArea==''||buildStartTime==''||buildEndTime==''){
+						alert("请将信息填写完整！");
+					}else{
+						$.ajax({
+							url:'/community/buildinginfo/changebuildinginfo',
+							type:'POST',
+							dataType:'JSON',
+							data:{"buildId":buildId,"oldbuildNumber":oldbuildNumber,"buildNumber":buildNumber,"buildLayer":buildLayer,"buildSumHouse":buildSumHouse,"buildArea":buildArea,"buildStartTime":buildStartTime,"buildEndTime":buildEndTime},
+							success : function(result) {
+								alert(result.msg);
+								app.get();
+							}
+						});
+					}
 				},
 				//删除一条楼栋信息
 				deleteinfo:function(buildId){
@@ -279,22 +299,63 @@
 					var buildEndTime=$("#newendtime").val();
 					var houseArea=$("#housearea").val();
 					var houseType=$("#housetype").val();
-					$.ajax({
+					if(buildNumber==''||buildLayer==''||buildSumHouse==''||buildArea==''||buildStartTime==''||buildEndTime==''){
+						alert("请将信息填写完整！");
+					}else{
+						$.ajax({
+							type:'POST',
+							dataType:'JSON',
+							url:'/community/buildinginfo/addbuildinginfo',
+							data:{"houseType":houseType,"houseArea":houseArea,"buildNumber":buildNumber,"buildLayer":buildLayer,"buildSumHouse":buildSumHouse,"buildArea":buildArea,"buildStartTime":buildStartTime,"buildEndTime":buildEndTime},
+							success:function(result){
+								if(result.flag==true){
+									alert(result.msg);
+								}else{
+									alert(result.msg);
+								}
+								app.get();
+							}
+						});
+					}
+				},
+				checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.infolist.forEach((item) =>{
+                            this.arr.push(item.buildId);
+                        })
+                    }
+                },
+                //批量删除
+                checkdelete : function(){
+                	var listbuildId = app.arr;
+                	$.ajax({
 						type:'POST',
 						dataType:'JSON',
-						url:'/community/buildinginfo/addbuildinginfo',
-						data:{"houseType":houseType,"houseArea":houseArea,"buildNumber":buildNumber,"buildLayer":buildLayer,"buildSumHouse":buildSumHouse,"buildArea":buildArea,"buildStartTime":buildStartTime,"buildEndTime":buildEndTime},
+						url:'/community/buildinginfo/checkdelete',
+						contentType: "application/json;charset=utf-8",
+						data:JSON.stringify(listbuildId),
 						success:function(result){
-							if(result.flag==true){
-								alert(result.msg);
-							}else{
-								alert(result.msg);
-							}
+							alert(result.msg);
 							app.get();
 						}
 					});
-				}
-			}
+                }
+			},
+			watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.infolist.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
 		});
 	</script>
 </body>

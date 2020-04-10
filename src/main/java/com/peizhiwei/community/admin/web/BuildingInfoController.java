@@ -9,8 +9,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,6 +60,7 @@ public class BuildingInfoController {
 	@ResponseBody
 	private JspResult changebuildinginfo(
 			@RequestParam(value = "buildId",required = false)Integer buildId,
+			@RequestParam(value = "oldbuildNumber",required = false)String oldbuildNumber,
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
 			@RequestParam(value = "buildLayer",required = false)int buildLayer,
 			@RequestParam(value = "buildSumHouse",required = false)int buildSumHouse,
@@ -67,22 +70,25 @@ public class BuildingInfoController {
 		BuildingInfo buildinginfo=new BuildingInfo();
 		JspResult rs = new JspResult();
 		try {
-			buildinginfo.setBuildNumber(buildNumber);
-			buildinginfo.setBuildId(buildId);
-			buildinginfo.setBuildLayer(buildLayer);
-			buildinginfo.setBuildSumHouse(buildSumHouse);
-			buildinginfo.setBuildArea(buildArea);
-			buildinginfo.setBuildStartTime(buildStartTime);
-			buildinginfo.setBuildEndTime(buildEndTime);
-			if(buildinginfoservice.changebuildinfo(buildinginfo)==true) {
+			if(buildinginfoservice.selectnumberisnull(buildNumber)==false||oldbuildNumber.equals(buildNumber)) {
+				buildinginfo.setBuildNumber(buildNumber);
+				buildinginfo.setBuildId(buildId);
+				buildinginfo.setBuildLayer(buildLayer);
+				buildinginfo.setBuildSumHouse(buildSumHouse);
+				buildinginfo.setBuildArea(buildArea);
+				buildinginfo.setBuildStartTime(buildStartTime);
+				buildinginfo.setBuildEndTime(buildEndTime);
+				buildinginfoservice.changebuildinfo(buildinginfo);
 				rs.setFlag(true);
 				rs.setMsg("修改成功");
 			}else {
 				rs.setFlag(false);
 				rs.setMsg("该楼栋编号已存在，请重新输入！");
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}
@@ -176,6 +182,43 @@ public class BuildingInfoController {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		return rs;
+	}
+	/**
+	 * 批量删除楼栋信息
+	 * @param listbuildId
+	 * @return
+	 */
+	@RequestMapping("/checkdelete")
+	@ResponseBody
+	public JspResult checkdelete(@RequestBody List<Integer> listbuildId) {
+		JspResult rs = new JspResult();
+		List<Integer> listnodeletebuildid = new ArrayList<Integer>();
+		try {
+			for(int i=0;i<listbuildId.size();i++) {
+				if(buildinginfoservice.deletebuildinfoishouseowner(listbuildId.get(i))==false) {
+					listnodeletebuildid.add(listbuildId.get(i));//存储不能删除的楼栋id
+				}else {
+					buildinginfoservice.deletebuildinfoishouseowner(listbuildId.get(i));
+				}
+			}
+			if(listnodeletebuildid.size()==0) {
+				rs.setMsg("删除成功");
+				rs.setFlag(true);
+			}else {
+				String nodeletelist = new String();
+				for(int j=0;j<listnodeletebuildid.size();j++) {
+					String number = buildinginfoservice.selectbuildnumber(listnodeletebuildid.get(j));
+					nodeletelist += number+",";
+				}
+				rs.setFlag(false);
+				rs.setMsg(nodeletelist+"楼栋中已有住户，无法删除！");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		
 		return rs;
 	}
 }

@@ -14,6 +14,12 @@ public interface BuildingInfoDao {
 	 */
 	List<BuildingInfo> getallbuildinginfo();
 	/**
+	 * 根据楼房编号判断数据库中是否已存在该编号
+	 * @param buildNumber
+	 * @return
+	 */
+	int selectnumberisnull(String buildNumber);
+	/**
 	 * 修改楼栋信息
 	 * @param buildinginfo
 	 */
@@ -44,4 +50,10 @@ public interface BuildingInfoDao {
 	 * @param houseinfolist
 	 */
 	void inserthouseinfolist(@Param("houseinfolist")List<HouseInfo> houseinfolist);
+	/**
+	 * 通过id查询楼栋编号
+	 * @param buildId
+	 * @return
+	 */
+	String selectbuildnumber(int buildId);
 }
