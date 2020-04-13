@@ -70,7 +70,7 @@
 		var app = new Vue({
 			el : '#app',
 			data : {
-				listrepairinfo:[],//所有家庭成员信息
+				listrepairinfo:[],//所有报修信息
 			},
 			mounted : function() {
 				this.get();

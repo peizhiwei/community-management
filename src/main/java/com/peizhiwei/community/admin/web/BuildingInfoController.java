@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.peizhiwei.community.admin.entity.BuildingInfo;
 import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.entity.HouseType;
-import com.peizhiwei.community.admin.entity.HouseUse;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.service.BuildingInfoService;
 import com.peizhiwei.community.admin.service.HouseInfoService;
@@ -46,7 +45,7 @@ public class BuildingInfoController {
 	 */
 	@RequestMapping("/getallbuildinginfo")
 	@ResponseBody
-	private List<BuildingInfo> getallbuidinginfo() {
+	public List<BuildingInfo> getallbuidinginfo() {
 		List<BuildingInfo> buildinginfolist=new ArrayList<BuildingInfo>();
 		buildinginfolist=buildinginfoservice.getallbuildinginfo();
 		return buildinginfolist;
@@ -58,7 +57,7 @@ public class BuildingInfoController {
 	 */
 	@RequestMapping("/changebuildinginfo")
 	@ResponseBody
-	private JspResult changebuildinginfo(
+	public JspResult changebuildinginfo(
 			@RequestParam(value = "buildId",required = false)Integer buildId,
 			@RequestParam(value = "oldbuildNumber",required = false)String oldbuildNumber,
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
@@ -99,7 +98,7 @@ public class BuildingInfoController {
 	 */
 	@RequestMapping("/deletebuildinginfo")
 	@ResponseBody
-	private JspResult deletebuildinginfo(Integer buildId) {
+	public JspResult deletebuildinginfo(Integer buildId) {
 		JspResult rs = new JspResult();
 		try {
 			if(buildinginfoservice.deletebuildinfoishouseowner(buildId)==true) {
@@ -127,12 +126,13 @@ public class BuildingInfoController {
 	 */
 	@RequestMapping("/addbuildinginfo")
 	@ResponseBody
-	private JspResult addbuildinginfo(
+	public JspResult addbuildinginfo(
 			@RequestParam(value = "houseType",required=false)String houseType,
 			@RequestParam(value = "houseArea",required = false)BigDecimal houseArea,
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "buildUnitSum",required = false)int buildUnitSum,
 			@RequestParam(value = "buildLayer",required = false)int buildLayer,
-			@RequestParam(value = "buildSumHouse",required = false)int buildSumHouse,
+			@RequestParam(value = "buildUnitSingleLayerRooms",required = false)int buildUnitSingleLayerRooms,
 			@RequestParam(value = "buildArea",required = false)BigDecimal buildArea,
 			@RequestParam(value = "buildStartTime",required = false)Date buildStartTime,
 			@RequestParam(value = "buildEndTime",required = false)Date buildEndTime) {
@@ -142,35 +142,40 @@ public class BuildingInfoController {
 		
 		List<HouseType> listhousetype=new ArrayList<HouseType>();
 		HouseType nhousetype=new HouseType();
-		HouseUse houseuse = new HouseUse();
 		try {
 			buildinginfo.setBuildNumber(buildNumber);
+			buildinginfo.setBuildUnitSum(buildUnitSum);
 			buildinginfo.setBuildLayer(buildLayer);
+			buildinginfo.setBuildUnitSingleLayerRooms(buildUnitSingleLayerRooms);
+			int buildSumHouse = buildUnitSum*buildLayer*buildUnitSingleLayerRooms;
 			buildinginfo.setBuildSumHouse(buildSumHouse);
 			buildinginfo.setBuildArea(buildArea);
 			buildinginfo.setBuildStartTime(buildStartTime);
 			buildinginfo.setBuildEndTime(buildEndTime);
 			if(buildinginfoservice.insertbuildinginfo(buildinginfo)==true) {
-				for(int i=0;i<buildSumHouse;i++) {//插入房间信息
-					HouseInfo houseinfo=new HouseInfo();//每次循环的时候都要重新new一个对象，否则list.add方法会将前面插入的数据覆盖掉，只保留最后一个
-					String num=String.format("%03d", i+1);
-					String housenumber=buildNumber+num;//拼接房间号
-					houseinfo.setHouseNumber(housenumber);
-					BuildingInfo buildinfo = new BuildingInfo();
-					buildinfo.setBuildId(buildinginfo.getBuildId());//获取刚插入的楼栋信息id
-					houseinfo.setBuildInfo(buildinfo);
-					houseinfo.setHouseArea(houseArea);
-					listhousetype= houseinfoservice.getallhousetype();
-					for(int j=0;j<listhousetype.size();j++) {
-						if(listhousetype.get(j).getHouseTypeName().equals(houseType)) {
-							nhousetype.setHouseTypeId(listhousetype.get(j).getHouseTypeId());
-							houseinfo.setHouseType(nhousetype);
+				for(int i=1;i<buildUnitSum+1;i++) {//单元数
+					for(int j=1;j<buildLayer+1;j++) {//楼层数
+						for(int t=1;t<buildUnitSingleLayerRooms+1;t++) {//单元单层房间数
+							HouseInfo houseinfo=new HouseInfo();//每次循环的时候都要重新new一个对象，否则list.add方法会将前面插入的数据覆盖掉，只保留最后一个
+							String houseNumber = String.valueOf(j)+String.valueOf(0)+String.valueOf(t);//int型转String拼接成房间号，如302
+							houseinfo.setHouseNumber(houseNumber);
+							houseinfo.setHouseUnit(i);
+							BuildingInfo buildinfo = new BuildingInfo();
+							buildinfo.setBuildId(buildinginfo.getBuildId());//获取刚插入的楼栋信息id
+							houseinfo.setBuildInfo(buildinfo);
+							houseinfo.setHouseArea(houseArea);
+							listhousetype= houseinfoservice.getallhousetype();
+							for(int z=0;z<listhousetype.size();z++) {
+								if(listhousetype.get(z).getHouseTypeName().equals(houseType)) {
+									nhousetype.setHouseTypeId(listhousetype.get(z).getHouseTypeId());
+									houseinfo.setHouseType(nhousetype);
+								}
+							}
+							houseinfo.setHouseUse("居住");
+							houseinfo.setHouseState(0);
+							houseinfolist.add(houseinfo);
 						}
 					}
-					houseuse.setHouseUseId(1);
-					houseinfo.setHouseUse(houseuse);
-					houseinfo.setHouseState(0);
-					houseinfolist.add(houseinfo);
 				}
 				buildinginfoservice.inserthouseinfolist(houseinfolist);
 				rs.setFlag(true);
@@ -181,6 +186,7 @@ public class BuildingInfoController {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}
@@ -218,7 +224,17 @@ public class BuildingInfoController {
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
-		
 		return rs;
+	}
+	/**
+	 * 根据楼栋编号模糊查询楼栋信息
+	 * @param buildNumber
+	 * @return
+	 */
+	@RequestMapping("/selectlikebuildinginfo")
+	@ResponseBody
+	public List<BuildingInfo> selectlikebuildinginfo(String buildNumber){
+		List<BuildingInfo> listbuildinfo = buildinginfoservice.selectlikebuildinginfo(buildNumber);
+		return listbuildinfo;
 	}
 }

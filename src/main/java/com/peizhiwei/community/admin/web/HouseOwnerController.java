@@ -1,12 +1,14 @@
 package com.peizhiwei.community.admin.web;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -105,6 +107,38 @@ public class HouseOwnerController {
 		return rs;
 	}
 	/**
+	 * 获取还有住户的楼栋编号
+	 * @return
+	 */
+	@RequestMapping("/getallhavenullhousebuildnumber")
+	@ResponseBody
+	public List<String> getallhavenullhousebuildnumber(){
+		List<String> buildinginfolist = houseownerservice.getallhavenullhousebuildNumber();
+		return buildinginfolist;
+	}
+	/**
+	 * 根据楼栋编号查询该楼栋中还有空房间的单元号
+	 */
+	@RequestMapping("/getallhavenullhousehouseunit")
+	@ResponseBody
+	public List<Integer> getallhavenullhousehouseunit(String buildNumber){
+		List<Integer> listhouseunit = houseownerservice.getallhavenullhousehouseunit(buildNumber);
+		return listhouseunit;
+	}
+	/**
+	 * 根据楼栋编号，单元号，查询所有空房间的房间号
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @return
+	 */
+	@RequestMapping("/getallnullhousehousenumber")
+	@ResponseBody
+	public List<String> getallnullhousehousenumber(@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)int houseUnit){
+		List<String> listhousenumber = houseownerservice.getallnullhousehousenumber(buildNumber, houseUnit);
+		return listhousenumber;
+	}
+	/**
 	 * 新增业主信息
 	 * @param ownerName
 	 * @param houseNumber
@@ -120,6 +154,8 @@ public class HouseOwnerController {
 	@ResponseBody
 	public JspResult inserthouseownerinfo(
 			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)int houseUnit,
 			@RequestParam(value = "houseNumber",required = false)String houseNumber,
 			@RequestParam(value = "ownerSex",required = false)int ownerSex,
 			@RequestParam(value = "ownerPhone",required = false)String ownerPhone,
@@ -133,7 +169,7 @@ public class HouseOwnerController {
 		try {
 			if(ownerselfmessageservice.selectownerphone(ownerPhone)==false) {//输入的手机号不存在
 				houseownerinfo.setOwnerName(ownerName);
-				houseinfo.setHouseId(houseinfoservice.gethouseidaccordinghousenumber(houseNumber));
+				houseinfo.setHouseId(houseinfoservice.selecthouseid(buildNumber, houseUnit, houseNumber));
 				houseownerinfo.setHouseInfo(houseinfo);
 				
 				houseownerinfo.setOwnerSex(ownerSex);
@@ -147,7 +183,7 @@ public class HouseOwnerController {
 				//添加业主时，在房间信息表中添加业主id,入住时间（默认为系统当前时间）
 				HouseInfo updatehouseinfo= new HouseInfo();
 				updatehouseinfo.setHouseInTime(new Date());
-				updatehouseinfo.setHouseId(houseinfoservice.gethouseidaccordinghousenumber(houseNumber));
+				updatehouseinfo.setHouseId(houseinfoservice.selecthouseid(buildNumber, houseUnit, houseNumber));
 				HouseOwner houseowner=new HouseOwner();
 				houseowner.setOwnerId(houseownerinfo.getOwnerId());//获取刚刚添加的业主id
 				updatehouseinfo.setHouseOwner(houseowner);
@@ -167,6 +203,7 @@ public class HouseOwnerController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}

@@ -13,17 +13,31 @@
 </head>
 <body style="background-color: rgb(245,245,245)">
 	<div class="container-fluid" id="vue">
+		<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>房间信息</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;楼房信息管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;房间信息</span></h5>
+        </div>
+        <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
+            <h4>查询条件</h4><hr>
+            <form class="form-inline" style="padding-bottom: 25px;">
+                <input type="text" class="form-control" id="likebuildnumber" placeholder="请输入楼栋编号">
+                <input type="text" class="form-control" id="likehouseunit" placeholder="请输入单元号">
+                <input type="text" class="form-control" id="likehousenumber" placeholder="请输入房间号">
+                <input type="text" class="form-control" id="likeownername" placeholder="请输入业主姓名">
+                <button type="button" class="btn btn-default" @click="gethouseinfolike()">查询</button>
+            </form>
+        </div>
 		<div class="row">
-			<div>
-				<h1 style="text-align: center;">房间信息</h1>
-				<button type="button" class="btn btn-default" style="float:right;" data-toggle="modal" data-target="#myModal2">新增</button>
-			</div>
+			<button type="button" class="btn btn-default"data-toggle="modal" data-target="#myModal2">新增</button>
+		</div>
+		<div class="row">
 			<table class="table table-bordered table-hover text-center col-md-12" id="mytb" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">序号</th>
-						<th class="text-center">房间号</th>
 						<th class="text-center">楼栋</th>
+						<th class="text-center">单元</th>
+						<th class="text-center">房间号</th>
 						<th class="text-center">业主</th>
 						<th class="text-center">面积(m²)</th>
 						<th class="text-center">房型</th>
@@ -36,12 +50,13 @@
 				<tbody>
 					<tr v-for="(list,index) in houseinfolist">
 						<td>{{index+1}}</td>
-						<td>{{list.houseNumber}}</td>
 						<td>{{list.buildInfo.buildNumber}}</td>
+						<td>{{list.houseUnit}}</td>
+						<td>{{list.houseNumber}}</td>
 						<td>{{list.houseOwner==null?'':list.houseOwner.ownerName}}</td>
 						<td>{{list.houseArea}}</td>
 						<td>{{list.houseType.houseTypeName}}</td>
-						<td>{{list.houseUse.houseUseName}}</td>
+						<td>{{list.houseUse}}</td>
 						<td>{{list.houseState==1?'有人居住':'待售'}}</td>
 						<td>{{list.houseInTime==''?'':list.houseInTime}}</td>
 						<td>
@@ -223,6 +238,22 @@
 						success : function(result) {
 							alert(result.msg);
 							app.get();
+						}
+					});
+				},
+				//模糊查询房间信息
+				gethouseinfolike : function(){
+					var buildNumber = $("#likebuildnumber").val();
+					var houseUnit = $("#likehouseunit").val();
+					var houseNumber = $("#likehousenumber").val();
+					var ownerName = $("#likeownername").val();
+					$.ajax({
+						url:'/community/houseinfo/gethouseinfolike',
+						type:'POST',
+						dataType:'JSON',
+						data:{"buildNumber":"%"+buildNumber+"%","houseUnit":"%"+houseUnit+"%","houseNumber":"%"+houseNumber+"%","ownerName":"%"+ownerName+"%"},
+						success : function(result) {
+							app.houseinfolist = result;
 						}
 					});
 				}

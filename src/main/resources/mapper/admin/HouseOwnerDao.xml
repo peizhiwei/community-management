@@ -5,7 +5,7 @@
  <mapper namespace="com.peizhiwei.community.admin.dao.HouseOwnerDao">
  	<!-- 查询所有业主信息 -->
  	<select id="getallhouseownerinfo" resultType="com.peizhiwei.community.admin.entity.HouseOwner">
- 		SELECT house_owner.*,building_info.build_number as `buildingInfo.buildNumber`,house_info.house_number as `houseInfo.houseNumber`,house_info.house_state as `houseInfo.houseState`,house_info.house_id as `houseInfo.houseId`
+ 		SELECT house_owner.*,building_info.build_number as `buildingInfo.buildNumber`,house_info.house_number as `houseInfo.houseNumber`,house_info.house_unit as `houseInfo.houseUnit`,house_info.house_state as `houseInfo.houseState`,house_info.house_id as `houseInfo.houseId`
 		FROM house_owner 
 		left join house_info on house_owner.house_id=house_info.house_id
 		left join building_info on house_info.build_id=building_info.build_id
@@ -17,6 +17,29 @@
 		owner_native_place=#{ownerNativePlace},owner_work_place=#{ownerWorkPlace}
 		where owner_id=#{ownerId}
  	</update>
+ 	<!-- 查询所有还有空房间的楼栋编号 -->
+ 	<select id="getallhavenullhousebuildNumber" resultType="String">
+ 		SELECT build_number FROM building_info b
+		LEFT JOIN house_info i on i.build_id = b.build_id
+		WHERE house_state=0
+		GROUP BY i.build_id HAVING COUNT(*)>=1
+		ORDER BY build_number
+ 	</select>
+ 	<!-- 根据楼栋编号，查询该楼栋中还有空房间的单元 -->
+ 	<select id="getallhavenullhousehouseunit" parameterType="String" resultType="int">
+ 		SELECT house_unit FROM house_info i
+		LEFT JOIN building_info b on i.build_id = b.build_id
+		WHERE house_state=0 AND build_number=#{buildNumber}
+		GROUP BY house_unit HAVING COUNT(*)>0
+		ORDER BY house_unit
+ 	</select>
+ 	<!-- 根据楼栋编号，单元号查询所有空房间的房间号 -->
+ 	<select id="getallnullhousehousenumber" resultType="String">
+ 		SELECT house_number FROM house_info i
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE house_state=0 AND build_number= #{buildNumber} AND house_unit=#{houseUnit}
+		ORDER BY house_number
+ 	</select>
  	<!-- 新增业主信息 -->
  	<insert id="inserthouseownerinfo" parameterType="com.peizhiwei.community.admin.entity.HouseOwner" useGeneratedKeys="true" keyProperty="ownerId">
  		INSERT INTO house_owner(owner_phone,owner_password,owner_name,owner_birthday,

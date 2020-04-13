@@ -11,10 +11,18 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body style="background-color: rgb(245,245,245)">
-	<div>
-		<h1 style="text-align: center;">楼栋信息</h1>
-	</div>
 	<div class="container-fluid" id="vue">
+		<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>楼栋信息</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;楼房信息管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;楼栋信息</span></h5>
+        </div>
+        <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
+            <h4>查询条件</h4><hr>
+            <form class="form-inline" style="padding-bottom: 25px;">
+                <input type="text" class="form-control" id="likebuildnumber" placeholder="请输入楼栋编号">
+                <button type="button" class="btn btn-default" @click="getbuildinfooflikebuildnumber()">查询</button>
+            </form>
+        </div>
 		<div class="row">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
 			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
@@ -28,7 +36,9 @@
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">编号</th>
+						<th class="text-center">单元数</th>
 						<th class="text-center">层数</th>
+						<th class="text-center">单元单层房间数</th>
 						<th class="text-center">房间数</th>
 						<th class="text-center">建筑面积(m²)</th>
 						<th class="text-center">开工时间</th>
@@ -43,13 +53,15 @@
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.buildNumber}}</td>
+						<td>{{list.buildUnitSum}}</td>
 						<td>{{list.buildLayer}}</td>
+						<td>{{list.buildUnitSingleLayerRooms}}</td>
 						<td>{{list.buildSumHouse}}</td>
 						<td>{{list.buildArea}}</td>
 						<td>{{list.buildStartTime}}</td>
 						<td>{{list.buildEndTime}}</td>
 						<td>
-							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal1" @click="changeinfo(list.buildId,list.buildNumber,list.buildLayer,list.buildSumHouse,list.buildArea,list.buildEndTime,list.buildStartTime)">修改</button>
+							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal1" @click="changeinfo(list.buildId,list.buildNumber,list.buildArea,list.buildEndTime,list.buildStartTime)">修改</button>
                             <button type="button" class="btn btn-danger btn-sm" @click="deleteinfo(list.buildId)">删除</button>
 						</td>
 					</tr>
@@ -73,18 +85,6 @@
 									<label class="col-sm-3 control-label">编号</label>
 									<div class="col-sm-9">
 										<input type="text" class="form-control" id="number">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">层数</label>
-									<div class="col-sm-9">
-										<input type="number" class="form-control" id="layer">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">房间数</label>
-									<div class="col-sm-9">
-										<input type="number" class="form-control" id="sum">
 									</div>
 								</div>
 								<div class="form-group">
@@ -135,15 +135,21 @@
 									</div>
 								</div>
 								<div class="form-group">
+									<label class="col-sm-3 control-label">单元数</label>
+									<div class="col-sm-9">
+										<input type="number" class="form-control" id="newunitsum">
+									</div>
+								</div>
+								<div class="form-group">
 									<label class="col-sm-3 control-label">层数</label>
 									<div class="col-sm-9">
 										<input type="number" class="form-control" id="newlayer">
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label">房间数</label>
+									<label class="col-sm-3 control-label">单元单层房间数</label>
 									<div class="col-sm-9">
-										<input type="number" class="form-control" id="newsum">
+										<input type="number" class="form-control" id="newunitsinglelayerrooms">
 									</div>
 								</div>
 								<div class="form-group">
@@ -226,12 +232,10 @@
 					});
 				},
 				//点击修改按钮，显示信息在模态框中
-				changeinfo:function(buildId,buildNumber,buildLayer,buildSumHouse,buildArea,buildEndTime,buildStartTime){
+				changeinfo:function(buildId,buildNumber,buildArea,buildEndTime,buildStartTime){
 					this.changeinfoid=buildId;
 					this.oldbuildNumber = buildNumber;
 					$("#number").val(buildNumber);
-					$("#layer").val(buildLayer);
-					$("#sum").val(buildSumHouse);
 					$("#area").val(buildArea);
 					$("#starttime").val(buildStartTime);
 					$("#endtime").val(buildEndTime);
@@ -241,19 +245,17 @@
 					var buildId=app.changeinfoid;
 					var oldbuildNumber = app.oldbuildNumber;
 					var buildNumber=$("#number").val();
-					var buildLayer=$("#layer").val();
-					var buildSumHouse=$("#sum").val();
 					var buildArea=$("#area").val();
 					var buildStartTime=$("#starttime").val();
 					var buildEndTime=$("#endtime").val();
-					if(buildNumber==''||buildLayer==''||buildSumHouse==''||buildArea==''||buildStartTime==''||buildEndTime==''){
+					if(buildNumber==''||buildArea==''||buildStartTime==''||buildEndTime==''){
 						alert("请将信息填写完整！");
 					}else{
 						$.ajax({
 							url:'/community/buildinginfo/changebuildinginfo',
 							type:'POST',
 							dataType:'JSON',
-							data:{"buildId":buildId,"oldbuildNumber":oldbuildNumber,"buildNumber":buildNumber,"buildLayer":buildLayer,"buildSumHouse":buildSumHouse,"buildArea":buildArea,"buildStartTime":buildStartTime,"buildEndTime":buildEndTime},
+							data:{"buildId":buildId,"oldbuildNumber":oldbuildNumber,"buildNumber":buildNumber,"buildArea":buildArea,"buildStartTime":buildStartTime,"buildEndTime":buildEndTime},
 							success : function(result) {
 								alert(result.msg);
 								app.get();
@@ -292,21 +294,22 @@
 				//新增一条楼栋信息
 				saveaddbuildinfo:function(){
 					var buildNumber=$("#newnumber").val();
+					var buildUnitSum = $("#newunitsum").val();
 					var buildLayer=$("#newlayer").val();
-					var buildSumHouse=$("#newsum").val();
+					var buildUnitSingleLayerRooms = $("#newunitsinglelayerrooms").val();
 					var buildArea=$("#newarea").val();
 					var buildStartTime=$("#newstarttime").val();
 					var buildEndTime=$("#newendtime").val();
 					var houseArea=$("#housearea").val();
 					var houseType=$("#housetype").val();
-					if(buildNumber==''||buildLayer==''||buildSumHouse==''||buildArea==''||buildStartTime==''||buildEndTime==''){
+					if(buildNumber==''||buildUnitSum==''||buildLayer==''||buildUnitSingleLayerRooms==''||buildArea==''||buildStartTime==''||buildEndTime==''){
 						alert("请将信息填写完整！");
 					}else{
 						$.ajax({
 							type:'POST',
 							dataType:'JSON',
 							url:'/community/buildinginfo/addbuildinginfo',
-							data:{"houseType":houseType,"houseArea":houseArea,"buildNumber":buildNumber,"buildLayer":buildLayer,"buildSumHouse":buildSumHouse,"buildArea":buildArea,"buildStartTime":buildStartTime,"buildEndTime":buildEndTime},
+							data:{"houseType":houseType,"houseArea":houseArea,"buildNumber":buildNumber,"buildUnitSum":buildUnitSum,"buildLayer":buildLayer,"buildUnitSingleLayerRooms":buildUnitSingleLayerRooms,"buildArea":buildArea,"buildStartTime":buildStartTime,"buildEndTime":buildEndTime},
 							success:function(result){
 								if(result.flag==true){
 									alert(result.msg);
@@ -323,7 +326,7 @@
                         this.arr=[];
                     }else{//实现全选
                         this.arr=[];
-                        this.infolist.forEach((item) =>{
+                        this.infolist.forEach((item)=>{
                             this.arr.push(item.buildId);
                         })
                     }
@@ -340,6 +343,19 @@
 						success:function(result){
 							alert(result.msg);
 							app.get();
+						}
+					});
+                },
+                //根据楼栋编号模糊查询楼栋信息
+                getbuildinfooflikebuildnumber : function(){
+                	var buildNumber = $("#likebuildnumber").val();
+                	$.ajax({
+						type:'POST',
+						dataType:'JSON',
+						url:'/community/buildinginfo/selectlikebuildinginfo',
+						data:{"buildNumber":"%"+buildNumber+"%"},
+						success:function(result){
+							app.infolist = result;
 						}
 					});
                 }

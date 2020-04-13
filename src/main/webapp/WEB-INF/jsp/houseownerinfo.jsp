@@ -11,10 +11,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body style="background-color: rgb(245,245,245)">
-  	<div>
-  		<h1 style="text-align: center;">业主信息</h1>
-  	</div>
     <div class="container-fluid" id="app">
+    	<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>业主信息</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;业主信息管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;业主信息</span></h5>
+        </div>
+        <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
+            <h4>查询条件</h4><hr>
+            <form class="form-inline" style="padding-bottom: 25px;">
+                <input type="text" class="form-control" id="likebuildnumber" placeholder="请输入楼栋编号">
+                <input type="text" class="form-control" id="likehouseunit" placeholder="请输入单元号">
+                <input type="text" class="form-control" id="likehousenumber" placeholder="请输入房间号">
+                <input type="text" class="form-control" id="likeownername" placeholder="请输入业主姓名">
+                <button type="button" class="btn btn-default" @click="gethouseinfolike()">查询</button>
+            </form>
+        </div>
     	<div class="row">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
 			<span style="color: red;text-align: center;">注：新增业主的默认密码为000000</span>
@@ -23,22 +34,24 @@
 			<table class="table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
-						<th class="col-md-1 text-center">姓名</th>
-						<th class="col-md-1 text-center">楼栋</th>
-						<th class="col-md-1 text-center">房间号</th>
-						<th class="col-md-1 text-center">性别</th>
-						<th class="col-md-1 text-center">电话</th>
-						<th class="col-md-1 text-center">出生日期</th>
-						<th class="col-md-1 text-center">身份证号</th>
-						<th class="col-md-1 text-center">籍贯</th>
-						<th class="col-md-2 text-center">工作单位</th>
-						<th class="col-md-2 text-center">操作</th>
+						<th class="text-center">姓名</th>
+						<th class="text-center">楼栋</th>
+						<th class="text-center">单元</th>
+						<th class="text-center">房间号</th>
+						<th class="text-center">性别</th>
+						<th class="text-center">电话</th>
+						<th class="text-center">出生日期</th>
+						<th class="text-center">身份证号</th>
+						<th class="text-center">籍贯</th>
+						<th class="text-center">工作单位</th>
+						<th class="text-center">操作</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="list in listhouseownerinfo">
 						<td>{{list.ownerName}}</td>
 						<td>{{list.buildingInfo.buildNumber}}</td>
+						<td>{{list.houseInfo.houseUnit}}</td>
 						<td>{{list.houseInfo.houseNumber}}</td>
 						<td>{{list.ownerSex==1?'男':'女'}}</td>
 						<td>{{list.ownerPhone}}</td>
@@ -50,7 +63,7 @@
 							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#myModal1" @click="change(list.ownerId,list.ownerName,list.ownerSex,list.ownerPhone,
                                 list.ownerBirthday,list.ownerIdCard,list.ownerNativePlace,list.ownerWorkPlace)">修改</button>
-                            <button type="button" class="btn btn-danger btn-sm" @click="deleteowner(ownerlist.ownerId)">迁出</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click="deleteowner(list.ownerId)">迁出</button>
 						</td>
 					</tr>
 				</tbody>
@@ -133,7 +146,7 @@
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title text-center" id="myModalLabel">增加楼栋信息</h4>
+							<h4 class="modal-title text-center" id="myModalLabel">新增业主信息</h4>
 						</div>
 						<div class="modal-body">
 							<form class="form-horizontal">
@@ -146,8 +159,16 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">楼栋</label>
 									<div class="col-sm-9">
-										<select required="required" class="form-control" id="addbuildnumber" @click="gethouseinfoofbuild()">
-											<option v-for="listbuild in listbuildinginfo">{{listbuild.buildNumber}}</option>
+										<select required="required" class="form-control" id="addbuildnumber" @click="gethavenullhousehouseunit()">
+											<option v-for="list in listhavenullhousebuildnumber">{{list}}</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">单元</label>
+									<div class="col-sm-9">
+										<select required="required" class="form-control" id="addhouseunit" @click="getnullhousehousenumber()">
+											<option v-for="list in listhouseunit">{{list}}</option>
 										</select>
 									</div>
 								</div>
@@ -155,7 +176,7 @@
 									<label class="col-sm-3 control-label">房间号</label>
 									<div class="col-sm-9">
 										<select required="required" class="form-control" id="addhousenumber">
-											<option v-for="listhouseinfoofbuild in listhouseinfoofbuild">{{listhouseinfoofbuild.houseNumber}}</option>
+											<option v-for="list in listhousenumber">{{list}}</option>
 										</select>
 									</div>
 								</div>
@@ -222,8 +243,9 @@
 				listhouseownerinfo:[],//所有业主信息
 				changeid:0,
 				oldownerphone:'',//业主原来的手机号
-				listbuildinginfo:[],//所有的楼栋信息
-				listhouseinfoofbuild:[]//根据楼栋号查出的所有的房间信息
+				listhavenullhousebuildnumber:[],//所有还有空房间的楼栋编号
+				listhouseunit:[],//所属楼栋中还有空房间的单元号
+				listhousenumber:[]//根据楼栋号,单元号查出的所有空房间的房间号
 			},
 			mounted : function() {
 				this.get();
@@ -282,22 +304,67 @@
 				},
 				//点击新增按钮，查询所有楼栋号，所有房间号
 				add:function(){
-					//获取所有的楼栋信息，主要是楼栋号
+					//获取所有还有空房间的楼栋编号
 					$.ajax({
-						url : '/community/buildinginfo/getallbuildinginfo',
+						url : '/community/houseownerinfo/getallhavenullhousebuildnumber',
 						type : 'GET',
 						dataType : 'JSON',
 						success : function(result) {
-							app.listbuildinginfo = result;
-							//点击新增按钮时，同时查询默认显示的楼号所属的房间号的所有信息
-							var buildNumber=result[0].buildNumber;
+							app.listhavenullhousebuildnumber = result;
+							//点击新增按钮时，同时查询默认显示的楼号所属的还有空房间的单元号
+							var buildNumber=result[0];
 							$.ajax({
-								url : '/community/houseinfo/getallhouseinfoofbuild',
+								url : '/community/houseownerinfo/getallhavenullhousehouseunit',
 								type : 'GET',
 								dataType : 'JSON',
 								data:{"buildNumber":buildNumber},
 								success : function(result) {
-									app.listhouseinfoofbuild = result;
+									app.listhouseunit = result;
+									var houseUnit = result[0];
+									//点击新增按钮时，根据默认显示的楼栋号，单元号查询所有空房间的房间号
+									$.ajax({
+										url : '/community/houseownerinfo/getallnullhousehousenumber',
+										type : 'GET',
+										dataType : 'JSON',
+										data:{"buildNumber":buildNumber,"houseUnit":houseUnit},
+										success : function(result) {
+											app.listhousenumber = result;
+										},
+										error : function() {
+											console.log("请求失败处理");
+										}
+									});
+								},
+								error : function() {
+									console.log("请求失败处理");
+								}
+							});
+							
+						},
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
+				},
+				//点击楼号下拉框时同步更新单元号下拉框里的内容
+				gethavenullhousehouseunit:function(){
+					//根据楼栋号，获取还有空房间的单元号
+					var buildNumber=$("#addbuildnumber").val();
+					$.ajax({
+						url : '/community/houseownerinfo/getallhavenullhousehouseunit',
+						type : 'GET',
+						dataType : 'JSON',
+						data:{"buildNumber":buildNumber},
+						success : function(result) {
+							app.listhouseunit = result;
+							var houseUnit=$("#addhouseunit").val();
+							$.ajax({
+								url : '/community/houseownerinfo/getallnullhousehousenumber',
+								type : 'GET',
+								dataType : 'JSON',
+								data:{"buildNumber":buildNumber,"houseUnit":houseUnit},
+								success : function(result) {
+									app.listhousenumber = result;
 								},
 								error : function() {
 									console.log("请求失败处理");
@@ -309,17 +376,17 @@
 						}
 					});
 				},
-				//点击楼号下拉框时同步更新另一个房间号下拉框里的内容
-				gethouseinfoofbuild:function(){
-					//根据楼栋号，获取所有的房间信息，主要是房间号
+				//点击单元号下拉框，根据默认显示的楼栋号，单元号查询所有空房间的房间号
+				getnullhousehousenumber : function(){
 					var buildNumber=$("#addbuildnumber").val();
+					var houseUnit=$("#addhouseunit").val();
 					$.ajax({
-						url : '/community/houseinfo/getallhouseinfoofbuild',
+						url : '/community/houseownerinfo/getallnullhousehousenumber',
 						type : 'GET',
 						dataType : 'JSON',
-						data:{"buildNumber":buildNumber},
+						data:{"buildNumber":buildNumber,"houseUnit":houseUnit},
 						success : function(result) {
-							app.listhouseinfoofbuild = result;
+							app.listhousenumber = result;
 						},
 						error : function() {
 							console.log("请求失败处理");
@@ -329,6 +396,8 @@
 				//确定新增的业主信息
 				saveaddownerinfo:function(){
 					var ownerName=$("#addownername").val();
+					var	buildNumber = $("#addbuildnumber").val();
+					var houseUnit = $("#addhouseunit").val();
 					var houseNumber=$("#addhousenumber").val();
 					var ownerSex=$("#addownersex").val()=='男'?1:0;
 					var ownerPhone=$("#addownerphone").val();
@@ -336,14 +405,14 @@
 					var ownerIdCard=$("#addowneridcard").val();
 					var ownerNativePlace=$("#addownernativeplace").val();
 					var ownerWorkPlace=$("#addownerworkplace").val();
-					if(ownerName==''||houseNumber==''||ownerPhone==''||ownerBirthday==''||ownerIdCard==''||ownerNativePlace==''||ownerWorkPlace==''){
+					if(ownerName==''||buildNumber==''||houseUnit==''||houseNumber==''||ownerPhone==''||ownerBirthday==''||ownerIdCard==''||ownerNativePlace==''||ownerWorkPlace==''){
 						alert("请将信息填写完整！");
 					}else{
 						$.ajax({
 							url : '/community/houseownerinfo/inserthouseownerinfo',
 							type : 'POST',
 							dataType : 'JSON',
-							data:{"ownerName":ownerName,"houseNumber":houseNumber,"ownerSex":ownerSex,"ownerPhone":ownerPhone,"ownerBirthday":ownerBirthday,
+							data:{"ownerName":ownerName,"buildNumber":buildNumber,"houseUnit":houseUnit,"houseNumber":houseNumber,"ownerSex":ownerSex,"ownerPhone":ownerPhone,"ownerBirthday":ownerBirthday,
 								"ownerIdCard":ownerIdCard,"ownerNativePlace":ownerNativePlace,"ownerWorkPlace":ownerWorkPlace},
 							success : function(result) {
 								alert(result.msg);

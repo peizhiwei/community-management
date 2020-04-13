@@ -22,4 +22,10 @@ public interface OwnerPayService {
 	 * @param payinfodetails
 	 */
 	void paid(PayInfoDetails payinfodetails);
+	/**
+	 * 根据缴费名称查询对应的id
+	 * @param methodName
+	 * @return
+	 */
+	int getpaymethodid(String methodName);
 }

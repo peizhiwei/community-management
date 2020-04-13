@@ -37,5 +37,12 @@ public class OwnerPayServiceImpl implements OwnerPayService {
 	public void paid(PayInfoDetails payinfodetails) {
 		ownerpaydao.paid(payinfodetails);
 	}
+	/**
+	 * 根据缴费方式名称查询对应的id
+	 */
+	@Override
+	public int getpaymethodid(String methodName) {
+		return ownerpaydao.getpaymethodid(methodName);
+	}
 
 }

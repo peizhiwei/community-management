@@ -5,11 +5,9 @@
 <mapper namespace="com.peizhiwei.community.admin.dao.BuildingInfoDao">
 	<!-- 查询所有楼栋信息 -->
 	<select id="getallbuildinginfo" resultType="com.peizhiwei.community.admin.entity.BuildingInfo">
-		SELECT build_id as buildId,build_number as buildNumber,build_layer as buildLayer,
-		build_sum_house as buildSumHouse,build_area as buildArea,build_end_time as buildEndTime,
-		build_start_time as buildStartTime
+		SELECT *
 		FROM building_info
-		ORDER BY buildNumber
+		ORDER BY build_number
 	</select>
 	<!-- 根据楼房编号判断数据库中是否已存在该编号 -->
 	<select id="selectnumberisnull" resultType="int" parameterType="String">
@@ -38,18 +36,18 @@
 	</select>
 	<!-- 新增楼栋信息 -->
 	<insert id="insertbuildinfo" parameterType="com.peizhiwei.community.admin.entity.BuildingInfo" useGeneratedKeys="true" keyProperty="buildId">
-		INSERT INTO building_info(build_number,build_layer,build_sum_house,build_area,build_start_time,build_end_time) 
-		VALUES(#{buildNumber},#{buildLayer},#{buildSumHouse},#{buildArea},#{buildStartTime},#{buildEndTime})
+		INSERT INTO building_info(build_number,build_unit_sum,build_layer,build_unit_single_layer_rooms,build_sum_house,build_area,build_start_time,build_end_time) 
+		VALUES(#{buildNumber},#{buildUnitSum},#{buildLayer},#{buildUnitSingleLayerRooms},#{buildSumHouse},#{buildArea},#{buildStartTime},#{buildEndTime})
 	</insert>
 	<!-- 批量增加房间信息 -->
 	<insert id="inserthouseinfolist" parameterType="java.util.List">
 		insert into house_info(
-    		house_number,build_id,house_area,house_type_id,house_use_id,house_state
+    		house_number,house_unit,build_id,house_area,house_type_id,house_use,house_state
    		)
     	values
     	<foreach collection="houseinfolist" item="item" index="index" separator=",">
       	(
-      		#{item.houseNumber},#{item.buildInfo.buildId},#{item.houseArea},#{item.houseType.houseTypeId},#{item.houseUse.houseUseId},#{item.houseState}
+      		#{item.houseNumber},#{item.houseUnit},#{item.buildInfo.buildId},#{item.houseArea},#{item.houseType.houseTypeId},#{item.houseUse},#{item.houseState}
       	)
     	</foreach>
 	</insert>
@@ -60,5 +58,9 @@
 	<!-- 根据id查询楼栋编号 -->
 	<select id="selectbuildnumber" parameterType="int" resultType="String">
 		select build_number from building_info where build_id=#{buildId}
+	</select>
+	<!-- 根据楼栋编号模糊查找楼栋信息 -->
+	<select id="selectlikebuildinginfo" parameterType="String" resultType="com.peizhiwei.community.admin.entity.BuildingInfo">
+		SELECT * FROM building_info WHERE build_number LIKE #{buildNumber} ORDER BY build_number
 	</select>
 </mapper>

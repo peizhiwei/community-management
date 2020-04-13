@@ -5,25 +5,19 @@
 <mapper namespace="com.peizhiwei.community.admin.dao.HouseInfoDao">
 	<!-- 查询所有的房间信息，并按房间号升序排序 -->
 	<select id="getallhouseinfo" resultType="com.peizhiwei.community.admin.entity.HouseInfo">
-		SELECT h.house_id as houseId,h.house_number as houseNumber,h.house_area as houseArea,h.house_in_time as houseInTime,h.house_state as houseState,
-				b.build_number as `buildInfo.buildNumber`,o.owner_name as `houseOwner.ownerName`,
-			   t.house_type_name as `houseType.houseTypeName`, u.house_use_name as `houseUse.houseUseName`
+		SELECT h.*,b.build_number as `buildInfo.buildNumber`,o.owner_name as `houseOwner.ownerName`,
+			   t.house_type_name as `houseType.houseTypeName`
 		FROM house_info h
 		LEFT JOIN building_info b on h.build_id=b.build_id
 		LEFT JOIN house_owner o on h.owner_id=o.owner_id
 		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
-		LEFT JOIN house_use u on h.house_use_id=u.house_use_id
-		ORDER BY houseNumber
+		ORDER BY build_id,house_unit,house_number
 	</select>
 	<!-- 根据业主名称查询所有的房间信息 -->
 	<select id="getallhouseinfoaccordingownername" resultType="com.peizhiwei.community.admin.entity.HouseInfo" parameterType="String">
 		SELECT house_info.* FROM house_info
 		LEFT JOIN house_owner ON house_info.owner_id=house_owner.owner_id
 		WHERE house_owner.owner_name=#{ownerName}
-	</select>
-	<!-- 查询所有房间用途 -->
-	<select id="getallhousetype" resultType="com.peizhiwei.community.admin.entity.HouseType">
-		SELECT * FROM house_type
 	</select>
 	<!-- 更新房间信息 -->
 	<update id="updatehouseinfo" parameterType="com.peizhiwei.community.admin.entity.HouseInfo">
@@ -43,9 +37,15 @@
 		LEFT JOIN building_info on house_info.build_id=building_info.build_id 
 		where building_info.build_number=#{buildNumber} and house_state=0
 	</select>
-	<!-- 根据房间号查询该房间的id -->
-	<select id="gethouseidaccordinghousenumber" resultType="int" parameterType="String">
-		SELECT house_id as houseId FROM house_info WHERE house_number=#{houseNumber}
+	<!-- 根据楼栋编号，单元号，房间号，查询该房间的id -->
+	<select id="selecthouseid" resultType="int">
+		SELECT house_id FROM house_info i
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE build_number=#{buildNumber} AND house_unit=#{houseUnit} AND house_number=#{houseNumber}
+	</select>
+	<!-- 查询所有房间用途 -->
+	<select id="getallhousetype" resultType="com.peizhiwei.community.admin.entity.HouseType">
+		SELECT * FROM house_type
 	</select>
 	<!-- 新增业主的时候在房间信息表中添加业主id,入住时间（默认为系统当前时间） -->
 	<update id="updatehouseinfoofownerid" parameterType="com.peizhiwei.community.admin.entity.HouseInfo">
@@ -57,4 +57,16 @@
 		SET `owner_id` = null, `house_in_time` = null, `house_state` = 0 
 		WHERE `owner_id`=#{ownerId}
 	</update>
+	<!-- 模糊查询房间信息 -->
+	<select id="selecthouseinfolike" resultType="com.peizhiwei.community.admin.entity.HouseInfo">
+		SELECT h.*,b.build_number as `buildInfo.buildNumber`,o.owner_name as `houseOwner.ownerName`,
+			   t.house_type_name as `houseType.houseTypeName`
+		FROM house_info h
+		LEFT JOIN building_info b on h.build_id=b.build_id
+		LEFT JOIN house_owner o on h.owner_id=o.owner_id
+		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
+		WHERE b.build_number LIKE #{buildNumber} AND h.house_unit LIKE #{houseUnit}
+		AND	h.house_number LIKE #{houseNumber} AND IFNULL(o.owner_name,'') LIKE #{ownerName}
+		ORDER BY build_id,house_unit,house_number
+	</select>
 </mapper>

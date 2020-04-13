@@ -20,7 +20,6 @@ public class AdminIndexController {
 	@ResponseBody
 	public int gethouseinfosum() {
 		int houseinfosum = adminindexservice.selecthousesum();
-		System.out.println(houseinfosum);
 		return houseinfosum;
 	}
 	/**

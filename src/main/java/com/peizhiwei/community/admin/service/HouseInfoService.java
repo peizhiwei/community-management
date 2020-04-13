@@ -7,6 +7,8 @@ package com.peizhiwei.community.admin.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.entity.HouseType;
 
@@ -38,11 +40,12 @@ public interface HouseInfoService {
 	 */
 	List<HouseInfo> getallhouseinfoofbuild(String buildNumber);
 	/**
-	 * 根据房间号查询该房间的id
-	 * @param houseNumber
+	 * 根据楼栋编号，单元号，房间号，查询该房间的id
+	 * @param buildNumber
+	 * @param houseUnit
 	 * @return
 	 */
-	Integer gethouseidaccordinghousenumber(String houseNumber);
+	int selecthouseid(@Param("buildNumber")String buildNumber,@Param("houseUnit")int houseUnit,@Param("houseNumber")String houseNumber);
 	/**
 	 * 新增业主时，在房间信息表中添加业主id,入住时间（默认为系统当前时间）
 	 * @param houseinfo
@@ -53,4 +56,11 @@ public interface HouseInfoService {
 	 * @param ownerId
 	 */
 	void updatehouseinfoofowner(int ownerId);
+	/**
+	 * 模糊查询房间信息
+	 * @param houseinfo(楼栋编号，单元号，房间号，业主姓名)
+	 * @return
+	 */
+	List<HouseInfo> selecthouseinfolike(String buildNumber,String houseUnit,String houseNumber,String ownerName);
+
 }

@@ -20,6 +20,7 @@ import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.entity.PayMethod;
+import com.peizhiwei.community.admin.service.PayInfoSumService;
 import com.peizhiwei.community.owner.service.OwnerPayService;
 
 @RequestMapping("/ownerpay")
@@ -27,6 +28,8 @@ import com.peizhiwei.community.owner.service.OwnerPayService;
 public class OwnerPayController {
 	@Autowired
 	OwnerPayService ownerpayservice;
+	@Autowired
+	PayInfoSumService payinfosumservice;
 	
 	/**
 	 * 日期格式，在每一个日期实体上添加一个注解，再在这里添加一下语句，这样可以保证后台和页面间交互的日期格式是标准的，不需要再进行格式化
@@ -67,6 +70,12 @@ public class OwnerPayController {
 		List<PayMethod> listpaymethod = ownerpayservice.getallpaymethod();
 		return listpaymethod;
 	}
+	
+	@RequestMapping("/getpaymethodid")
+	@ResponseBody
+	public int getpaymethodid(String methodName) {
+		return ownerpayservice.getpaymethodid(methodName);
+	}
 	/**
 	 * 业主缴费，更改缴费状态，由业主选择缴费方式
 	 * @return
@@ -86,6 +95,7 @@ public class OwnerPayController {
 			payinfodetails.setPayMethod(method);
 			payinfodetails.setPayId(payId);
 			ownerpayservice.paid(payinfodetails);
+			payinfosumservice.updatepayinfosum();//更新缴费汇总信息
 			rs.setFlag(true);
 			rs.setMsg("缴费成功！");
 		} catch (Exception e) {

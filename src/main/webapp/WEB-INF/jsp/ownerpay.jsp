@@ -79,8 +79,8 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">方式</label>
 									<div class="col-sm-9">
-										<select required="required" class="form-control" id="paymethod">
-											<option class="form-control" v-for="list in listpaymethod" @click="selectmethod(list.methodId)">{{list.methodName}}</option>
+										<select required="required" class="form-control" id="paymethod" @click="selectmethod()">
+											<option class="form-control" v-for="list in listpaymethod">{{list.methodName}}</option>
 										</select>
 									</div>
 								</div>
@@ -143,8 +143,20 @@
 					});
 				},
 				//选择支付方式，保留支付方式的id
-				selectmethod:function(methodId){
-					app.methodid=methodId
+				selectmethod:function(){
+					var methodName = $("#paymethod").val();
+					$.ajax({
+						url : '/community/ownerpay/getpaymethodid',
+						type : 'GET',
+						dataType : 'JSON',
+						data:{"methodName":methodName},
+						success : function(result) {
+							app.methodid=result
+						},							
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
 				},
 				//确定缴费
 				savepaid : function(){

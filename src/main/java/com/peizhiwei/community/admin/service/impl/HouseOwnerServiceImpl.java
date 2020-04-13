@@ -17,6 +17,7 @@ import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 import com.peizhiwei.community.admin.service.PayInfoSumService;
 import com.peizhiwei.community.admin.service.RepairService;
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class HouseOwnerServiceImpl implements HouseOwnerService {
 	@Autowired
 	HouseOwnerDao houseownerdao;
@@ -43,12 +44,40 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 		List<HouseOwner> listhouseowner = houseownerdao.getallhouseownerinfo();
 		return listhouseowner;
 	}
-
+	/**
+	 * 更新业主信息
+	 */
 	@Override
 	public void updatehouseownerinfo(HouseOwner houseowner) {
 		houseownerdao.updatehouseownerinfo(houseowner);
 	}
-
+	/**
+	 * 获取所有还有空房间的楼栋编号
+	 */
+	@Override
+	public List<String> getallhavenullhousebuildNumber() {
+		List<String> listbuildnumber = houseownerdao.getallhavenullhousebuildNumber();
+		return listbuildnumber;
+	}
+	/**
+	 * 根据楼栋编号查询该楼栋中还有空房间的单元
+	 */
+	@Override
+	public List<Integer> getallhavenullhousehouseunit(String buildNumber) {
+		List<Integer> listhouseunit = houseownerdao.getallhavenullhousehouseunit(buildNumber);
+		return listhouseunit;
+	}
+	/**
+	 * 根据楼栋号，单元号，查询空房间的房间号
+	 */
+	@Override
+	public List<String> getallnullhousehousenumber(String buildNumber, int houseUnit) {
+		List<String> listhousenumber = houseownerdao.getallnullhousehousenumber(buildNumber, houseUnit);
+		return listhousenumber;
+	}
+	/**
+	 * 新增业主
+	 */
 	@Override
 	public void inserthouseownerinfo(HouseOwner houseownerinfo) {
 		houseownerdao.inserthouseownerinfo(houseownerinfo);
@@ -61,7 +90,9 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 		List<HouseOwner> onluhouseownername = houseownerdao.getallonlyhouseownername();
 		return onluhouseownername;
 	}
-
+	/**
+	 * 根据房间号查询业主
+	 */
 	@Override
 	public HouseOwner gethouseownerinfoaccordinghousenumber(String houseNumber) {
 		HouseOwner houseonwer = houseownerdao.gethouseownerinfoaccordinghousenumber(houseNumber);

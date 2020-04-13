@@ -5,10 +5,11 @@
 <mapper namespace="com.peizhiwei.community.admin.dao.PayInfoSumDao">
 	<!-- 获取所有汇总信息 -->
 	<select id="getallpayinfosum" resultType="com.peizhiwei.community.admin.entity.PayInfoSum">
-		SELECT s.*,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		SELECT s.*,b.build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,i.house_unit as `houseOwner.houseInfo.houseUnit`,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`
 		FROM pay_info_sum s
 		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
 		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
 	</select>
 	<!-- 添加业主时添加该业主的缴费汇总信息 -->
 	<insert id="insertpayinfosum" parameterType="com.peizhiwei.community.admin.entity.PayInfoSum">

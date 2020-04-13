@@ -22,6 +22,10 @@
 		SELECT * FROM pay_method
         WHERE method_name!='现金'
 	</select>
+	<!-- 根据缴费方式名称查询对应的id -->
+	<select id="getpaymethodid" resultType="int" parameterType="String">
+		SELECT method_id FROM pay_method WHERE method_name=#{methodName}
+	</select>
 	<!-- 业主缴费，修改缴费状态，由业主选择缴费方式 -->
 	<update id="paid" parameterType="com.peizhiwei.community.admin.entity.PayInfoDetails">
 		UPDATE `pay_info_details` SET 

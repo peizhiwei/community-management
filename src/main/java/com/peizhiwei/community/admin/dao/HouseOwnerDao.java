@@ -2,6 +2,8 @@ package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.peizhiwei.community.admin.entity.HouseOwner;
 
 public interface HouseOwnerDao {
@@ -24,6 +26,22 @@ public interface HouseOwnerDao {
 	 */
 	void updatehouseownerinfo(HouseOwner houseowner);
 
+	/**
+	 * 获取所有有空房间的楼栋编号
+	 * @return
+	 */
+	List<String> getallhavenullhousebuildNumber();
+	/**
+	 * 根据楼栋编号查询该楼栋中还有空房间的单元
+	 */
+	List<Integer> getallhavenullhousehouseunit(String buildNumber);
+	/**
+	 * 根据楼栋号，单元号，查询房间号
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @return
+	 */
+	List<String> getallnullhousehousenumber(@Param("buildNumber")String buildNumber,@Param("houseUnit")int houseUnit);
 	/**
 	 * 新增业主信息
 	 * @param houseownerifo

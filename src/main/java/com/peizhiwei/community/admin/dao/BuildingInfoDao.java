@@ -56,4 +56,10 @@ public interface BuildingInfoDao {
 	 * @return
 	 */
 	String selectbuildnumber(int buildId);
+	/**
+	 * 根据楼栋编号模糊查询楼栋信息
+	 * @param buildNumber
+	 * @return
+	 */
+	List<BuildingInfo> selectlikebuildinginfo(String buildNumber);
 }

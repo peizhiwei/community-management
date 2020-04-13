@@ -26,6 +26,22 @@ public interface HouseOwnerService {
 	 */
 	void updatehouseownerinfo(HouseOwner houseowner);
 	/**
+	 * 获取所有还有住户的楼栋编号
+	 * @return
+	 */
+	List<String> getallhavenullhousebuildNumber();
+	/**
+	 * 根据楼栋编号查询该楼栋中还有空房间的单元
+	 */
+	List<Integer> getallhavenullhousehouseunit(String buildNumber);
+	/**
+	 * 根据楼栋号，单元号，查询房间号
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @return
+	 */
+	List<String> getallnullhousehousenumber(String buildNumber,int houseUnit);
+	/**
 	 * 新增业主信息
 	 * @param houseownerinfo
 	 */

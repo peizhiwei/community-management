@@ -2,6 +2,9 @@ package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.entity.HouseType;
 
@@ -27,9 +30,12 @@ public interface HouseInfoDao {
 	 */
 	List<HouseInfo> getallhouseinfoofbuild(String buildNumber);
 	/**
-	 * 根据房间号查询该房间id
+	 * 根据楼栋编号，单元号，房间号，查询该房间的id
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @return
 	 */
-	Integer gethouseidaccordinghousenumber(String houseNumber);
+	int selecthouseid(@Param("buildNumber")String buildNumber,@Param("houseUnit")int houseUnit,@Param("houseNumber")String houseNumber);
 	/**
 	 * 在新增业主的时候在房间信息表中插入业主id、入住时间（默认为新增业主时间）
 	 */
@@ -39,5 +45,11 @@ public interface HouseInfoDao {
 	 * @param ownerId
 	 */
 	void updatehouseinfoofowner(int ownerId);
+	/**
+	 * 模糊查询房间信息
+	 * @param houseinfo(楼栋编号，单元号，房间号，业主姓名)
+	 * @return
+	 */
+	List<HouseInfo> selecthouseinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName);
 	
 }

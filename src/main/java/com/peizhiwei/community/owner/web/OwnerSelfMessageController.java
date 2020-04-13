@@ -42,9 +42,11 @@ public class OwnerSelfMessageController {
 	@ResponseBody
 	public HouseOwner getmessageofowner(HttpSession session) {
 		HouseOwner owner = new HouseOwner();
+		HouseOwner messageofowner = new HouseOwner();
 		Object ownersession = session.getAttribute("owner");
 		owner = (HouseOwner) ownersession;
-		return owner;
+		messageofowner = ownerselfmessageservice.getmessageofowner(owner.getOwnerId());
+		return messageofowner;
 	}
 	/**
 	 * 业主修改个人信息

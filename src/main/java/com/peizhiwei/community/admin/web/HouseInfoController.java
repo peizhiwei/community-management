@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.peizhiwei.community.admin.entity.BuildingInfo;
 import com.peizhiwei.community.admin.entity.HouseInfo;
+import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.HouseType;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.service.HouseInfoService;
@@ -107,5 +109,23 @@ public class HouseInfoController {
 			e.printStackTrace();
 		}
 		return rs;
+	}
+	/**
+	 * 模糊查询房间信息
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param ownerName
+	 * @return
+	 */
+	@RequestMapping("/gethouseinfolike")
+	@ResponseBody
+	public List<HouseInfo> gethouseinfolike(
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)String houseUnit,
+			@RequestParam(value = "houseNumber",required = false)String houseNumber,
+			@RequestParam(value = "ownerName",required = false)String ownerName){
+		List<HouseInfo> listhouseinfo = houseinfoservice.selecthouseinfolike(buildNumber, houseUnit, houseNumber, ownerName);
+		return listhouseinfo;
 	}
 }

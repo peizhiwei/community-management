@@ -89,16 +89,28 @@ public class BuildingInfoServiceImpl implements BuildingInfoService {
 		}
 		return flag;
 	}
-
+	/**
+	 * 批量增加房间信息
+	 */
 	@Override
 	public void inserthouseinfolist(List<HouseInfo> houseinfolist) {
 		buildinginfodao.inserthouseinfolist(houseinfolist);		
 	}
-
+	/**
+	 * 根据楼栋id查找楼栋编号
+	 */
 	@Override
 	public String selectbuildnumber(int buildId) {
 		String number = buildinginfodao.selectbuildnumber(buildId);
 		return number;
+	}
+	/**
+	 * 根据楼栋编号模糊查询楼栋信息
+	 */
+	@Override
+	public List<BuildingInfo> selectlikebuildinginfo(String buildNumber) {
+		List<BuildingInfo> listbuildinginfo = buildinginfodao.selectlikebuildinginfo(buildNumber);
+		return listbuildinginfo;
 	}
 	
 

@@ -8,14 +8,21 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class HouseInfo {
 	private Integer houseId;//id
 	private String houseNumber;//房间号
+	private int houseUnit;//单元号
 	private BigDecimal houseArea;//房间面积
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date houseInTime;//入住时间，可以为空
 	private BuildingInfo buildInfo;
 	private HouseOwner houseOwner;
 	private HouseType houseType;
-	private HouseUse houseUse;
+	private String houseUse;
 	private int houseState;//状态0表示待售，1表示有人居住
+	public int getHouseUnit() {
+		return houseUnit;
+	}
+	public void setHouseUnit(int houseUnit) {
+		this.houseUnit = houseUnit;
+	}
 	public int getHouseState() {
 		return houseState;
 	}
@@ -64,11 +71,10 @@ public class HouseInfo {
 	public void setHouseType(HouseType houseType) {
 		this.houseType = houseType;
 	}
-	public HouseUse getHouseUse() {
+	public String getHouseUse() {
 		return houseUse;
 	}
-	public void setHouseUse(HouseUse houseUse) {
+	public void setHouseUse(String houseUse) {
 		this.houseUse = houseUse;
 	}
-	
 }
