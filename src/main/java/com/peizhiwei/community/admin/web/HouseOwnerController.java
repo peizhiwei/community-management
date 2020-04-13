@@ -224,5 +224,25 @@ public class HouseOwnerController {
 		}
 		return rs;
 	}
-	
+	/**
+	 * 模糊查询业主信息
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param ownerName
+	 * @param ownerPhone
+	 * @return
+	 */
+	@RequestMapping("/gethouseownerinfolike")
+	@ResponseBody
+	public List<HouseOwner> gethouseownerinfolike(
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)String houseUnit,
+			@RequestParam(value = "houseNumber",required = false)String houseNumber,
+			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "ownerPhone",required = false)String ownerPhone){
+		List<HouseOwner> listhouseowner = new ArrayList<HouseOwner>();
+		listhouseowner = houseownerservice.gethouseownerinfolike(buildNumber, houseUnit, houseNumber, ownerName, ownerPhone);
+		return listhouseowner;
+	}
 }

@@ -117,4 +117,13 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 模糊查询业主信息
+	 */
+	@Override
+	public List<HouseOwner> gethouseownerinfolike(String buildNumber, String houseUnit, String houseNumber,
+			String ownerName, String ownerPhone) {
+		List<HouseOwner> listhouseowner = houseownerdao.gethouseownerinfolike(buildNumber, houseUnit, houseNumber, ownerName, ownerPhone);
+		return listhouseowner;
+	}
 }

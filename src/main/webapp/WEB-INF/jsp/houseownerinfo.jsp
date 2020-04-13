@@ -23,7 +23,8 @@
                 <input type="text" class="form-control" id="likehouseunit" placeholder="请输入单元号">
                 <input type="text" class="form-control" id="likehousenumber" placeholder="请输入房间号">
                 <input type="text" class="form-control" id="likeownername" placeholder="请输入业主姓名">
-                <button type="button" class="btn btn-default" @click="gethouseinfolike()">查询</button>
+                <input type="text" class="form-control" id="likeownerphone" placeholder="请输入手机号">
+                <button type="button" class="btn btn-default" @click="getownerinfolike()">查询</button>
             </form>
         </div>
     	<div class="row">
@@ -437,6 +438,24 @@
 						},
 						error : function() {
 							console.log("请求失败处理");
+						}
+					});
+				},
+				//模糊查询业主信息
+				getownerinfolike : function(){
+					var buildNumber = $("#likebuildnumber").val();
+					var houseUnit = $("#likehouseunit").val();
+					var houseNumber = $("#likehousenumber").val();
+					var ownerName = $("#likeownername").val();
+					var ownerPhone = $("#likeownerphone").val();
+					$.ajax({
+						url:'/community/houseownerinfo/gethouseownerinfolike',
+						type:'POST',
+						dataType:'JSON',
+						data:{"buildNumber":"%"+buildNumber+"%","houseUnit":"%"+houseUnit+"%","houseNumber":"%"+houseNumber+"%",
+							"ownerName":"%"+ownerName+"%","ownerPhone":"%"+ownerPhone+"%"},
+						success : function(result) {
+							app.listhouseownerinfo = result;
 						}
 					});
 				}

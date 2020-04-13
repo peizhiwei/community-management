@@ -52,4 +52,15 @@ public interface HouseOwnerDao {
 	 * @param ownerId
 	 */
 	void deleteowner(int ownerId);
+	/**
+	 * 模糊查询业主信息
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param ownerName
+	 * @param ownerPhone
+	 * @return
+	 */
+	List<HouseOwner> gethouseownerinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,
+			@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName,@Param("ownerPhone")String ownerPhone);
 }

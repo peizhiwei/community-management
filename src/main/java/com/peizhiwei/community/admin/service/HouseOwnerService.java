@@ -2,6 +2,8 @@ package com.peizhiwei.community.admin.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.peizhiwei.community.admin.entity.HouseOwner;
 
 public interface HouseOwnerService {
@@ -51,4 +53,15 @@ public interface HouseOwnerService {
 	 * @param ownerId
 	 */
 	void deleteowner(int ownerId);
+	/**
+	 * 模糊查询业主信息
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param ownerName
+	 * @param ownerPhone
+	 * @return
+	 */
+	List<HouseOwner> gethouseownerinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,
+			@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName,@Param("ownerPhone")String ownerPhone);
 }

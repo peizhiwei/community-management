@@ -61,4 +61,13 @@
  	<delete id="deleteowner" parameterType="int">
  		delete from house_owner where owner_id=#{ownerId} 
  	</delete>
+ 	<!-- 模糊查询业主信息（楼栋号，单元号，房间号，业主姓名，联系方式） -->
+ 	<select id="gethouseownerinfolike" resultType="com.peizhiwei.community.admin.entity.HouseOwner">
+ 		SELECT house_owner.*,building_info.build_number as `buildingInfo.buildNumber`,house_info.house_number as `houseInfo.houseNumber`,house_info.house_unit as `houseInfo.houseUnit`,house_info.house_state as `houseInfo.houseState`,house_info.house_id as `houseInfo.houseId`
+		FROM house_owner 
+		left join house_info on house_owner.house_id=house_info.house_id
+		left join building_info on house_info.build_id=building_info.build_id
+		WHERE build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} 
+		AND owner_name LIKE #{ownerName} AND owner_phone LIKE #{ownerPhone}
+ 	</select>
  </mapper>
