@@ -12,10 +12,14 @@
   </head>
   <body style="background-color: rgb(245,245,245)">
     <div class="container-fluid" id="app">
+    	<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>缴费详情</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;缴费管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;缴费详情</span></h5>
+        </div>
+        <div class="row">
+			<button type="button" class="btn btn-success">一键缴费</button>
+		</div>
 		<div class="row">
-			<div>
-				<h1 style="text-align: center;">缴费详情</h1>
-			</div>
 			<table class="col-xs-12 col-sm-12 col-md-12 table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
@@ -23,8 +27,10 @@
 							<input type="checkbox" value="">
 						</th>
 						<th class="text-center">序号</th>
-						<th class="text-center">房间号</th>
 						<th class="text-center">业主</th>
+						<th class="text-center">楼栋号</th>
+						<th class="text-center">单元号</th>
+						<th class="text-center">房间号</th>
 						<th class="text-center">缴费项目</th>
 						<th class="text-center">金额(元)</th>
 						<th class="text-center">发布时间</th>
@@ -41,8 +47,10 @@
 							<input type="checkbox" value="">
 						</td>
 						<td>{{index+1}}</td>
-						<td>{{list.houseOwner.houseInfo.houseNumber}}</td>
 						<td>{{list.houseOwner.ownerName}}</td>
+						<td>{{list.houseOwner.houseInfo.buildInfo.buildNumber}}</td>
+						<td>{{list.houseOwner.houseInfo.houseUnit}}</td>
+						<td>{{list.houseOwner.houseInfo.houseNumber}}</td>
 						<td>{{list.payInfo.payType.payTypeName}}</td>
 						<td>{{list.payInfo.payInfoMoney}}</td>
 						<td>{{list.payInfo.payInfoStartTime}}</td>

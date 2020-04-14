@@ -47,10 +47,13 @@
 					<span>工作单位：</span><span>{{ownerinfo.ownerWorkPlace}}</span>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-6 info">
-					<span>房间号：</span><span v-if="ownerinfo.houseInfo!=undefined">{{ownerinfo.houseInfo.houseNumber}}</span>
+					<span>楼栋号：</span><span v-if="ownerinfo.buildingInfo!=undefined">{{ownerinfo.buildingInfo.buildNumber}}</span>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-6 info">
-					<span>楼栋号：</span><span v-if="ownerinfo.buildingInfo!=undefined">{{ownerinfo.buildingInfo.buildNumber}}</span>
+					<span>单元号：</span><span v-if="ownerinfo.buildingInfo!=undefined">{{ownerinfo.houseInfo.houseUnit}}</span>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-6 info">
+					<span>房间号：</span><span v-if="ownerinfo.houseInfo!=undefined">{{ownerinfo.houseInfo.houseNumber}}</span>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-6 info">
 					<span>车位：</span><span v-if="ownerinfo.parking!=undefined&&ownerinfo.parking!=null">{{ownerinfo.parking.parkingNumber}}</span><span v-else>无</span>

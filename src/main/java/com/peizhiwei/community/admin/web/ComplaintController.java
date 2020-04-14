@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.peizhiwei.community.admin.entity.Admin;
@@ -111,5 +112,25 @@ public class ComplaintController {
 		rs.setFlag(true);
 		rs.setMsg("删除成功！");
 		return rs;
+	}
+	/**
+	 * 模糊查询投诉信息，(投诉人，楼栋编号，单元号，房间号，投诉原因)
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param complaintReason
+	 * @return
+	 */
+	@RequestMapping("/getcomplaintinfolike")
+	@ResponseBody
+	public List<Complaint> getcomplaintinfolike(
+			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)String houseUnit,
+			@RequestParam(value = "houseNumber",required = false)String houseNumber,
+			@RequestParam(value = "complaintReason",required = false)String complaintReason){
+		List<Complaint> listcomplaintinfo = complaintservice.getcomplaintinfolike(ownerName, buildNumber, houseUnit, houseNumber, complaintReason);
+		return listcomplaintinfo;
 	}
 }

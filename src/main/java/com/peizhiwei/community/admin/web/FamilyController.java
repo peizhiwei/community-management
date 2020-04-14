@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -230,5 +231,19 @@ public class FamilyController {
 		List<Family> listfamily = new ArrayList<Family>();
 		listfamily = familyservice.getfamilyinfolike(buildNumber, houseUnit, houseNumber, ownerName, familyName);
 		return listfamily;
+	}
+	/**
+	 * 批量删除家庭成员信息
+	 * @param listfamilyId
+	 * @return
+	 */
+	@RequestMapping("/checkdelete")
+	@ResponseBody
+	public JspResult checkdelete(@RequestBody String[] listfamilyId) {
+		JspResult rs = new JspResult();
+		familyservice.checkdelete(listfamilyId);
+		rs.setFlag(true);
+		rs.setMsg("已全部删除！");
+		return rs;
 	}
 }

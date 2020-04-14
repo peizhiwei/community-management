@@ -5,13 +5,14 @@
 <mapper namespace="com.peizhiwei.community.admin.dao.ComplaintDao">
  	<!-- 获取所有投诉信息 -->
 	<select id="getallcomplaintinfo" resultType="com.peizhiwei.community.admin.entity.Complaint">
-		SELECT c.*,h.owner_name as `houseOwner.ownerName`,h.owner_phone as `houseOwner.ownerPhone`,
+		SELECT c.*,h.owner_name as `houseOwner.ownerName`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_phone as `houseOwner.ownerPhone`,
 				i.house_number as `houseOwner.houseInfo.houseNumber`,
 				a.admin_name as `admin.adminName` 
 		FROM complaint c
 		LEFT JOIN house_owner h ON h.owner_id=c.owner_id
 		LEFT JOIN admin a ON a.admin_id=c.admin_id
 		LEFT JOIN house_info i ON i.owner_id=h.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
 	</select>
 	<!-- 受理投诉信息，添加受理人，修改投诉状态为1已受理 -->
 	<update id="acceptancecomplaint" parameterType="com.peizhiwei.community.admin.entity.Complaint">
@@ -38,4 +39,16 @@
 	<delete id="deletecomplaintofowner" parameterType="int">
 		delete from complaint where owner_id=#{ownerId}
 	</delete>
+	<!-- 模糊查询投诉信息(投诉人，楼栋编号，单元号，房间号，投诉内容) -->
+	<select id="getcomplaintinfolike" resultType="com.peizhiwei.community.admin.entity.Complaint">
+		SELECT c.*,h.owner_name as `houseOwner.ownerName`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_phone as `houseOwner.ownerPhone`,
+				i.house_number as `houseOwner.houseInfo.houseNumber`,
+				a.admin_name as `admin.adminName` 
+		FROM complaint c
+		LEFT JOIN house_owner h ON h.owner_id=c.owner_id
+		LEFT JOIN admin a ON a.admin_id=c.admin_id
+		LEFT JOIN house_info i ON i.owner_id=h.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE owner_name LIKE #{ownerName} AND build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} AND complaint_reason LIKE #{complaintReason}
+	</select>
 </mapper>

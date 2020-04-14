@@ -12,10 +12,14 @@
   </head>
   <body style="background-color: rgb(245,245,245)">
     <div class="container-fluid" id="app">
+    	<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>汇总</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;缴费管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;汇总</span></h5>
+        </div>
+        <div class="row">
+			<button type="button" class="btn btn-success">一键缴费</button>
+		</div>
 		<div class="row">
-			<div>
-				<h1 style="text-align: center;">汇总</h1>
-			</div>
 			<table class="col-xs-12 col-sm-12 col-md-12 table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>

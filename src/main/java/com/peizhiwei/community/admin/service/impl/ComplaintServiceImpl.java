@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.peizhiwei.community.admin.dao.ComplaintDao;
 import com.peizhiwei.community.admin.entity.Complaint;
 import com.peizhiwei.community.admin.service.ComplaintService;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ComplaintServiceImpl implements ComplaintService {
 	@Autowired
 	ComplaintDao complaintdao;
@@ -56,6 +58,15 @@ public class ComplaintServiceImpl implements ComplaintService {
 	@Override
 	public void deletecomplaintofowner(int ownerId) {
 		complaintdao.deletecomplaintofowner(ownerId);
+	}
+	/**
+	 * 模糊查询投诉信息，(投诉人，楼栋编号，单元号，房间号，投诉原因)
+	 */
+	@Override
+	public List<Complaint> getcomplaintinfolike(String ownerName, String buildNumber, String houseUnit,
+			String houseNumber, String complaintReason) {
+		List<Complaint> listcomplaint = complaintdao.getcomplaintinfolike(ownerName, buildNumber, houseUnit, houseNumber, complaintReason);
+		return listcomplaint;
 	}
 	
 }

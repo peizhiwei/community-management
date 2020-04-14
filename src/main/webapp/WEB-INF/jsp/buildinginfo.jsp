@@ -326,7 +326,7 @@
                         this.arr=[];
                     }else{//实现全选
                         this.arr=[];
-                        this.infolist.forEach((item)=>{
+                        this.infolist.forEach( (item) => {
                             this.arr.push(item.buildId);
                         })
                     }

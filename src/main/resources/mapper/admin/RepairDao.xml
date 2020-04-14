@@ -5,11 +5,12 @@
 <mapper namespace="com.peizhiwei.community.admin.dao.RepairDao">
 	<!-- 获取所有报修信息 -->
 	<select id="getallrepairinfo" resultType="com.peizhiwei.community.admin.entity.Repair">
-		select r.*,h.owner_name as `houseOwner.ownerName`,h.owner_phone as `houseOwner.ownerPhone`,
+		select r.*,h.owner_name as `houseOwner.ownerName`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_phone as `houseOwner.ownerPhone`,
 				i.house_number as `houseOwner.houseInfo.houseNumber`,a.admin_name as `admin.adminName`
 		from repair r
 		left join house_owner h on h.owner_id=r.owner_id
 		left join house_info i on i.house_id=h.house_id
+		left join building_info b on b.build_id=i.build_id
 		left join admin a on a.admin_id=r.admin_id
 	</select>
 	<!-- 受理报修信息，添加受理人，修改状态为1，已受理 -->
@@ -37,4 +38,15 @@
 	<delete id="deleterepairofowner" parameterType="int">
 		delete from repair where owner_id=#{ownerId}
 	</delete>
+	<!-- 模糊查询报修信息，(报修人，楼栋编号，单元号，房间号，报修物品) -->
+	<select id="getrepairinfolike" resultType="com.peizhiwei.community.admin.entity.Repair">
+		select r.*,h.owner_name as `houseOwner.ownerName`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_phone as `houseOwner.ownerPhone`,
+				i.house_number as `houseOwner.houseInfo.houseNumber`,a.admin_name as `admin.adminName`
+		from repair r
+		left join house_owner h on h.owner_id=r.owner_id
+		left join house_info i on i.house_id=h.house_id
+		left join building_info b on b.build_id=i.build_id
+		left join admin a on a.admin_id=r.admin_id
+		WHERE owner_name LIKE #{ownerName} AND build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} AND repair_goods LIKE #{repairGoods}
+	</select>
 </mapper>

@@ -27,9 +27,9 @@
                 <button type="button" class="btn btn-default" @click="gethouseinfolike()">查询</button>
             </form>
         </div>
-		<div class="row">
+		<!-- div class="row">
 			<button type="button" class="btn btn-default"data-toggle="modal" data-target="#myModal2">新增</button>
-		</div>
+		</div -->
 		<div class="row">
 			<table class="table table-striped table-bordered table-hover text-center col-md-12" id="mytb" style="background-color: white;">
 				<thead>
@@ -97,7 +97,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">入住时间</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" id="houseintime">
+										<input id="houseintime" class="form-control" type="text" onclick="WdatePicker({skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
 									</div>
 								</div>
 							</form>
@@ -109,65 +109,6 @@
 					</div>
 				</div>
 			</div>
-			<!-- 新增楼栋信息的模态框 -->
-			<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"
-				aria-labelledby="myModalLabel">
-				<div class="modal-dialog" role="document" style="width: 32%;">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<h4 class="modal-title text-center" id="myModalLabel">增加楼栋信息</h4>
-						</div>
-						<div class="modal-body">
-							<form class="form-horizontal">
-								<div class="form-group">
-									<label class="col-sm-3 control-label">编号</label>
-									<div class="col-sm-9">
-										<input type="text" class="form-control" id="newnumber">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">层数</label>
-									<div class="col-sm-9">
-										<input type="number" class="form-control" id="newlayer">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">房间数</label>
-									<div class="col-sm-9">
-										<input type="number" class="form-control" id="newsum">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">建筑面积(单位:m²)</label>
-									<div class="col-sm-9">
-										<input type="text" class="form-control" id="newarea">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">开工时间</label>
-									<div class="col-sm-9">
-										<input type="date" class="form-control" id="newstarttime">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">竣工时间</label>
-									<div class="col-sm-9">
-										<input type="date" class="form-control" id="newendtime">
-									</div>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-							<button type="button" class="btn btn-primary" @click="saveaddbuildinfo()" >确定</button>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 
@@ -175,8 +116,7 @@
 	<script	src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 	<script src="../static/js/vue.min.js"></script>
-	<script src="../static/js/bootstrap-table.min.js"></script>
-	<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../static/datepicker/WdatePicker.js"></script>
 	<script>
 		var app = new Vue({
 			el : '#vue',

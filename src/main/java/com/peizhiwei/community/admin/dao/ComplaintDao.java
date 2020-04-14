@@ -2,6 +2,9 @@ package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.peizhiwei.community.admin.entity.Complaint;
 
 public interface ComplaintDao {
@@ -34,4 +37,15 @@ public interface ComplaintDao {
 	 * 根据业主id删除该业主的所有投诉信息
 	 */
 	void deletecomplaintofowner(int ownerId);
+	/**
+	 * 模糊查询投诉信息(投诉人，楼栋编号，单元号，房间号，投诉内容)
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param complaintReason
+	 * @return
+	 */
+	List<Complaint> getcomplaintinfolike(@Param("ownerName")String ownerName,@Param("buildNumber")String buildNumber,
+			@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("complaintReason")String complaintReason);
 }

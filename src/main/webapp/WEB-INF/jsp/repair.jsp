@@ -12,27 +12,44 @@
   </head>
   <body style="background-color: rgb(245,245,245)">
     <div class="container-fluid" id="app">
+    	<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>报修管理</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;小区管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;报修管理</span></h5>
+        </div>
+        <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
+            <h4>查询条件</h4><hr>
+            <form class="form-inline" style="padding-bottom: 25px;">
+            	<input type="text" class="form-control" id="likeownername" placeholder="请输入报修人姓名">
+                <input type="text" class="form-control" id="likebuildnumber" placeholder="请输入楼栋编号">
+                <input type="text" class="form-control" id="likehouseunit" placeholder="请输入单元号">
+                <input type="text" class="form-control" id="likehousenumber" placeholder="请输入房间号">
+                <input type="text" class="form-control" id="likerepairgoods" placeholder="请输入报修物品名">
+                <button type="button" class="btn btn-default" @click="getrepairinfolike()">查询</button>
+            </form>
+        </div>
+        <div class="row">
+			<button type="button" class="btn btn-danger">一键删除</button>
+		</div>
 		<div class="row">
-			<div>
-				<h1 style="text-align: center;">报修信息</h1>
-			</div>
 			<table class="table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
-						<th>
+						<th class="text-center">
 							<input type="checkbox" value="">
 						</th>
-						<th class="col-md-1 text-center">序号</th>
-						<th class="col-md-1 text-center">报修人</th>
-						<th class="col-md-1 text-center">房间号</th>
-						<th class="col-md-1 text-center">手机号</th>
-						<th class="col-md-1 text-center">报修物品</th>
-						<th class="col-md-1 text-center">报修时间</th>
-						<th class="col-md-1 text-center">报修原因</th>
-						<th class="col-md-1 text-center">状态</th>
-						<th class="col-md-1 text-center">受理人</th>
-						<th class="col-md-1 text-center">解决时间</th>
-						<th class="col-md-2 text-center">操作</th>
+						<th class="text-center">序号</th>
+						<th class="text-center">报修人</th>
+						<th class="text-center">楼栋号</th>
+						<th class="text-center">单元号</th>
+						<th class="text-center">房间号</th>
+						<th class="text-center">手机号</th>
+						<th class="text-center">报修物品</th>
+						<th class="text-center">报修时间</th>
+						<th class="text-center">报修原因</th>
+						<th class="text-center">状态</th>
+						<th class="text-center">受理人</th>
+						<th class="text-center">解决时间</th>
+						<th class="text-center">操作</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -42,6 +59,8 @@
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.houseOwner.ownerName}}</td>
+						<td>{{list.houseOwner.houseInfo.buildInfo.buildNumber}}</td>
+						<td>{{list.houseOwner.houseInfo.houseUnit}}</td>
 						<td>{{list.houseOwner.houseInfo.houseNumber}}</td>
 						<td>{{list.houseOwner.ownerPhone}}</td>
 						<td>{{list.repairGoods}}</td>
@@ -136,6 +155,24 @@
     						console.log("请求失败处理");
     					}
     				});
+    			},
+    			//模糊查询报修信息(报修人，楼栋号，单元号，房间号，报修物品)
+    			getrepairinfolike : function(){
+    				var ownerName = $("#likeownername").val();
+    				var buildNumber = $("#likebuildnumber").val();
+    				var houseUnit = $("#likehouseunit").val();
+    				var houseNumber = $("#likehousenumber").val();
+    				var repairGoods = $("#likerepairgoods").val();
+    				$.ajax({
+						url:'/community/repairinfo/getrepairinfolike',
+						type:'POST',
+						dataType:'JSON',
+						data:{"ownerName":"%"+ownerName+"%","buildNumber":"%"+buildNumber+"%","houseUnit":"%"+houseUnit+"%",
+							"houseNumber":"%"+houseNumber+"%","repairGoods":"%"+repairGoods+"%"},
+						success : function(result) {
+							app.listrepairinfo = result;
+						}
+					});
     			}
 			}
 		});

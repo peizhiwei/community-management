@@ -72,4 +72,9 @@ public interface FamilyService {
 	 * @return
 	 */
 	List<Family> getfamilyinfolike(String buildNumber,String houseUnit,String houseNumber,String ownerName,String familyName);
+	/**
+	 * 批量删除家庭成员信息
+	 * @param listfamilyId
+	 */
+	void checkdelete(String[] listfamilyId);
 }

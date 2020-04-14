@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -247,5 +248,21 @@ public class HouseOwnerController {
 		List<HouseOwner> listhouseowner = new ArrayList<HouseOwner>();
 		listhouseowner = houseownerservice.gethouseownerinfolike(buildNumber, houseUnit, houseNumber, ownerName, ownerPhone);
 		return listhouseowner;
+	}
+	/**
+	 * 批量删除业主
+	 * @param listownerId
+	 * @return
+	 */
+	@RequestMapping("/checkdelete")
+	@ResponseBody
+	public JspResult checkdelete(@RequestBody List<Integer> listownerId) {
+		JspResult rs = new JspResult();
+		for(int i=0;i<listownerId.size();i++) {
+			houseownerservice.deleteowner(listownerId.get(i));
+		}
+		rs.setFlag(true);
+		rs.setMsg("已全部迁出！");
+		return rs;
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.peizhiwei.community.admin.entity.Admin;
@@ -106,5 +107,25 @@ public class RepairController {
 		rs.setFlag(true);
 		rs.setMsg("删除成功！");
 		return rs;
+	}
+	/**
+	 * 模糊查询报修信息(报修人，楼栋编号，单元号，房间号，报修物品)
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param complaintReason
+	 * @return
+	 */
+	@RequestMapping("/getrepairinfolike")
+	@ResponseBody
+	public List<Repair> getrepairinfolike(
+			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)String houseUnit,
+			@RequestParam(value = "houseNumber",required = false)String houseNumber,
+			@RequestParam(value = "repairGoods",required = false)String repairGoods){
+		List<Repair> listrepair = repairservice.getrepairinfolike(ownerName, buildNumber, houseUnit, houseNumber, repairGoods);
+		return listrepair;
 	}
 }

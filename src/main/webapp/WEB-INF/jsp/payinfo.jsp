@@ -12,11 +12,15 @@
   </head>
   <body style="background-color: rgb(245,245,245)">
     <div class="container-fluid" id="app">
+    	<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>缴费信息</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;缴费管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;缴费信息</span></h5>
+        </div>
+        <div class="row">
+			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#addpaymethod">发布缴费信息</button>
+			<button type="button" class="btn btn-danger">一键删除</button>
+		</div>
 		<div class="row">
-			<div>
-				<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#addpaymethod">发布缴费信息</button>
-				<h1 style="text-align: center;">缴费信息</h1>
-			</div>
 			<table class="col-xs-12 col-sm-12 col-md-12 table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>

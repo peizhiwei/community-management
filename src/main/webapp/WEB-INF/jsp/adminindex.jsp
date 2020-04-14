@@ -123,6 +123,8 @@
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">报修人</th>
+						<th class="text-center">楼栋号</th>
+						<th class="text-center">单元号</th>
 						<th class="text-center">房间号</th>
 						<th class="text-center">手机号</th>
 						<th class="text-center">报修物品</th>
@@ -141,6 +143,8 @@
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.houseOwner.ownerName}}</td>
+						<td>{{list.houseOwner.houseInfo.buildInfo.buildNumber}}</td>
+						<td>{{list.houseOwner.houseInfo.houseUnit}}</td>
 						<td>{{list.houseOwner.houseInfo.houseNumber}}</td>
 						<td>{{list.houseOwner.ownerPhone}}</td>
 						<td>{{list.repairGoods}}</td>

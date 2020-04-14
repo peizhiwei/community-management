@@ -75,4 +75,11 @@
 		LEFT JOIN building_info b ON b.build_id=i.build_id
 		WHERE build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} AND owner_name LIKE #{ownerName} AND family_name LIKE #{familyName}
 	</select>
+	<!-- 批量删除家庭成员信息 -->
+	<delete id="checkdelete">
+		delete from family where family_id in
+		<foreach collection="array" item="familyId" open="(" separator="," close=")">
+			#{familyId}
+		</foreach>
+	</delete>
 </mapper>

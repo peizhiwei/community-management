@@ -29,12 +29,16 @@
         </div>
     	<div class="row">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
+			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
 			<span style="color: red;text-align: center;">注：新增业主的默认密码为000000</span>
 		</div>
 		<div class="row">
 			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
+						<th class="text-center">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
+						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">姓名</th>
 						<th class="text-center">楼栋</th>
@@ -51,6 +55,9 @@
 				</thead>
 				<tbody>
 					<tr v-for="(list,index) in listhouseownerinfo">
+						<td>
+							<input type="checkbox" v-model="arr" :value="list.ownerId">
+						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.ownerName}}</td>
 						<td>{{list.buildingInfo.buildNumber}}</td>
@@ -248,7 +255,9 @@
 				oldownerphone:'',//业主原来的手机号
 				listhavenullhousebuildnumber:[],//所有还有空房间的楼栋编号
 				listhouseunit:[],//所属楼栋中还有空房间的单元号
-				listhousenumber:[]//根据楼栋号,单元号查出的所有空房间的房间号
+				listhousenumber:[],//根据楼栋号,单元号查出的所有空房间的房间号
+				checked:false,
+				arr:[]
 			},
 			mounted : function() {
 				this.get();
@@ -460,8 +469,45 @@
 							app.listhouseownerinfo = result;
 						}
 					});
-				}
-			}
+				},
+				checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.listhouseownerinfo.forEach( (item) => {
+                            this.arr.push(item.ownerId);
+                        })
+                    }
+                },
+                //批量删除
+                checkdelete : function(){
+                	var listownerId= app.arr;
+                	$.ajax({
+						type:'POST',
+						dataType:'JSON',
+						url:'/community/houseownerinfo/checkdelete',
+						contentType: "application/json;charset=utf-8",
+						data:JSON.stringify(listownerId),
+						success:function(result){
+							alert(result.msg);
+							app.get();
+						}
+					});
+                }
+			},
+			watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.listhouseownerinfo.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
 		});
 	</script>
   </body>

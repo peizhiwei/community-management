@@ -11,12 +11,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body style="background-color: rgb(245,245,245)">
-  	<div>
-  		<h1 style="text-align: center;">管理员信息</h1>
-  	</div>
     <div class="container-fluid" id="app">
+    	<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>管理员信息</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;管理员信息</span></h5>
+        </div>
     	<div class="row">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2">新增</button>
+			<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">一键删除</button>
 		</div>
 		<div class="row">
 			<table class="col-xs-12 col-sm-12 col-md-12 table table-bordered table-hover text-center" style="background-color: white;">

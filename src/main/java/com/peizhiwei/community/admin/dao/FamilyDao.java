@@ -75,4 +75,9 @@ public interface FamilyDao {
 	 * @return
 	 */
 	List<Family> getfamilyinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName,@Param("familyName")String familyName);
+	/**
+	 * 批量删除家庭成员信息
+	 * @param listfamilyId
+	 */
+	void checkdelete(String[] listfamilyId);
 }

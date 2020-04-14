@@ -2,6 +2,8 @@ package com.peizhiwei.community.admin.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.peizhiwei.community.admin.entity.Complaint;
 
 
@@ -36,4 +38,14 @@ public interface ComplaintService {
 	 * 根据业主id删除该业主的所有投诉信息
 	 */
 	void deletecomplaintofowner(int ownerId);
+	/**
+	 * 模糊查询投诉信息(投诉人，楼栋编号，单元号，房间号，投诉内容)
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param complaintReason
+	 * @return
+	 */
+	List<Complaint> getcomplaintinfolike(String ownerName,String buildNumber,String houseUnit,String houseNumber,String complaintReason);
 }

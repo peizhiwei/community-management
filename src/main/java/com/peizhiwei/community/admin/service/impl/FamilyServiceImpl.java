@@ -98,5 +98,12 @@ public class FamilyServiceImpl implements FamilyService {
 		List<Family> listfamily = familydao.getfamilyinfolike(buildNumber, houseUnit, houseNumber, ownerName, familyName);
 		return listfamily;
 	}
+	/**
+	 * 批量删除家庭成员信息
+	 */
+	@Override
+	public void checkdelete(String[] listfamilyId) {
+		familydao.checkdelete(listfamilyId);
+	}
 
 }

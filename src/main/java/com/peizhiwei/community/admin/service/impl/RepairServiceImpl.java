@@ -58,4 +58,13 @@ public class RepairServiceImpl implements RepairService {
 	public void deleterepairofowner(int ownerId) {
 		repairdao.deleterepairofowner(ownerId);
 	}
+	/**
+	 * 模糊查询报修信息，(报修人，楼栋编号，单元号，房间号，报修物品)
+	 */
+	@Override
+	public List<Repair> getrepairinfolike(String ownerName, String buildNumber, String houseUnit, String houseNumber,
+			String repairGoods) {
+		List<Repair> listrepair = repairdao.getrepairinfolike(ownerName, buildNumber, houseUnit, houseNumber, repairGoods);
+		return listrepair;
+	}
 }

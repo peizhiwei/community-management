@@ -29,13 +29,14 @@
         </div>
         <div class="row">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
+			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
 		</div>
 		<div class="row">
 			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">
-							<input type="checkbox">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">姓名</th>
@@ -55,7 +56,7 @@
 				<tbody>
 					<tr v-for="(list,index) in listfamilyinfo">
 						<td>
-							<input type="checkbox">
+							<input type="checkbox" v-model="arr" :value="list.familyId">
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.familyName}}</td>
@@ -264,7 +265,9 @@
 				listbuildnumber:[],//业主所属的楼栋编号，去掉重复的
 				listhouseunit:[],//业主所属的单元号，去掉重复的
 				listhousenumber:[],//业主所属房间号
-				ownerName:''//新增家庭成员模态框中下拉框中的业主名
+				ownerName:'',//新增家庭成员模态框中下拉框中的业主名
+				checked:false,
+				arr:[]
 			},
 			mounted : function() {
 				this.get();
@@ -496,8 +499,45 @@
 							app.listfamilyinfo = result;
 						}
 					});
-				}
-			}
+				},
+				checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.listfamilyinfo.forEach( (item) => {
+                            this.arr.push(item.familyId);
+                        })
+                    }
+                },
+                //批量删除
+                checkdelete : function(){
+                	var listfamilyId= app.arr;
+                	$.ajax({
+						type:'POST',
+						dataType:'JSON',
+						url:'/community/familyinfo/checkdelete',
+						contentType: "application/json;charset=utf-8",
+						data:JSON.stringify(listfamilyId),
+						success:function(result){
+							alert(result.msg);
+							app.get();
+						}
+					});
+                }
+			},
+			watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.listfamilyinfo.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
 		});
 	</script>
   </body>

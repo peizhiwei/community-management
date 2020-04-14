@@ -2,6 +2,8 @@ package com.peizhiwei.community.admin.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.peizhiwei.community.admin.entity.Repair;
 
 public interface RepairService {
@@ -36,4 +38,15 @@ public interface RepairService {
 	 * @param ownerId
 	 */
 	void deleterepairofowner(int ownerId);
+	
+	/**
+	 * 模糊查询报修信息，(报修人，楼栋编号，单元号，房间号，报修物品)
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param repairGoods
+	 * @return
+	 */
+	List<Repair> getrepairinfolike(String ownerName,String buildNumber,String houseUnit,String houseNumber,String repairGoods);
 }
