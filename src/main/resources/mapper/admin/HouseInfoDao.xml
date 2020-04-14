@@ -13,12 +13,6 @@
 		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
 		ORDER BY build_id,house_unit,house_number
 	</select>
-	<!-- 根据业主名称查询所有的房间信息 -->
-	<select id="getallhouseinfoaccordingownername" resultType="com.peizhiwei.community.admin.entity.HouseInfo" parameterType="String">
-		SELECT house_info.* FROM house_info
-		LEFT JOIN house_owner ON house_info.owner_id=house_owner.owner_id
-		WHERE house_owner.owner_name=#{ownerName}
-	</select>
 	<!-- 更新房间信息 -->
 	<update id="updatehouseinfo" parameterType="com.peizhiwei.community.admin.entity.HouseInfo">
 		UPDATE house_info,house_type

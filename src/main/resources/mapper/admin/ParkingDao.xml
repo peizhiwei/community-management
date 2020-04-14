@@ -5,22 +5,16 @@
 <mapper namespace="com.peizhiwei.community.admin.dao.ParkingDao">
 	<!-- 获取所有停车位信息 -->
 	<select id="getallparkinginfo" resultType="com.peizhiwei.community.admin.entity.Parking">
-		select parking.*,house_owner.owner_name as `houseOwner.ownerName`,
-				house_owner.owner_phone as `houseOwner.ownerPhone`,house_info.house_number as `houseOwner.houseInfo.houseNumber`
-		from parking
-		left join house_owner on parking.owner_id=house_owner.owner_id
-		left join house_info on house_info.owner_id=house_owner.owner_id
+		select p.*,o.owner_name as `houseOwner.ownerName`,o.owner_phone as `houseOwner.ownerPhone`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		from parking p
+		left join house_owner o on p.owner_id=o.owner_id
+		left join house_info i on i.owner_id=o.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
 	</select>
 	<!-- 查询当前停车位编号最大的一个 -->
 	<select id="getparkinginfomaxparkingnumber" resultType="String">
 		SELECT MAX(parking_number) FROM parking
 	</select>
-	<!-- 更新停车位业主 -->
-	<update id="updateparkinginfo" parameterType="com.peizhiwei.community.admin.entity.Parking">
-		UPDATE parking
-		set owner_id=#{houseOwner.ownerId},parking_sell_time=#{parkingSellTime}
-		where parking_id=#{parkingId}
-	</update>
 	<!-- 调整停车位价格 -->
 	<update id="updateparkingprice" parameterType="com.peizhiwei.community.admin.entity.Parking">
 		update parking
@@ -57,4 +51,13 @@
       	)
     	</foreach>
 	</insert>
+	<!-- 模糊查询停车位信息，(车位号，业主名，楼栋号，单元号，房间号) -->
+	<select id="getparkinginfolike" resultType="com.peizhiwei.community.admin.entity.Parking">
+		select p.*,o.owner_name as `houseOwner.ownerName`,o.owner_phone as `houseOwner.ownerPhone`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		from parking p
+		left join house_owner o on p.owner_id=o.owner_id
+		left join house_info i on i.owner_id=o.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE parking_number LIKE #{parkingNumber} AND IFNULL(owner_name,'') LIKE #{ownerName} AND IFNULL(build_number,'') LIKE #{buildNumber} AND IFNULL(house_unit,'') LIKE #{houseUnit} AND IFNULL(house_number,'') LIKE #{houseNumber}
+	</select>
 </mapper>

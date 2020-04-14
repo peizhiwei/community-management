@@ -19,10 +19,6 @@ public interface HouseInfoService {
 	 */
 	List<HouseInfo> getallhouseinfo();
 	/**
-	 * 根据业主名称查询所有的房间信息
-	 */
-	List<HouseInfo> getallhouseinfoaccordingownername(String ownerName);
-	/**
 	 * 获取所有房型信息
 	 * @return
 	 */

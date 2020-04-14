@@ -69,14 +69,6 @@ public class HouseInfoServiceImpl implements HouseInfoService {
 		houseinfodao.updatehouseinfoofownerid(houseinfo);
 	}
 	/**
-	 * 根据业主名称查询该业主的房间信息
-	 */
-	@Override
-	public List<HouseInfo> getallhouseinfoaccordingownername(String ownerName) {
-		List<HouseInfo> listhouseinfo = houseinfodao.getallhouseinfoaccordingownername(ownerName);
-		return listhouseinfo;
-	}
-	/**
 	 * 业主迁出时，将业主id置为空，入住时间为空，状态置为0待售
 	 */
 	@Override

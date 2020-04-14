@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.entity.Parking;
-import com.peizhiwei.community.admin.service.HouseOwnerService;
+import com.peizhiwei.community.admin.service.FamilyService;
 import com.peizhiwei.community.admin.service.ParkingService;
 
 @Controller
@@ -27,7 +28,7 @@ public class ParkingController {
 	@Autowired
 	ParkingService parkingservice;
 	@Autowired
-	HouseOwnerService houseownerservice;
+	FamilyService familyservice;
 	
 	/**
 	 * 日期格式，在每一个日期实体上添加一个注解，再在这里添加一下语句，这样可以保证后台和页面间交互的日期格式是标准的，不需要再进行格式化
@@ -47,40 +48,6 @@ public class ParkingController {
 	public List<Parking> getallparkinginfo(){
 		List<Parking> listparkinginfo = parkingservice.getallparkinginfo();
 		return listparkinginfo;
-	}
-	/**
-	 * 更改停车位业主
-	 * @param parkingId
-	 * @param houseNumber
-	 * @param parkingSellTime
-	 * @param ParkingPrice
-	 * @return
-	 */
-	@RequestMapping("/updateparkinginfo")
-	@ResponseBody
-	public JspResult updateparkinginfo(
-			@RequestParam(value = "parkingId",required = false)Integer parkingId,
-			@RequestParam(value = "houseNumber",required = false)String houseNumber,
-			@RequestParam(value = "parkingSellTime",required = false)Date parkingSellTime,
-			@RequestParam(value = "ParkingPrice",required = false)BigDecimal ParkingPrice) {
-		Parking parking = new Parking();
-		JspResult rs = new JspResult();
-		HouseOwner houseowner = new HouseOwner();
-		try {
-			parking.setParkingId(parkingId);
-			parking.setParkingSellTime(parkingSellTime);
-			parking.setParkingPrice(ParkingPrice);
-			houseowner = houseownerservice.gethouseownerinfoaccordinghousenumber(houseNumber);
-			parking.setHouseOwner(houseowner);
-			parkingservice.updateparkinginfo(parking);
-			rs.setFlag(true);
-			rs.setMsg("修改成功！");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return rs;
-		
 	}
 	/**
 	 * 调整车位价格
@@ -113,8 +80,10 @@ public class ParkingController {
 	@ResponseBody
 	public JspResult sellupdateparkinginfo(
 			@RequestParam(value = "parkingId",required = false)Integer parkingId,
-			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)int houseUnit,
 			@RequestParam(value = "houseNumber",required = false)String houseNumber,
+			@RequestParam(value = "ownerName",required = false)String ownerName,
 			@RequestParam(value = "parkingSellTime",required = false)Date parkingSellTime,
 			@RequestParam(value = "parkingPrice",required = false)BigDecimal parkingPrice) {
 		JspResult rs = new JspResult();
@@ -122,7 +91,7 @@ public class ParkingController {
 		HouseOwner houseowner = new HouseOwner();
 		try {
 			parking.setParkingId(parkingId);
-			houseowner = houseownerservice.gethouseownerinfoaccordinghousenumber(houseNumber);
+			houseowner.setOwnerId(familyservice.selectowneridaccording_bn_hu_hn(buildNumber, houseUnit, houseNumber));
 			parking.setHouseOwner(houseowner);
 			parking.setParkingSellTime(parkingSellTime);
 			parking.setParkingPrice(parkingPrice);
@@ -131,6 +100,7 @@ public class ParkingController {
 			rs.setMsg("出售成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}
@@ -181,5 +151,25 @@ public class ParkingController {
 			// TODO: handle exception
 		}
 		return rs;
+	}
+	/**
+	 * 模糊查询停车位信息(车位号，业主名，楼栋号，单元号，房间号)
+	 * @param parkingNumber
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @return
+	 */
+	@RequestMapping("/getparkinginfolike")
+	@ResponseBody
+	public List<Parking> getparkinginfolike(
+			@RequestParam(value = "parkingNumber",required = false)String parkingNumber,
+			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)String houseUnit,
+			@RequestParam(value = "houseNumber",required = false)String houseNumber){
+		List<Parking> listparking = parkingservice.getparkinginfolike(parkingNumber, ownerName, buildNumber, houseUnit, houseNumber);
+		return listparking;
 	}
 }

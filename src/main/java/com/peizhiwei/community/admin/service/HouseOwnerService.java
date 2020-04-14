@@ -15,13 +15,7 @@ public interface HouseOwnerService {
 	/**
 	 * 获取所有业主名称，去掉重复的
 	 */
-	List<HouseOwner> getallonluhouseownername();
-	/**
-	 * 根据房间号查询业主信息
-	 * @param houseNumber
-	 * @return
-	 */
-	HouseOwner gethouseownerinfoaccordinghousenumber(String houseNumber);
+	List<String> getallonluhouseownername();
 	/**
 	 * 修改业主信息
 	 * @param houseowner

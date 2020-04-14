@@ -1,12 +1,14 @@
 package com.peizhiwei.community.admin.web;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,12 +42,69 @@ public class FamilyController {
 	 * 查询所有家庭成员信息
 	 * @return
 	 */
-	@RequestMapping("getallfamilyinfo")
+	@RequestMapping("/getallfamilyinfo")
 	@ResponseBody
 	public List<Family> getallfamilyinfo(){
 		List<Family> listfamilyinfo = familyservice.getallfamilyinfo();
 		return listfamilyinfo;
 	}
+	/**
+	 * 查询所有有住户的楼栋编号，去掉重复的
+	 * @param ownerName
+	 * @return
+	 */
+	@RequestMapping("/gethaveownerbuildnumber")
+	@ResponseBody
+	public List<String> gethaveownerbuildnumber(){
+		List<String> listbuildnumber = familyservice.gethaveownerbuildnumber();
+		return listbuildnumber;
+	}
+	/**
+	 * 根据楼栋编号，查询该栋楼中所有有住户的单元号
+	 * @param ownerName
+	 * @param buildNumber
+	 * @return
+	 */
+	@RequestMapping("/gethaveownerhouseunitaccordingbuildnumber")
+	@ResponseBody
+	public List<Integer> gethaveownerhouseunitaccordingbuildnumber(String buildNumber){
+		List<Integer> listhouseunit = familyservice.gethaveownerhouseunitaccordingbuildnumber(buildNumber);
+		return listhouseunit;
+	}
+	/**
+	 * 根据楼栋编号，单元号，查询所有有住户的房间号
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @return
+	 */
+	@RequestMapping("/gethaveownerhousenumber")
+	@ResponseBody
+	public List<String> gethaveownerhousenumber(
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)int houseUnit){
+		List<String> listhousenumber = familyservice.gethaveownerhousenumber(buildNumber, houseUnit);
+		return listhousenumber;
+	}
+	/**
+	 * 根据楼栋编号，单元号，房间号，查询业主名
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @return
+	 */
+	@RequestMapping("/getownername")
+	@ResponseBody
+	public JspResult getownername(
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)int houseUnit,
+			@RequestParam(value = "houseNumber",required = false)String houseNumber) {
+		String ownerName = familyservice.getownername(buildNumber, houseUnit, houseNumber);
+		JspResult rs = new JspResult();
+		rs.setMsg(ownerName);
+		return rs;
+	}
+	
 	/**
 	 * 更新家庭成员信息
 	 * @param familyId
@@ -109,8 +168,10 @@ public class FamilyController {
 			@RequestParam(value = "familySex",required = false)int familySex,
 			@RequestParam(value = "familyPhone",required = false)String familyPhone,
 			@RequestParam(value = "familyBirthday",required = false)Date familyBirthday,
-			@RequestParam(value = "familyHouseOwner",required = false)String familyHouseOwner,
-			@RequestParam(value = "familyHouseNumber",required = false)String familyHouseNumber,
+			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)int houseUnit,
+			@RequestParam(value = "houseNumber",required = false)String houseNumber,
 			@RequestParam(value = "familyRelation",required = false)String familyRelation,
 			@RequestParam(value = "familyNativePlace",required = false)String familyNativePlace,
 			@RequestParam(value = "familyWorkPlace",required = false)String familyWorkPlace) {
@@ -122,8 +183,9 @@ public class FamilyController {
 			familyinfo.setFamilySex(familySex);
 			familyinfo.setFamilyPhone(familyPhone);
 			familyinfo.setFamilyBirthday(familyBirthday);
-			//根据房间号查询业主的信息
-			houseowner = houseownerservice.gethouseownerinfoaccordinghousenumber(familyHouseNumber);
+			//根据楼栋号，单元号，房间号，查询业主id
+			int ownerId = familyservice.selectowneridaccording_bn_hu_hn(buildNumber, houseUnit, houseNumber);
+			houseowner.setOwnerId(ownerId);
 			familyinfo.setHouseOwner(houseowner);
 			
 			familyinfo.setFamilyRelation(familyRelation);
@@ -134,6 +196,7 @@ public class FamilyController {
 			rs.setMsg("添加成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}
@@ -151,5 +214,21 @@ public class FamilyController {
 		rs.setFlag(true);
 		rs.setMsg("删除成功");
 		return rs;
+	}
+	/**
+	 * 模糊查询家庭成员信息
+	 * @return
+	 */
+	@RequestMapping("/getfamilyinfolike")
+	@ResponseBody
+	public List<Family> getfamilyinfolike(
+			@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "houseUnit",required = false)String houseUnit,
+			@RequestParam(value = "houseNumber",required = false)String houseNumber,
+			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "familyName",required = false)String familyName){
+		List<Family> listfamily = new ArrayList<Family>();
+		listfamily = familyservice.getfamilyinfolike(buildNumber, houseUnit, houseNumber, ownerName, familyName);
+		return listfamily;
 	}
 }

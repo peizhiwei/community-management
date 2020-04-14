@@ -16,10 +16,6 @@ public interface ParkingService {
 	 */
 	String getparkinginfomaxparkingnumber();
 	/**
-	 * 更改停车位业主
-	 */
-	void updateparkinginfo(Parking parking);
-	/**
 	 * 根据业主id收回停车位信息
 	 * @param ownerId
 	 */
@@ -40,4 +36,15 @@ public interface ParkingService {
 	 * 批量增加停车位信息
 	 */
 	void insertparkinginfo(List<Parking> parkinglist);
+	
+	/**
+	 * 模糊查询，(车位号，业主名，楼栋号，单元号，房间号)
+	 * @param parkingNumber
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @return
+	 */
+	List<Parking> getparkinginfolike(String parkingNumber,String ownerName,String buildNumber,String houseUnit,String houseNumber);
 }

@@ -5,9 +5,12 @@
 <mapper namespace="com.peizhiwei.community.admin.dao.FamilyDao">
 	<!-- 查询所有家庭成员信息 -->
 	<select id="getallfamilyinfo" resultType="com.peizhiwei.community.admin.entity.Family">
-		SELECT family.*,house_owner.owner_name as `houseOwner.ownerName`,house_info.house_number as `houseOwner.houseInfo.houseNumber` FROM family
-		LEFT JOIN house_owner ON family.owner_id=house_owner.owner_id
-		LEFT JOIN house_info ON house_owner.house_id=house_info.house_id
+		SELECT f.*,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`,
+		build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`
+		FROM family f
+		LEFT JOIN house_owner o ON f.owner_id=o.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
 	</select>
 	<!-- 更改家庭成员信息 -->
 	<update id="updatefamilyinfo" parameterType="com.peizhiwei.community.admin.entity.Family">
@@ -30,4 +33,46 @@
 		delete from family
 		where owner_id=#{ownerId}
 	</delete>
+	<!-- 查询所有有住户的楼栋信息，去掉重复的 -->
+	<select id="gethaveownerbuildnumber" resultType="String">
+		SELECT DISTINCT build_number FROM building_info b
+		LEFT JOIN house_info i ON i.build_id=b.build_id
+		WHERE house_state=1
+	</select>
+	<!-- 根据楼栋编号查询该栋楼中有住户的单元号 -->
+	<select id="gethaveownerhouseunitaccordingbuildnumber" resultType="int">
+		SELECT DISTINCT house_unit FROM house_info i
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE build_number=#{buildNumber} AND house_state=1
+	</select>
+	<!-- 根据楼栋编号，单元号，查询该栋楼中所有有住户的房间号 -->
+	<select id="gethaveownerhousenumber" resultType="String">
+		SELECT house_number FROM house_info i
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE build_number=#{buildNumber} AND house_unit=#{houseUnit} AND house_state=1
+	</select>
+	<!-- 根据楼栋编号，单元号，房间号，查询业主名 -->
+	<select id="getownername" resultType="String">
+		SELECT owner_name FROM house_owner o
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE build_number=#{buildNumber} AND house_unit=#{houseUnit} AND house_number=#{houseNumber}
+	</select>
+	<!-- 根据楼栋编号，单元号，房间编号，查询业主id -->
+	<select id="selectowneridaccording_bn_hu_hn" resultType="int">
+		SELECT o.owner_id FROM house_owner o
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE build_number=#{buildNumber} AND house_unit=#{houseUnit} AND house_number=#{houseNumber}
+	</select>
+	<!-- 模糊查询家庭成员信息（楼栋编号，单元号，房间号，业主姓名，成员姓名） -->
+	<select id="getfamilyinfolike" resultType="com.peizhiwei.community.admin.entity.Family">
+		SELECT f.*,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`,
+		build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`
+		FROM family f
+		LEFT JOIN house_owner o ON f.owner_id=o.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} AND owner_name LIKE #{ownerName} AND family_name LIKE #{familyName}
+	</select>
 </mapper>

@@ -86,18 +86,11 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 	 * 获取所有业主名称，去掉重复的
 	 */
 	@Override
-	public List<HouseOwner> getallonluhouseownername() {
-		List<HouseOwner> onluhouseownername = houseownerdao.getallonlyhouseownername();
+	public List<String> getallonluhouseownername() {
+		List<String> onluhouseownername = houseownerdao.getallonlyhouseownername();
 		return onluhouseownername;
 	}
-	/**
-	 * 根据房间号查询业主
-	 */
-	@Override
-	public HouseOwner gethouseownerinfoaccordinghousenumber(String houseNumber) {
-		HouseOwner houseonwer = houseownerdao.gethouseownerinfoaccordinghousenumber(houseNumber);
-		return houseonwer;
-	}
+	
 	/**
 	 * 业主迁出，同时删除家庭成员信息，停车位信息
 	 */

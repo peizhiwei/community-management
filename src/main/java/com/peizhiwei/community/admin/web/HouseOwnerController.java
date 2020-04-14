@@ -54,11 +54,14 @@ public class HouseOwnerController {
 		List<HouseOwner> listhouseownerinfo=houseownerservice.getallhouseownerinfo();
 		return listhouseownerinfo;
 	}
-	
+	/**
+	 * 获取所有业主名称，去掉重复的
+	 * @return
+	 */
 	@RequestMapping("/getallonlyhouseownername")
 	@ResponseBody
-	public List<HouseOwner> getallonlyhouseownername(){
-		List<HouseOwner> listonlyhouseownername = houseownerservice.getallonluhouseownername();
+	public List<String> getallonlyhouseownername(){
+		List<String> listonlyhouseownername = houseownerservice.getallonluhouseownername();
 		return listonlyhouseownername;
 	}
 	

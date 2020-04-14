@@ -32,9 +32,10 @@
 			<span style="color: red;text-align: center;">注：新增业主的默认密码为000000</span>
 		</div>
 		<div class="row">
-			<table class="table table-bordered table-hover text-center" style="background-color: white;">
+			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
+						<th class="text-center">序号</th>
 						<th class="text-center">姓名</th>
 						<th class="text-center">楼栋</th>
 						<th class="text-center">单元</th>
@@ -49,7 +50,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="list in listhouseownerinfo">
+					<tr v-for="(list,index) in listhouseownerinfo">
+						<td>{{index+1}}</td>
 						<td>{{list.ownerName}}</td>
 						<td>{{list.buildingInfo.buildNumber}}</td>
 						<td>{{list.houseInfo.houseUnit}}</td>

@@ -3,6 +3,7 @@ package com.peizhiwei.community.admin.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.peizhiwei.community.admin.entity.Parking;
 
@@ -17,10 +18,6 @@ public interface ParkingDao {
 	 * @return
 	 */
 	String getparkinginfomaxparkingnumber();
-	/**
-	 * 更改停车位业主
-	 */
-	void updateparkinginfo(Parking parking);
 	/**
 	 * 调整停车位价格
 	 */
@@ -42,4 +39,15 @@ public interface ParkingDao {
 	 * 批量增加停车位信息
 	 */
 	void insertparkinginfo(@Param("parkinglist")List<Parking> parkinglist);
+	/**
+	 * 模糊查询，(车位号，业主名，楼栋号，单元号，房间号)
+	 * @param parkingNumber
+	 * @param ownerName
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @return
+	 */
+	List<Parking> getparkinginfolike(@Param("parkingNumber")String parkingNumber,@Param("ownerName")String ownerName,
+			@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber);
 }

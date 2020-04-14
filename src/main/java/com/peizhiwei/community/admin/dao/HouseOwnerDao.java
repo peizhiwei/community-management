@@ -15,11 +15,7 @@ public interface HouseOwnerDao {
 	/**
 	 * 获取所有业主名称，且名称相同的只显示一个
 	 */
-	List<HouseOwner> getallonlyhouseownername();
-	/**
-	 * 根据房间号查询业主信息
-	 */
-	HouseOwner gethouseownerinfoaccordinghousenumber(String houseNumber);
+	List<String> getallonlyhouseownername();
 	/**
 	 * 更新业主信息
 	 * @param houseowner

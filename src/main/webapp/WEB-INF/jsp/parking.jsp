@@ -12,105 +12,76 @@
   </head>
   <body style="background-color: rgb(245,245,245)">
     <div class="container-fluid" id="app">
+    	<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>停车位信息</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;业主信息管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;停车位</span></h5>
+        </div>
+        <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
+            <h4>查询条件</h4><hr>
+            <form class="form-inline" style="padding-bottom: 25px;">
+            	<input type="text" class="form-control" id="likeparkingnumber" placeholder="请输入车位号">
+                <input type="text" class="form-control" id="likeownername" placeholder="请输入业主姓名">
+                <input type="text" class="form-control" id="likebuildnumber" placeholder="请输入楼栋编号">
+                <input type="text" class="form-control" id="likehouseunit" placeholder="请输入单元号">
+                <input type="text" class="form-control" id="likehousenumber" placeholder="请输入房间号">
+                <button type="button" class="btn btn-default" @click="getparkinginfolike()">查询</button>
+            </form>
+        </div>
+        <div class="row">
+			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2">新增</button>
+		</div>
 		<div class="row">
-			<div>
-				<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2">新增</button>
-				<h1 style="text-align: center;">停车位信息</h1>
-			</div>
-			<table class="table table-bordered table-hover text-center" style="background-color: white;">
+			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
-						<th>
+						<th class="text-center">
 							<input type="checkbox" value="">
 						</th>
-						<th class="col-md-1 text-center">序号</th>
-						<th class="col-md-1 text-center">车位编号</th>
-						<th class="col-md-1 text-center">业主</th>
-						<th class="col-md-1 text-center">房间号</th>
-						<th class="col-md-2 text-center">手机号</th>
-						<th class="col-md-1 text-center">出售时间</th>
-						<th class="col-md-1 text-center">价格(万)</th>
-						<th class="col-md-1 text-center">状态</th>
-						<th class="col-md-3 text-center">操作</th>
+						<th class="text-center">序号</th>
+						<th class="text-center">车位编号</th>
+						<th class="text-center">业主</th>
+						<th class="text-center">楼栋号</th>
+						<th class="text-center">单元号</th>
+						<th class="text-center">房间号</th>
+						<th class="text-center">手机号</th>
+						<th class="text-center">出售时间</th>
+						<th class="text-center">价格(万)</th>
+						<th class="text-center">状态</th>
+						<th class="text-center">操作</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(parkinglist,index) in listparkinginfo">
+					<tr v-for="(list,index) in listparkinginfo">
 						<td>
 							<input type="checkbox" value="">
 						</td>
 						<td>{{index+1}}</td>
-						<td>{{parkinglist.parkingNumber}}</td>
-						<td>{{parkinglist.houseOwner==null?'':parkinglist.houseOwner.ownerName}}</td>
-						<td>{{parkinglist.houseOwner==null?'':parkinglist.houseOwner.houseInfo.houseNumber}}</td>
-						<td>{{parkinglist.houseOwner==null?'':parkinglist.houseOwner.ownerPhone}}</td>
-						<td>{{parkinglist.parkingSellTime==''?'':parkinglist.parkingSellTime}}</td>
-						<td>{{parkinglist.parkingPrice}}</td>
-						<td>{{parkinglist.parkingstate==1?'已售':'待售'}}</td>
+						<td>{{list.parkingNumber}}</td>
+						<td>{{list.houseOwner==null?'':list.houseOwner.ownerName}}</td>
+						<td>{{list.houseOwner==null?'':list.houseOwner.houseInfo.buildInfo.buildNumber}}</td>
+						<td>{{list.houseOwner==null?'':list.houseOwner.houseInfo.houseUnit}}</td>
+						<td>{{list.houseOwner==null?'':list.houseOwner.houseInfo.houseNumber}}</td>
+						<td>{{list.houseOwner==null?'':list.houseOwner.ownerPhone}}</td>
+						<td>{{list.parkingSellTime==''?'':list.parkingSellTime}}</td>
+						<td>{{list.parkingPrice}}</td>
+						<td>{{list.parkingstate==1?'已售':'待售'}}</td>
 						<td>
-							<!-- 更改业主按钮是否禁用 -->
-							<button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
-                                data-target="#changeownerModal" @click="change(parkinglist.parkingId,parkinglist.houseOwner.ownerName,parkinglist.houseOwner.houseInfo.houseNumber,
-                                parkinglist.parkingSellTime,parkinglist.parkingPrice)" v-if="parkinglist.houseOwner!=null">更改业主</button>
-                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" disabled="disabled"
-                                data-target="#changeownerModal" @click="change(parkinglist.parkingId,parkinglist.houseOwner.ownerName,parkinglist.houseOwner.houseInfo.houseNumber,
-                                parkinglist.parkingSellTime,parkinglist.parkingPrice)" v-else>更改业主</button>
-                                
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                data-target="#changepricemodal" @click="changeprice(parkinglist.parkingId,parkinglist.parkingPrice)">调整价格</button>
+                                data-target="#changepricemodal" @click="changeprice(list.parkingId,list.parkingPrice)">调整价格</button>
                             <!-- 出售按钮是否禁用 -->
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" disabled="disabled"
-                                data-target="#sellmodal" @click="sell(parkinglist.parkingId,parkinglist.parkingPrice)" v-if="parkinglist.houseOwner!=null">出售</button>
+                                data-target="#sellmodal" v-if="list.houseOwner!=null">出售</button>
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                data-target="#sellmodal" @click="sell(parkinglist.parkingId,parkinglist.parkingPrice)" v-else>出售</button>
+                                data-target="#sellmodal" @click="sell(list.parkingId,list.parkingPrice)" v-else>出售</button>
                             <!-- 出售按钮是否禁用 -->
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" disabled="disabled"
-                                data-target="#Takebackmodal" @click="takeback(parkinglist.parkingId)" v-if="parkinglist.houseOwner==null">收回</button>
+                                data-target="#Takebackmodal" v-if="list.houseOwner==null">收回</button>
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                data-target="#Takebackmodal" @click="takeback(parkinglist.parkingId)" v-else>收回</button>
+                                data-target="#Takebackmodal" @click="takeback(list.parkingId)" v-else>收回</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<!--更改车位业主的模态框-->
-			<div class="modal fade" id="changeownerModal" tabindex="-1" role="dialog"
-				aria-labelledby="myModalLabel">
-				<div class="modal-dialog" role="document" style="width: 32%;">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<h4 class="modal-title text-center" id="myModalLabel">更改业主</h4>
-						</div>
-						<div class="modal-body">
-							<form class="form-horizontal">
-								<div class="form-group">
-									<label class="col-sm-3 control-label">业主</label>
-									<div class="col-sm-9">
-										<select required="required" class="form-control" id="parkingownername" @click="selecthousenumber()">
-											<option class="form-control" v-for="onlyhouseownername in listonlyhouseownername">{{onlyhouseownername.ownerName}}</option>
-										</select>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">房间号</label>
-									<div class="col-sm-9">
-										<select required="required" class="form-control" id="parkingownernumber">
-											<option class="form-control" v-for="list in listhouseinfo">{{list.houseNumber==''?'':list.houseNumber}}</option>
-										</select>
-									</div>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-							<button type="button" class="btn btn-primary" id="savechange" @click="savechangeowner()">确定</button>
-						</div>
-					</div>
-				</div>
-			</div>
 			<!--更改车位价格的模态框-->
 			<div class="modal fade" id="changepricemodal" tabindex="-1" role="dialog"
 				aria-labelledby="myModalLabel">
@@ -155,18 +126,34 @@
 						<div class="modal-body">
 							<form class="form-horizontal">
 								<div class="form-group">
-									<label class="col-sm-3 control-label">业主</label>
+									<label class="col-sm-3 control-label">楼栋号</label>
 									<div class="col-sm-9">
-										<select required="required" class="form-control" id="sell_parkingownername" @click="selecthousenumber()">
-											<option class="form-control" v-for="onlyhouseownername in listonlyhouseownername">{{onlyhouseownername.ownerName}}</option>
+										<select required="required" class="form-control" id="sell_buildnumber" @click="selecthouseunit()">
+											<option class="form-control" v-for="item in listbuildnumber">{{item}}</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">单元号</label>
+									<div class="col-sm-9">
+										<select required="required" class="form-control" id="sell_houseunit" @click="selecthousenumber()">
+											<option class="form-control" v-for="item in listhouseunit">{{item}}</option>
 										</select>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">房间号</label>
 									<div class="col-sm-9">
-										<select required="required" class="form-control" id="sell_parkingownernumber">
-											<option class="form-control" v-for="list in listhouseinfo">{{list.houseNumber==''?'':list.houseNumber}}</option>
+										<select required="required" class="form-control" id="sell_housenumber" @click="selectownername">
+											<option class="form-control" v-for="item in listhousenumber">{{item}}</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">业主</label>
+									<div class="col-sm-9">
+										<select required="required" class="form-control" id="sell_ownername">
+											<option class="form-control">{{ownerName}}</option>
 										</select>
 									</div>
 								</div>
@@ -232,18 +219,18 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script src="../static/js/vue.min.js"></script>
-    <script language="javascript" type="text/javascript" src="../static/datepicker/WdatePicker.js"></script>
+    <script src="../static/datepicker/WdatePicker.js"></script>
     <script>
 		var app = new Vue({
 			el : '#app',
 			data : {
 				listparkinginfo:[],//所有停车位信息
-				infotomodal:[],
-				changeownerid:0,//点击修改业主的业主id
 				changepriceid:0,//点击调整价格的id
 				changesell:0,//点击出售的id
-				listonlyhouseownername:[],//所有的业主名称，去掉重复的
-				listhouseinfo:[]//根据业主名称查出的所有房间信息
+				listbuildnumber:[],//所有有住户的楼栋编号
+				listhouseunit:[],//所有有住户的单元号
+				listhousenumber:[],//所有有住户的房间号
+				ownerName:'',//出售下拉框中的业主
 			},
 			mounted : function() {
 				this.get();
@@ -263,93 +250,10 @@
 						}
 					});
 				},
-				//点击更改业主按钮，显示信息在模态框上
-				change:function(parkingId,ownerName,houseNumber,parkingSellTime,parkingPrice){
-					console.log(ownerName==null?'':ownerName);
-					app.changeownerid=parkingId;
-					$("#parkingownername").val(ownerName==null?'':ownerName);
-					$("#parkingownernumber").val(houseNumber);
-					//获取所有业主名称，去掉重复的
-					$.ajax({
-						url : '/community/houseownerinfo/getallonlyhouseownername',
-						type : 'GET',
-						dataType : 'JSON',
-						success : function(result) {
-							app.listonlyhouseownername = result;
-							var ownerName = result[0].ownerName;
-							//点击按钮时根据查询到的业主名称查询所有的房间信息
-							$.ajax({
-								url : '/community/houseinfo/getallhouseinfoaccordingownername',
-								type : 'GET',
-								dataType : 'JSON',
-								data:{"ownerName":ownerName},
-								success : function(result) {
-									app.listhouseinfo = result;
-								},
-								error : function() {
-									console.log("请求失败处理");
-								}
-							});
-							
-						},
-						error : function() {
-							console.log("请求失败处理");
-						}
-					});
-				},
-				//更换车位业主时点击业主下拉框，同步更新房间号信息
-				selecthousenumber:function(){
-					var ownerName = $("#parkingownername").val();
-					$.ajax({
-						url : '/community/houseinfo/getallhouseinfoaccordingownername',
-						type : 'GET',
-						dataType : 'JSON',
-						data:{"ownerName":ownerName},
-						success : function(result) {
-							app.listhouseinfo = result;
-						},
-						error : function() {
-							console.log("请求失败处理");
-						}
-					});
-				},
-				//出售车位时点击业主下拉框，同步更新房间号信息
-				selecthousenumber:function(){
-					var ownerName = $("#sell_parkingownername").val();
-					$.ajax({
-						url : '/community/houseinfo/getallhouseinfoaccordingownername',
-						type : 'GET',
-						dataType : 'JSON',
-						data:{"ownerName":ownerName},
-						success : function(result) {
-							app.listhouseinfo = result;
-						},
-						error : function() {
-							console.log("请求失败处理");
-						}
-					});
-				},
-				//保存修改停车位业主
-				savechangeowner:function(){
-					var parkingId=app.changeownerid;
-					var ownerName=$("#parkingownername").val();
-					var houseNumber=$("#parkingownernumber").val();
-					$.ajax({
-						url:'/community/parkinginfo/updateparkinginfo',
-						type:'POST',
-						dataType:'JSON',
-						data:{"parkingId":parkingId,"houseNumber":houseNumber,},
-						success : function(result) {
-							alert(result.msg);
-							app.get();
-						}
-					});
-				},
 				//点击调整价格按钮，显示信息
 				changeprice:function(parkingId,parkingPrice){
 					app.changepriceid=parkingId;
 					$("#parkingprice").val(parkingPrice);
-					
 				},
 				//保存调整的价格
 				savechangeprice:function(){
@@ -377,28 +281,109 @@
 					var time = myDate.toLocaleDateString().split('/').join('-');//将1970/08/08转化成1970-08-08
 					$("#sell_parkingprice").val(parkingPrice);
 					$("#sell_parkingselltime").val(time);
-					//获取所有业主名称，去掉重复的
+					//查询所有有住户的楼栋编号，去掉重复的
 					$.ajax({
-						url : '/community/houseownerinfo/getallonlyhouseownername',
+						url : '/community/familyinfo/gethaveownerbuildnumber',
 						type : 'GET',
 						dataType : 'JSON',
 						success : function(result) {
-							app.listonlyhouseownername = result;
-							var ownerName = result[0].ownerName;
-							//点击按钮时根据查询到的业主名称查询所有的房间信息
+							app.listbuildnumber = result;
+							var buildNumber = result[0];
+							//根据楼栋编号查询该栋楼中所有有住户的单元号
 							$.ajax({
-								url : '/community/houseinfo/getallhouseinfoaccordingownername',
+								url : '/community/familyinfo/gethaveownerhouseunitaccordingbuildnumber',
 								type : 'GET',
 								dataType : 'JSON',
-								data:{"ownerName":ownerName},
+								data:{"buildNumber":buildNumber},
 								success : function(result) {
-									app.listhouseinfo = result;
+									app.listhouseunit = result;
+									var houseUnit = result[0];
+									//根据楼栋号，单元号，查询所有有住户的房间号
+									$.ajax({
+										url : '/community/familyinfo/gethaveownerhousenumber',
+										type : 'GET',
+										dataType : 'JSON',
+										data:{"buildNumber":buildNumber,"houseUnit":houseUnit,},
+										success : function(result) {
+											app.listhousenumber = result;
+											var houseNumber = result[0];
+											//根据楼栋编号，单元号，房间号，查询业主名
+											$.ajax({
+												url : '/community/familyinfo/getownername',
+												type : 'GET',
+												dataType : 'JSON',
+												data:{"buildNumber":buildNumber,"houseUnit":houseUnit,"houseNumber":houseNumber},
+												success : function(result) {
+													app.ownerName = result.msg;
+												},
+												error : function() {
+													console.log("请求失败处理");
+												}
+											});
+										},
+										error : function() {
+											console.log("请求失败处理");
+										}
+									});
 								},
 								error : function() {
 									console.log("请求失败处理");
 								}
 							});
-							
+						},
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
+				},
+				//点击楼栋编号下拉框，同步更新单元号,房间号，业主名信息
+				selecthouseunit : function(){
+					var buildNumber = $("#sell_buildnumber").val();
+					$.ajax({
+						url : '/community/familyinfo/gethaveownerhouseunitaccordingbuildnumber',
+						type : 'GET',
+						dataType : 'JSON',
+						data:{"buildNumber":buildNumber},
+						success : function(result) {
+							app.listhouseunit = result;
+							app.selecthousenumber();
+							app.selectownername();
+						},
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
+				},
+				//点击单元号下拉框，同步更新房间号，业主名信息
+				selecthousenumber : function(){
+					var buildNumber = $("#sell_buildnumber").val();
+					var houseUnit = $("#sell_houseunit").val();
+					$.ajax({
+						url : '/community/familyinfo/gethaveownerhousenumber',
+						type : 'GET',
+						dataType : 'JSON',
+						data:{"buildNumber":buildNumber,"houseUnit":houseUnit},
+						success : function(result) {
+							app.listhousenumber = result;
+							app.selectownername();
+						},
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
+				},
+				//点击房间号下拉框，同步更新业主名
+				selectownername : function(){
+					var buildNumber = $("#sell_buildnumber").val();
+					var houseUnit = $("#sell_houseunit").val();
+					var houseNumber=$("#sell_housenumber").val();
+					$.ajax({
+						url : '/community/familyinfo/getownername',
+						type : 'GET',
+						dataType : 'JSON',
+						data:{"buildNumber":buildNumber,"houseUnit":houseUnit,"houseNumber":houseNumber},
+						success : function(result) {
+							app.ownerName = result.msg;
 						},
 						error : function() {
 							console.log("请求失败处理");
@@ -408,15 +393,17 @@
 				//车位出售确定按钮
 				savesell:function(){
 					var parkingId = app.changesell;
-					var ownerName = $("#sell_parkingownername").val();
-					var houseNumber = $("#sell_parkingownernumber").val();
+					var buildNumber = $("#sell_buildnumber").val();
+					var houseUnit = $("#sell_houseunit").val();
+					var houseNumber = $("#sell_housenumber").val();
+					var ownerName = $("#sell_ownername").val();
 					var parkingSellTime = $("#sell_parkingselltime").val();
 					var parkingPrice = $("#sell_parkingprice").val();
 					$.ajax({
 						url : '/community/parkinginfo/sellupdateparkinginfo',
 						type : 'POST',
 						dataType : 'JSON',
-						data:{"parkingId":parkingId,"ownerName":ownerName,"houseNumber":houseNumber,"parkingSellTime":parkingSellTime,"parkingPrice":parkingPrice},
+						data:{"parkingId":parkingId,"buildNumber":buildNumber,"houseUnit":houseUnit,"houseNumber":houseNumber,"ownerName":ownerName,"parkingSellTime":parkingSellTime,"parkingPrice":parkingPrice},
 						success : function(result) {
 							alert(result.msg);
 							app.get();
@@ -456,6 +443,25 @@
 							console.log("请求失败处理");
 						}
 					});
+				},
+				//模糊查询车位信息
+				getparkinginfolike : function(){
+					var parkingNumber = $("#likeparkingnumber").val();
+					var ownerName = $("#likeownername").val();
+					var buildNumber = $("#likebuildnumber").val();
+					var houseUnit = $("#likehouseunit").val();
+					var houseNumber = $("#likehousenumber").val();
+					$.ajax({
+						url:'/community/parkinginfo/getparkinginfolike',
+						type:'POST',
+						dataType:'JSON',
+						data:{"parkingNumber":"%"+parkingNumber+"%","ownerName":"%"+ownerName+"%","buildNumber":"%"+buildNumber+"%",
+							"houseUnit":"%"+houseUnit+"%","houseNumber":"%"+houseNumber+"%"},
+						success : function(result) {
+							app.listparkinginfo = result;
+						}
+					});
+					
 				}
 			}
 		});

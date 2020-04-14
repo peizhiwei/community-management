@@ -48,14 +48,8 @@
 		#{ownerIdCard},#{ownerWorkPlace},#{ownerNativePlace},#{ownerSex},#{houseInfo.houseId})
  	</insert>
  	<!-- 获取所有业主名称，去掉重复的 -->
- 	<select id="getallonlyhouseownername" resultType="com.peizhiwei.community.admin.entity.HouseOwner">
+ 	<select id="getallonlyhouseownername" resultType="String">
  		SELECT DISTINCT owner_name FROM house_owner
- 	</select>
- 	<!-- 根据房间号查询业主信息 -->
- 	<select id="gethouseownerinfoaccordinghousenumber" parameterType="String" resultType="com.peizhiwei.community.admin.entity.HouseOwner">
- 		SELECT * FROM house_owner
-		LEFT JOIN house_info ON house_owner.owner_id=house_info.owner_id
-		WHERE house_info.house_number=#{houseNumber}
  	</select>
  	<!-- 业主迁出 -->
  	<delete id="deleteowner" parameterType="int">

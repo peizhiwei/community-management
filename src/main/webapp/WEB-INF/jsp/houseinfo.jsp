@@ -31,7 +31,7 @@
 			<button type="button" class="btn btn-default"data-toggle="modal" data-target="#myModal2">新增</button>
 		</div>
 		<div class="row">
-			<table class="table table-bordered table-hover text-center col-md-12" id="mytb" style="background-color: white;">
+			<table class="table table-striped table-bordered table-hover text-center col-md-12" id="mytb" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">序号</th>

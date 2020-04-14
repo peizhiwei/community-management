@@ -12,42 +12,68 @@
   </head>
   <body style="background-color: rgb(245,245,245)">
     <div class="container-fluid" id="app">
+    	<div class="row" style="background-color: white;margin-top: 20px;padding-left: 10px;margin-bottom: 20px">
+            <h1>家庭成员</h1>
+            <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;业主信息管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;家庭成员</span></h5>
+        </div>
+        <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
+            <h4>查询条件</h4><hr>
+            <form class="form-inline" style="padding-bottom: 25px;">
+                <input type="text" class="form-control" id="likebuildnumber" placeholder="请输入楼栋编号">
+                <input type="text" class="form-control" id="likehouseunit" placeholder="请输入单元号">
+                <input type="text" class="form-control" id="likehousenumber" placeholder="请输入房间号">
+                <input type="text" class="form-control" id="likeownername" placeholder="请输入业主姓名">
+                <input type="text" class="form-control" id="likefamilyname" placeholder="请输入成员姓名">
+                <button type="button" class="btn btn-default" @click="getfamilyinfolike()">查询</button>
+            </form>
+        </div>
+        <div class="row">
+			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
+		</div>
 		<div class="row">
-			<div>
-				<button type="button" class="btn btn-default" style="margin-bottom: -10%" data-toggle="modal" data-target="#myModal2" @click="add()">新增</button>
-				<h1 style="text-align: center;">家庭成员信息</h1>
-			</div>
-			<table class="table table-bordered table-hover text-center" style="background-color: white;">
+			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
-						<th class="col-md-1 text-center">姓名</th>
-						<th class="col-md-1 text-center">性别</th>
-						<th class="col-md-1 text-center">房间号</th>
-						<th class="col-md-1 text-center">电话</th>
-						<th class="col-md-1 text-center">出生日期</th>
-						<th class="col-md-1 text-center">业主</th>
-						<th class="col-md-1 text-center">与业主关系</th>
-						<th class="col-md-1 text-center">籍贯</th>
-						<th class="col-md-1 text-center">工作单位</th>
-						<th class="col-md-3 text-center">操作</th>
+						<th class="text-center">
+							<input type="checkbox">
+						</th>
+						<th class="text-center">序号</th>
+						<th class="text-center">姓名</th>
+						<th class="text-center">性别</th>
+						<th class="text-center">楼栋号</th>
+						<th class="text-center">单元号</th>
+						<th class="text-center">房间号</th>
+						<th class="text-center">电话</th>
+						<th class="text-center">出生日期</th>
+						<th class="text-center">业主</th>
+						<th class="text-center">与业主关系</th>
+						<th class="text-center">籍贯</th>
+						<th class="text-center">工作单位</th>
+						<th class="text-center">操作</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="familylist in listfamilyinfo">
-						<td>{{familylist.familyName}}</td>
-						<td>{{familylist.familySex==1?'男':'女'}}</td>
-						<td>{{familylist.houseOwner.houseInfo.houseNumber}}</td>
-						<td>{{familylist.familyPhone}}</td>
-						<td>{{familylist.familyBirthday}}</td>
-						<td>{{familylist.houseOwner.ownerName}}</td>
-						<td>{{familylist.familyRelation}}</td>
-						<td>{{familylist.familyNativePlace}}</td>
-						<td>{{familylist.familyWorkPlace}}</td>
+					<tr v-for="(list,index) in listfamilyinfo">
+						<td>
+							<input type="checkbox">
+						</td>
+						<td>{{index+1}}</td>
+						<td>{{list.familyName}}</td>
+						<td>{{list.familySex==1?'男':'女'}}</td>
+						<td>{{list.houseOwner.houseInfo.buildInfo.buildNumber}}</td>
+						<td>{{list.houseOwner.houseInfo.houseUnit}}</td>
+						<td>{{list.houseOwner.houseInfo.houseNumber}}</td>
+						<td>{{list.familyPhone}}</td>
+						<td>{{list.familyBirthday}}</td>
+						<td>{{list.houseOwner.ownerName}}</td>
+						<td>{{list.familyRelation}}</td>
+						<td>{{list.familyNativePlace}}</td>
+						<td>{{list.familyWorkPlace}}</td>
 						<td>
 							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                data-target="#myModal1" @click="change(familylist.familyId,familylist.familyName,familylist.familySex,familylist.familyPhone,familylist.familyBirthday,familylist.houseOwner.ownerName,
-                                familylist.familyRelation,familylist.familyNativePlace,familylist.familyWorkPlace)">修改</button>
-                            <button type="button" class="btn btn-danger btn-sm" @click="deletefamilyinfo(familylist.familyId)">删除</button>
+                                data-target="#myModal1" @click="change(list.familyId,list.familyName,list.familySex,list.familyPhone,list.familyBirthday,list.houseOwner.ownerName,
+                                list.familyRelation,list.familyNativePlace,list.familyWorkPlace)">修改</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click="deletefamilyinfo(list.familyId)">删除</button>
 						</td>
 					</tr>
 				</tbody>
@@ -90,7 +116,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">出生日期</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" id="familybirthday">
+										<input id="familybirthday" class="form-control" type="text" onclick="WdatePicker({skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
 									</div>
 								</div>
 								<div class="form-group">
@@ -158,22 +184,38 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">出生日期</label>
 									<div class="col-sm-9">
-										<input type="date" class="form-control" id="addfamilybirthday">
+										<input id="addfamilybirthday" class="form-control" type="text" onclick="WdatePicker({skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label">业主</label>
+									<label class="col-sm-3 control-label">楼栋号</label>
 									<div class="col-sm-9">
-										<select required="required" class="form-control" id="addfamilyhouseowner" @click="selecthousenumber()">
-											<option class="form-control" v-for="onlyhouseownername in listonlyhouseownername">{{onlyhouseownername.ownerName}}</option>
+										<select required="required" class="form-control" id="addbuildnumber" @click="selecthouseunit()">
+											<option class="form-control" v-for="list in listbuildnumber">{{list}}</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">单元号</label>
+									<div class="col-sm-9">
+										<select required="required" class="form-control" id="addhouseunit" @click="selecthousenumber()">
+											<option class="form-control" v-for="list in listhouseunit">{{list}}</option>
 										</select>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">房间号</label>
 									<div class="col-sm-9">
-										<select required="required" class="form-control" id="addfamilyhousenumber">
-											<option class="form-control" v-for="list in listhouseinfo">{{list.houseNumber}}</option>
+										<select required="required" class="form-control" id="addhousenumber" @click="selectownername()">
+											<option class="form-control" v-for="list in listhousenumber">{{list}}</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">业主</label>
+									<div class="col-sm-9">
+										<select required="required" class="form-control" id="addfamilyhouseowner">
+											<option class="form-control">{{ownerName}}</option>
 										</select>
 									</div>
 								</div>
@@ -210,6 +252,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script src="../static/js/vue.min.js"></script>
+    <script src="../static/datepicker/WdatePicker.js"></script>
     <script>
 		var app = new Vue({
 			el : '#app',
@@ -218,7 +261,10 @@
 				infotomodal:[],
 				changeid:0,
 				listonlyhouseownername:[],//所有的业主名称，去掉重复的
-				listhouseinfo:[]//根据业主名称查出的所有房间信息
+				listbuildnumber:[],//业主所属的楼栋编号，去掉重复的
+				listhouseunit:[],//业主所属的单元号，去掉重复的
+				listhousenumber:[],//业主所属房间号
+				ownerName:''//新增家庭成员模态框中下拉框中的业主名
 			},
 			mounted : function() {
 				this.get();
@@ -258,58 +304,127 @@
 					var familyRelation=$("#familyrelation").val();
 					var familyNativePlace=$("#familynativeplace").val();
 					var familyWorkPlace=$("#familyworkplace").val();
-					$.ajax({
-						url:'/community/familyinfo/updatefamilyinfo',
-						type:'POST',
-						dataType:'JSON',
-						data:{"familyId":familyId,"familyName":familyName,"familySex":familySex,"familyPhone":familyPhone,"familyBirthday":familyBirthday,
-							"familyRelation":familyRelation,"familyNativePlace":familyNativePlace,"familyWorkPlace":familyWorkPlace},
-						success : function(result) {
-							alert(result.msg);
-							app.get();
-						}
-					});
+					if(familyName==''||familyPhone==''||familyBirthday==''||familyRelation==''||familyNativePlace==''||familyWorkPlace==''){
+						alert("请将信息填写完整！");
+					}else{
+						$.ajax({
+							url:'/community/familyinfo/updatefamilyinfo',
+							type:'POST',
+							dataType:'JSON',
+							data:{"familyId":familyId,"familyName":familyName,"familySex":familySex,"familyPhone":familyPhone,"familyBirthday":familyBirthday,
+								"familyRelation":familyRelation,"familyNativePlace":familyNativePlace,"familyWorkPlace":familyWorkPlace},
+							success : function(result) {
+								alert(result.msg);
+								app.get();
+							}
+						});
+					}
 				},
-				//点击新增按钮,查询所有业主名称，让家庭成员选择
+				//点击新增按钮,查询所有有住户的楼栋信息
 				add:function(){
-					//获取所有业主名称，去掉重复的
+					//查询所有有住户的楼栋编号，去掉重复的
 					$.ajax({
-						url : '/community/houseownerinfo/getallonlyhouseownername',
+						url : '/community/familyinfo/gethaveownerbuildnumber',
 						type : 'GET',
 						dataType : 'JSON',
 						success : function(result) {
-							app.listonlyhouseownername = result;
-							var ownerName = result[0].ownerName;
-							//点击新增按钮时根据查询到的业主名称查询所有的房间信息
+							app.listbuildnumber = result;
+							var buildNumber = result[0];
+							//根据楼栋编号查询该栋楼中所有有住户的单元号
 							$.ajax({
-								url : '/community/houseinfo/getallhouseinfoaccordingownername',
+								url : '/community/familyinfo/gethaveownerhouseunitaccordingbuildnumber',
 								type : 'GET',
 								dataType : 'JSON',
-								data:{"ownerName":ownerName},
+								data:{"buildNumber":buildNumber},
 								success : function(result) {
-									app.listhouseinfo = result;
+									app.listhouseunit = result;
+									var houseUnit = result[0];
+									//根据楼栋号，单元号，查询所有有住户的房间号
+									$.ajax({
+										url : '/community/familyinfo/gethaveownerhousenumber',
+										type : 'GET',
+										dataType : 'JSON',
+										data:{"buildNumber":buildNumber,"houseUnit":houseUnit,},
+										success : function(result) {
+											app.listhousenumber = result;
+											var houseNumber = result[0];
+											//根据楼栋编号，单元号，房间号，查询业主名
+											$.ajax({
+												url : '/community/familyinfo/getownername',
+												type : 'GET',
+												dataType : 'JSON',
+												data:{"buildNumber":buildNumber,"houseUnit":houseUnit,"houseNumber":houseNumber},
+												success : function(result) {
+													app.ownerName = result.msg;
+												},
+												error : function() {
+													console.log("请求失败处理");
+												}
+											});
+										},
+										error : function() {
+											console.log("请求失败处理");
+										}
+									});
 								},
 								error : function() {
 									console.log("请求失败处理");
 								}
 							});
-							
 						},
 						error : function() {
 							console.log("请求失败处理");
 						}
 					});
 				},
-				//点击业主下拉框，同步更新房间号信息
-				selecthousenumber:function(){
-					var ownerName = $("#addfamilyhouseowner").val();
+				//点击楼栋编号下拉框，同步更新单元号,房间号，业主名信息
+				selecthouseunit : function(){
+					var buildNumber = $("#addbuildnumber").val();
 					$.ajax({
-						url : '/community/houseinfo/getallhouseinfoaccordingownername',
+						url : '/community/familyinfo/gethaveownerhouseunitaccordingbuildnumber',
 						type : 'GET',
 						dataType : 'JSON',
-						data:{"ownerName":ownerName},
+						data:{"buildNumber":buildNumber},
 						success : function(result) {
-							app.listhouseinfo = result;
+							app.listhouseunit = result;
+							app.selecthousenumber();
+							app.selectownername();
+						},
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
+				},
+				//点击单元号下拉框，同步更新房间号，业主名信息
+				selecthousenumber : function(){
+					var buildNumber = $("#addbuildnumber").val();
+					var houseUnit = $("#addhouseunit").val();
+					$.ajax({
+						url : '/community/familyinfo/gethaveownerhousenumber',
+						type : 'GET',
+						dataType : 'JSON',
+						data:{"buildNumber":buildNumber,"houseUnit":houseUnit},
+						success : function(result) {
+							app.listhousenumber = result;
+							app.selectownername();
+						},
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
+				},
+				//点击房间号下拉框，同步更新业主名
+				selectownername : function(){
+					var buildNumber = $("#addbuildnumber").val();
+					var houseUnit = $("#addhouseunit").val();
+					var houseNumber=$("#addhousenumber").val();
+					$.ajax({
+						url : '/community/familyinfo/getownername',
+						type : 'GET',
+						dataType : 'JSON',
+						data:{"buildNumber":buildNumber,"houseUnit":houseUnit,"houseNumber":houseNumber},
+						success : function(result) {
+							app.ownerName = result.msg;
 						},
 						error : function() {
 							console.log("请求失败处理");
@@ -322,25 +437,31 @@
 					var familySex=$("#addfamilysex").val()=='男'?1:0;
 					var familyPhone=$("#addfamilyphone").val();
 					var familyBirthday=$("#addfamilybirthday").val();
-					var familyHouseOwner=$("#addfamilyhouseowner").val();
-					var familyHouseNumber=$("#addfamilyhousenumber").val();
+					var ownerName=$("#addfamilyhouseowner").val();
+					var buildNumber = $("#addbuildnumber").val();
+					var houseUnit = $("#addhouseunit").val();
+					var houseNumber=$("#addhousenumber").val();
 					var familyRelation=$("#addfamilyrelation").val();
 					var familyNativePlace=$("#addfamilynativeplace").val();
 					var familyWorkPlace=$("#addfamilyworkplace").val();
-					$.ajax({
-						url : '/community/familyinfo/insertfamilyinfo',
-						type : 'POST',
-						dataType : 'JSON',
-						data:{"familyName":familyName,"familySex":familySex,"familyPhone":familyPhone,"familyBirthday":familyBirthday,"familyHouseOwner":familyHouseOwner,
-							"familyHouseNumber":familyHouseNumber,"familyRelation":familyRelation,"familyNativePlace":familyNativePlace,"familyWorkPlace":familyWorkPlace},
-						success : function(result) {
-							alert(result.msg);
-							app.get();
-						},
-						error : function() {
-							console.log("请求失败处理");
-						}
-					});
+					if(familyName==''||familyPhone==''||familyBirthday==''||ownerName==''||buildNumber==''||houseUnit==''||houseNumber==''||familyRelation==''||familyNativePlace==''||familyWorkPlace==''){
+						alert("请将信息填写完整！");
+					}else{
+						$.ajax({
+							url : '/community/familyinfo/insertfamilyinfo',
+							type : 'POST',
+							dataType : 'JSON',
+							data:{"familyName":familyName,"familySex":familySex,"familyPhone":familyPhone,"familyBirthday":familyBirthday,"ownerName":ownerName,
+								"buildNumber":buildNumber,"houseUnit":houseUnit,"houseNumber":houseNumber,"familyRelation":familyRelation,"familyNativePlace":familyNativePlace,"familyWorkPlace":familyWorkPlace},
+							success : function(result) {
+								alert(result.msg);
+								app.get();
+							},
+							error : function() {
+								console.log("请求失败处理");
+							}
+						});
+					}
 				},
 				//删除家庭成员信息
 				deletefamilyinfo:function(familyId){
@@ -355,6 +476,24 @@
 						},
 						error:function(){
 							console.log("请求失败处理！");
+						}
+					});
+				},
+				//模糊查询家庭成员信息
+				getfamilyinfolike : function(){
+					var buildNumber = $("#likebuildnumber").val();
+					var houseUnit = $("#likehouseunit").val();
+					var houseNumber = $("#likehousenumber").val();
+					var ownerName = $("#likeownername").val();
+					var familyName = $("#likefamilyname").val();
+					$.ajax({
+						url:'/community/familyinfo/getfamilyinfolike',
+						type:'POST',
+						dataType:'JSON',
+						data:{"buildNumber":"%"+buildNumber+"%","houseUnit":"%"+houseUnit+"%","houseNumber":"%"+houseNumber+"%",
+							"ownerName":"%"+ownerName+"%","familyName":"%"+familyName+"%"},
+						success : function(result) {
+							app.listfamilyinfo = result;
 						}
 					});
 				}

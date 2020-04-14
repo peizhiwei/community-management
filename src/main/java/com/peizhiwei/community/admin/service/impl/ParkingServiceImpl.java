@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.peizhiwei.community.admin.dao.ParkingDao;
 import com.peizhiwei.community.admin.entity.Parking;
 import com.peizhiwei.community.admin.service.ParkingService;
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ParkingServiceImpl implements ParkingService {
 	@Autowired
 	ParkingDao parkingdao;
@@ -20,13 +22,6 @@ public class ParkingServiceImpl implements ParkingService {
 	public List<Parking> getallparkinginfo() {
 		List<Parking> listparkinginfo = parkingdao.getallparkinginfo();
 		return listparkinginfo;
-	}
-	/**
-	 * 更新停车位业主
-	 */
-	@Override
-	public void updateparkinginfo(Parking parking) {
-		parkingdao.updateparkinginfo(parking);		
 	}
 	/**
 	 * 批量插入停车位信息
@@ -72,6 +67,14 @@ public class ParkingServiceImpl implements ParkingService {
 	@Override
 	public void takebackownerofparking(int ownerId) {
 		parkingdao.takebackownerofparking(ownerId);
+	}
+	/**
+	 * 模糊查询车位信息，(车位号，业主名，楼栋号，单元号，房间号)
+	 */
+	@Override
+	public List<Parking> getparkinginfolike(String parkingNumber, String ownerName, String buildNumber,String houseUnit, String houseNumber) {
+		List<Parking> listparking = parkingdao.getparkinginfolike(parkingNumber, ownerName, buildNumber, houseUnit, houseNumber);
+		return listparking;
 	}
 	
 }
