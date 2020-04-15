@@ -12,6 +12,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -132,5 +133,19 @@ public class ComplaintController {
 			@RequestParam(value = "complaintReason",required = false)String complaintReason){
 		List<Complaint> listcomplaintinfo = complaintservice.getcomplaintinfolike(ownerName, buildNumber, houseUnit, houseNumber, complaintReason);
 		return listcomplaintinfo;
+	}
+	/**
+	 * 批量删除投诉信息
+	 * @param listcomplaintId
+	 * @return
+	 */
+	@RequestMapping("/checkdelete")
+	@ResponseBody
+	public JspResult checkdelete(@RequestBody String[] listcomplaintId){
+		JspResult rs = new JspResult();
+		complaintservice.checkdelete(listcomplaintId);
+		rs.setFlag(true);
+		rs.setMsg("已全部删除！");
+		return rs;
 	}
 }

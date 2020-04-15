@@ -68,5 +68,12 @@ public class ComplaintServiceImpl implements ComplaintService {
 		List<Complaint> listcomplaint = complaintdao.getcomplaintinfolike(ownerName, buildNumber, houseUnit, houseNumber, complaintReason);
 		return listcomplaint;
 	}
+	/**
+	 * 批量删除投诉信息
+	 */
+	@Override
+	public void checkdelete(String[] listcomplaint) {
+		complaintdao.checkdelete(listcomplaint);
+	}
 	
 }

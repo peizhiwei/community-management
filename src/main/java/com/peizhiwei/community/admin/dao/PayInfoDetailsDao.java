@@ -3,6 +3,8 @@ package com.peizhiwei.community.admin.dao;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 
 public interface PayInfoDetailsDao {
@@ -39,4 +41,9 @@ public interface PayInfoDetailsDao {
 	 * @param ownerId
 	 */
 	void deletepayinfodetailsofowner(int ownerId);
+	/**
+	 * ÅúÁ¿½É·Ñ
+	 * @param listpayinfodetails
+	 */
+	void batchpaid(@Param("listpayinfodetails")List<PayInfoDetails> listpayinfodetails);
 }

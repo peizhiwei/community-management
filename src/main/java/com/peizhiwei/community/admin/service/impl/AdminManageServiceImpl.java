@@ -66,6 +66,13 @@ public class AdminManageServiceImpl implements AdminManageService {
 	public void deleteadmininfo(int adminId) {
 		adminmanagedao.deleteadmininfo(adminId);
 	}
+	/**
+	 * 批量删除管理员
+	 */
+	@Override
+	public void checkdelete(int[] listadminId) {
+		adminmanagedao.checkdelete(listadminId);
+	}
 	
 
 }

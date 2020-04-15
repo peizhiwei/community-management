@@ -49,4 +49,9 @@ public interface RepairService {
 	 * @return
 	 */
 	List<Repair> getrepairinfolike(String ownerName,String buildNumber,String houseUnit,String houseNumber,String repairGoods);
+	/**
+	 * 批量删除报修信息
+	 * @param listrepairId
+	 */
+	void checkdelete(int[] listrepairId);
 }

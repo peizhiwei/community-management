@@ -2,6 +2,8 @@ package com.peizhiwei.community.admin.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.entity.PayInfoSum;
 
@@ -31,4 +33,9 @@ public interface PayInfoSumService {
 	 * @param ownerId
 	 */
 	void deletepayinfosumofowner(int ownerId);
+	/**
+	 * ÅúÁ¿½É·Ñ
+	 * @param listpayinfodetails
+	 */
+	void batchpaid(List<PayInfoDetails> listpayinfodetails);
 }

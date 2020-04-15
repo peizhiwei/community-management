@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.peizhiwei.community.admin.dao.PayInfoDetailsDao;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class PayInfoDetailsServiceImpl implements PayInfoDetailsService {
 	@Autowired
 	PayInfoDetailsDao payinfodetailsfodao;
@@ -59,6 +61,13 @@ public class PayInfoDetailsServiceImpl implements PayInfoDetailsService {
 	@Override
 	public void deletepayinfodetailsofowner(int ownerId) {
 		payinfodetailsfodao.deletepayinfodetailsofowner(ownerId);
+	}
+	/**
+	 * ÅúÁ¿½É·Ñ
+	 */
+	@Override
+	public void batchpaid(List<PayInfoDetails> listpayinfodetails) {
+		payinfodetailsfodao.batchpaid(listpayinfodetails);
 	}
 	
 }

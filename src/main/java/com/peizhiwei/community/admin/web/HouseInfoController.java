@@ -20,6 +20,7 @@ import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.HouseType;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.service.HouseInfoService;
+import com.peizhiwei.community.util.Pager;
 
 @Controller
 @RequestMapping("/houseinfo")
@@ -40,8 +41,8 @@ public class HouseInfoController {
 	 */
 	@RequestMapping("/getallhouseinfo")
 	@ResponseBody
-	public List<HouseInfo> getallhouseinfo(){
-		List<HouseInfo> listhouseinfo = houseinfoservice.getallhouseinfo();
+	public Pager<HouseInfo> getallhouseinfo(int page,int size){
+		Pager<HouseInfo> listhouseinfo = houseinfoservice.getallhouseinfo(page,size);
 		return listhouseinfo;
 	}
 	

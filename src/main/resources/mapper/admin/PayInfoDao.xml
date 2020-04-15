@@ -36,10 +36,25 @@
 		delete from `pay_info_details`
 		where `pay_info_id`=#{payInfoId}
 	</delete>
+	
 	<!-- 修改缴费信息 -->
 	<update id="updatepayinfo" parameterType="com.peizhiwei.community.admin.entity.PayInfo">
 		UPDATE `pay_info` 
 		SET `pay_type_id` = #{payType.payTypeId}, `pay_info_money` = #{payInfoMoney}, `pay_info_end_time` = #{payInfoEndTime} 
 		WHERE `pay_info_id` = #{payInfoId}
 	</update>
+	<!-- 批量删除缴费信息 -->
+	<delete id="checkdelete">
+		delete from pay_info where pay_info_id in 
+		<foreach collection="array" item="payInfoId" open="(" separator="," close=")">
+			#{payInfoId}
+		</foreach>
+	</delete>
+	<!-- 批量删除缴费信息的同时，批量删除缴费详情 -->
+	<delete id="batchdeletepaydetailsofpayinfo">
+		delete from `pay_info_details` where `pay_info_id` in
+		<foreach collection="array" item="payInfoId" open="(" separator="," close=")">
+			#{payInfoId}
+		</foreach>
+	</delete>
 </mapper>

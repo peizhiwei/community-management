@@ -66,6 +66,25 @@
 					</tr>
 				</tbody>
 			</table>
+			<nav aria-label="Page navigation">
+				<ul class="pagination pagination-lg">
+					<li>
+						<a href="#" aria-label="Previous" @click="previous()">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li class="active"><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+					<li>
+						<a href="#" aria-label="Next" @click="next()">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
 			<!--修改信息的模态框-->
 			<div class="modal fade" id="myModal1" tabindex="-1" role="dialog"
 				aria-labelledby="myModalLabel">
@@ -124,25 +143,50 @@
 				houseinfolist : [],
 				housetypelist:[],
 				selectdefaultval:'',
-				changehouseinfoid:0
+				changehouseinfoid:0,
+				page:1,//起始页
+				size:6,//每页记录条数
+				total:0//记录总数
 			},
 			mounted : function() {
 				this.get();
 			},
 			methods : {
-				//获取所有楼栋信息
+				//获取所有房间信息
 				get : function() {
+					var page = this.page;
+					var size = this.size;
 					$.ajax({
 						url : '/community/houseinfo/getallhouseinfo',
 						type : 'GET',
 						dataType : 'JSON',
+						data:{"page":page,"size":size},
 						success : function(result) {
-							app.houseinfolist = result;
+							app.houseinfolist = result.rows;
+							app.total = result.total;
 						},
 						error : function() {
 							console.log("请求失败处理");
 						}
 					});
+				},
+				//点击上一页
+				previous : function(){
+					this.page -=1;
+					if(this.page==0){
+						alert("已经是第一页了！");
+					}else{
+						this.get();
+					}
+				},
+				//点击下一页
+				next : function(){
+					this.page +=1;
+					if(this.page==Math.ceil(app.total/app.size)+1){//向上取整
+						alert("已经是最后一页了！");	
+					}else{
+						this.get();
+					}
 				},
 				//点击修改按钮，将该条信息显示在模态框中
 				changeinfo:function(buildId,houseNumber,houseArea,houseTypeName,houseInTime){

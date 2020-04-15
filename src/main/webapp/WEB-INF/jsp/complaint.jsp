@@ -28,14 +28,14 @@
             </form>
         </div>
         <div class="row">
-			<button type="button" class="btn btn-danger">一键删除</button>
+			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
 		</div>
 		<div class="row">
 			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">投诉人</th>
@@ -54,7 +54,7 @@
 				<tbody>
 					<tr v-for="(list,index) in listcomplaintinfo">
 						<td>
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="arr" :value="list.complaintId">
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.houseOwner.ownerName}}</td>
@@ -87,7 +87,9 @@
     	var app = new Vue({
     		el:'#app',
     		data:{
-    			listcomplaintinfo:[]//所有的投诉信息
+    			listcomplaintinfo:[],//所有的投诉信息
+    			checked:false,
+    			arr:[]
     		},
     		mounted:function(){
     			this.get();
@@ -171,8 +173,49 @@
 							app.listcomplaintinfo = result;
 						}
 					});
-    			}
-    		}
+    			},
+    			checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.listcomplaintinfo.forEach( (item) => {
+                            this.arr.push(item.complaintId);
+                        })
+                    }
+                },
+                //批量删除
+                checkdelete : function(){
+                	var listcomplaintId= app.arr;
+                	if(listcomplaintId==''){
+                		alert("请选择要删除的项目！");
+                	}else{
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/complaintinfo/checkdelete',
+    						contentType: "application/json;charset=utf-8",
+    						data:JSON.stringify(listcomplaintId),
+    						success:function(result){
+    							alert(result.msg);
+    							app.get();
+    						}
+    					});
+                	}
+                }
+    		},
+    		watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.listcomplaintinfo.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
     	});
 	</script>
   </body>

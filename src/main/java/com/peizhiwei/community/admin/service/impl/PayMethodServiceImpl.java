@@ -22,34 +22,4 @@ public class PayMethodServiceImpl implements PayMethodService {
 		List<PayMethod> listmethod = paymethoddao.getallpaymethodinfo();
 		return listmethod;
 	}
-	/**
-	 * 修改支付方式
-	 */
-	@Override
-	public void updatepaymethodinfo(PayMethod paymethod) {
-		paymethoddao.updatepaymethodinfo(paymethod);
-	}
-	/**
-	 * 删除支付方式
-	 */
-	@Override
-	public void deletepaymethodinfo(int methodId) {
-		paymethoddao.deletepaymethodinfo(methodId);
-	}
-	/**
-	 * 新增支付方式
-	 */
-	@Override
-	public void insertpaymethodinfo(PayMethod paymethod) {
-		paymethoddao.insertpaymethodinfo(paymethod);
-	}
-	/**
-	 * 查询该支付方式在表中是否已存在
-	 */
-	@Override
-	public boolean selectpaymethodname(String methodName) {
-		boolean flag = paymethoddao.selectpaymethodname(methodName);
-		return flag;
-	}
-	
 }

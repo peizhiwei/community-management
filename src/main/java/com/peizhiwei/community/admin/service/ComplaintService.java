@@ -48,4 +48,9 @@ public interface ComplaintService {
 	 * @return
 	 */
 	List<Complaint> getcomplaintinfolike(String ownerName,String buildNumber,String houseUnit,String houseNumber,String complaintReason);
+	/**
+	 * 批量删除投诉信息
+	 * @param listcomplaint
+	 */
+	void checkdelete(String[] listcomplaint);
 }

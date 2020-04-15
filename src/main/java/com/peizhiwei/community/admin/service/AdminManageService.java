@@ -39,4 +39,9 @@ public interface AdminManageService {
 	 * @param adminId
 	 */
 	void deleteadmininfo(int adminId);
+	/**
+	 * 批量删除管理员
+	 * @param listadminId
+	 */
+	void checkdelete(int[] listadminId);
 }

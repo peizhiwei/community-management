@@ -33,4 +33,9 @@ public interface PayInfoService {
 	 * @param payinfo
 	 */
 	void updatepayinfo(PayInfo payinfo);
+	/**
+	 * 批量删除缴费信息
+	 * @param listpayInfoId
+	 */
+	void checkdelete(int[] listpayInfoId);
 }

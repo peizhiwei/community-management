@@ -24,6 +24,14 @@
 		SET `pay_time` = #{payTime}, `pay_state` = 1,`method_id` = #{payMethod.methodId}
 		WHERE `pay_id` = #{payId}
 	</update>
+	<!-- 批量缴费 -->
+	<update id="batchpaid" parameterType="java.util.List">
+		<foreach collection="listpayinfodetails" item="item" separator=";">
+			UPDATE `pay_info_details` 
+			SET `pay_time` = #{item.payTime}, `pay_state` = 1,`method_id` = #{item.payMethod.methodId}
+			WHERE `pay_id` = #{item.payId}
+		</foreach>
+	</update>
 	<!-- 根据缴费方式名称查找对应的id -->
 	<select id="getpaymethodid" parameterType="String" resultType="int">
 		SELECT method_id FROM pay_method

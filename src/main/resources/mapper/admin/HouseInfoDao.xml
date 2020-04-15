@@ -12,6 +12,10 @@
 		LEFT JOIN house_owner o on h.owner_id=o.owner_id
 		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
 		ORDER BY house_state DESC,build_id,house_unit,house_number
+		limit #{page},#{size}
+	</select>
+	<select id="count" resultType="long">
+		select count(1) from house_info
 	</select>
 	<!-- 更新房间信息 -->
 	<update id="updatehouseinfo" parameterType="com.peizhiwei.community.admin.entity.HouseInfo">

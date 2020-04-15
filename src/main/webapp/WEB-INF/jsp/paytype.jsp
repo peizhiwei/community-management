@@ -18,14 +18,14 @@
         </div>
         <div class="row">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#addpaytype">新增</button>
-			<button type="button" class="btn btn-danger">一键删除</button>
+			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
 		</div>
 		<div class="row">
 			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">类别</th>
@@ -36,7 +36,7 @@
 				<tbody>
 					<tr v-for="(list,index) in listpaytypeinfo">
 						<td>
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="arr" :value="list.payTypeId">
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.payTypeName}}</td>
@@ -130,7 +130,9 @@
 			el : '#app',
 			data : {
 				listpaytypeinfo:[],//所有缴费项目
-				clickbuttonid:0//点击按钮的项目id
+				clickbuttonid:0,//点击按钮的项目id
+				checked:false,
+    			arr:[]
 			},
 			mounted : function() {
 				this.get();
@@ -160,19 +162,23 @@
 					var payTypeId = app.clickbuttonid;
 					var payTypeName = $("#type").val();
 					var payTypeRemarks = $("#remarks").val();
-					$.ajax({
-						url : '/community/paytypeinfo/updatepayinfo',
-						type : 'POST',
-						dataType : 'JSON',
-						data:{"payTypeId":payTypeId,"payTypeName":payTypeName,"payTypeRemarks":payTypeRemarks},
-						success : function(result) {
-							alert(result.msg);
-							app.get();
-						},							
-						error : function() {
-							console.log("请求失败处理");
-						}
-					});
+					if(payTypeName==''){
+						alert("请输入缴费类别名称");
+					}else{
+						$.ajax({
+							url : '/community/paytypeinfo/updatepayinfo',
+							type : 'POST',
+							dataType : 'JSON',
+							data:{"payTypeId":payTypeId,"payTypeName":payTypeName,"payTypeRemarks":payTypeRemarks},
+							success : function(result) {
+								alert(result.msg);
+								app.get();
+							},							
+							error : function() {
+								console.log("请求失败处理");
+							}
+						});
+					}
 				},
 				//删除收费类别
 				deletepaytype:function(payTypeId){
@@ -194,21 +200,66 @@
 				addpaytype:function(){
 					var payTypeName = $("#addtype").val();
 					var payTypeRemarks = $("#addremarks").val();
-					$.ajax({
-						url : '/community/paytypeinfo/insertpaytypeinfo',
-						type : 'POST',
-						dataType : 'JSON',
-						data:{"payTypeName":payTypeName,"payTypeRemarks":payTypeRemarks},
-						success : function(result) {
-							alert(result.msg);
-							app.get();
-						},							
-						error : function() {
-							console.log("请求失败处理");
-						}
-					});
-				}
-			}
+					if(payTypeName==''){
+						alert("请输入缴费类别名称");
+					}else{
+						$.ajax({
+							url : '/community/paytypeinfo/insertpaytypeinfo',
+							type : 'POST',
+							dataType : 'JSON',
+							data:{"payTypeName":payTypeName,"payTypeRemarks":payTypeRemarks},
+							success : function(result) {
+								alert(result.msg);
+								app.get();
+							},							
+							error : function() {
+								console.log("请求失败处理");
+							}
+						});
+					}
+				},
+				checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.listpaytypeinfo.forEach( (item) => {
+                            this.arr.push(item.payTypeId);
+                        })
+                    }
+                },
+                //批量删除
+                checkdelete : function(){
+                	var listpayTypeId= app.arr;
+                	if(listpayTypeId==''){
+                		alert("请选择要删除的项目！");
+                	}else{
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/paytypeinfo/checkdelete',
+    						contentType: "application/json;charset=utf-8",
+    						data:JSON.stringify(listpayTypeId),
+    						success:function(result){
+    							alert(result.msg);
+    							app.get();
+    						}
+    					});
+                	}
+                }
+			},
+			watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.listpaytypeinfo.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
 		});
 	</script>
   </body>

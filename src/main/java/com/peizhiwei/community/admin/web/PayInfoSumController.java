@@ -6,9 +6,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.entity.PayInfoSum;
@@ -41,21 +44,55 @@ public class PayInfoSumController {
 	 */
 	@RequestMapping("/updatepaystate")
 	@ResponseBody
-	public JspResult updatepaystate(Integer payId) {
+	public JspResult updatepaystate(Integer ownerId) {
 		JspResult rs = new JspResult();
 		PayInfoDetails payinfo = new PayInfoDetails();
 		PayMethod paymethod = new PayMethod();
+		HouseOwner owner = new HouseOwner();
 		try {
-			payinfo.setPayId(payId);
+			owner.setOwnerId(ownerId);
+			payinfo.setHouseOwner(owner);
 			payinfo.setPayTime(new Date());
 			paymethod.setMethodId(payinfodetailsservice.getpaymethodid("现金"));
 			payinfo.setPayMethod(paymethod);
-			payinfodetailsservice.updatepaystate(payinfo);
+			payinfosumservice.updatepayinfodetailsstate(payinfo);
 			payinfosumservice.updatepayinfosum();//更新缴费汇总信息
 			rs.setFlag(true);
 			rs.setMsg("缴费成功！");
 		} catch (Exception e) {
 			// TODO: handle exception
+		}
+		return rs;
+	}
+	/**
+	 * 批量缴费
+	 * @param listpayId
+	 * @return
+	 */
+	@RequestMapping("/batchpaid")
+	@ResponseBody
+	public JspResult batchpaid(@RequestBody int[] listownerId) {
+		JspResult rs = new JspResult();
+		List<PayInfoDetails> listpayinfodetails = new ArrayList<PayInfoDetails>();
+		try {
+			for (int i = 0; i < listownerId.length; i++) {
+				PayMethod paymethod = new PayMethod();
+				HouseOwner owner = new HouseOwner();
+				PayInfoDetails payinfodetails = new PayInfoDetails();
+				owner.setOwnerId(listownerId[i]);
+				payinfodetails.setHouseOwner(owner);
+				payinfodetails.setPayTime(new Date());
+				paymethod.setMethodId(payinfodetailsservice.getpaymethodid("现金"));
+				payinfodetails.setPayMethod(paymethod);
+				listpayinfodetails.add(payinfodetails);
+			}
+			payinfosumservice.batchpaid(listpayinfodetails);
+			payinfosumservice.updatepayinfosum();//更新缴费汇总信息
+			rs.setFlag(true);
+			rs.setMsg("已全部缴费！");
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}

@@ -13,6 +13,16 @@
 		set pay_type_name=#{payTypeName},pay_type_remarks=#{payTypeRemarks}
 		where pay_type_id=#{payTypeId}
 	</update>
+	<!-- 根据缴费类别id查询缴费信息中是否存在该缴费类别的缴费 -->
+	<select id="selectpaytypeofpayinfo" parameterType="int" resultType="boolean">
+		SELECT COUNT(1) FROM pay_info pi 
+		LEFT JOIN pay_type pt ON pt.pay_type_id=pi.pay_type_id
+		WHERE pt.pay_type_id=#{payTypeId} LIMIT 1
+	</select>
+	<!-- 根据缴费类别Id查询缴费类别名称 -->
+	<select id="selectpaytypenameaccordingtypeid" parameterType="int" resultType="String">
+		SELECT pay_type_name FROM pay_type WHERE pay_type_id=#{payTypeId}
+	</select>
 	<!-- 删除类别信息 -->
 	<delete id="deletepaytypeinfo" parameterType="int">
 		delete from pay_type
@@ -25,10 +35,17 @@
 	</insert>
 	<!-- 根据收费类别名称查询表中是否已存在 -->
 	<select id="selectpaytypename" parameterType="String" resultType="boolean">
-		select count(pay_type_id) from pay_type where pay_type_name=#{payTypeName}
+		select count(1) from pay_type where pay_type_name=#{payTypeName}
 	</select>
 	<!-- 根据收费类别名称查询id -->
 	<select id="selectpaytypeid" parameterType="String" resultType="int">
 		select pay_type_id as payTypeId from pay_type where pay_type_name=#{payTypeName}
 	</select>
+	<!-- 批量删除缴费类别 -->
+	<delete id="checkdelete">
+		delete from pay_type where pay_type_id in
+		<foreach collection="list" item="payTypeId" open="(" separator="," close=")">
+			#{payTypeId}
+		</foreach>
+	</delete>
 </mapper>

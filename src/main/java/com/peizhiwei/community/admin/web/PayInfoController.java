@@ -11,6 +11,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -166,6 +167,22 @@ public class PayInfoController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return rs;
+	}
+	/**
+	 * 批量删除缴费信息
+	 * 更新缴费汇总信息
+	 * @param listpayInfoId
+	 * @return
+	 */
+	@RequestMapping("/checkdelete")
+	@ResponseBody
+	public JspResult checkdelete(@RequestBody int[] listpayInfoId) {
+		JspResult rs = new JspResult();
+		payinfoservice.checkdelete(listpayInfoId);
+		payinfosumservice.updatepayinfosum();//更新缴费汇总信息
+		rs.setFlag(true);
+		rs.setMsg("已全部删除！");
 		return rs;
 	}
 }

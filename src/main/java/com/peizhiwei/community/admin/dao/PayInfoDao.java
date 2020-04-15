@@ -39,4 +39,14 @@ public interface PayInfoDao {
 	 * @param payinfo
 	 */
 	void updatepayinfo(PayInfo payinfo);
+	/**
+	 * 批量删除缴费信息
+	 * @param listpayInfoId
+	 */
+	void checkdelete(int[] listpayInfoId);
+	/**
+	 * 删除缴费信息时，批量删除缴费详情
+	 * @param listpayInfoId
+	 */
+	void batchdeletepaydetailsofpayinfo(int[] listpayInfoId);
 }

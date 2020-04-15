@@ -6,18 +6,20 @@ package com.peizhiwei.community.admin.service;
  */
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.entity.HouseType;
+import com.peizhiwei.community.util.Pager;
 
 public interface HouseInfoService {
 	/**
 	 * 获取所有房间信息
 	 * @return
 	 */
-	List<HouseInfo> getallhouseinfo();
+	Pager<HouseInfo> getallhouseinfo(int page,int size);
 	/**
 	 * 获取所有房型信息
 	 * @return

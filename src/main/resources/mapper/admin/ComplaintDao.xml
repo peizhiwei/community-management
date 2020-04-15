@@ -51,4 +51,11 @@
 		LEFT JOIN building_info b ON b.build_id=i.build_id
 		WHERE owner_name LIKE #{ownerName} AND build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} AND complaint_reason LIKE #{complaintReason}
 	</select>
+	<!-- 批量删除投诉信息 -->
+	<delete id="checkdelete">
+		delete from complaint where complaint_id in
+		<foreach collection="array" item="complaintId" open="(" separator="," close=")">
+			#{complaintId}
+		</foreach>
+	</delete>
 </mapper>

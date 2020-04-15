@@ -334,17 +334,21 @@
                 //批量删除
                 checkdelete : function(){
                 	var listbuildId = app.arr;
-                	$.ajax({
-						type:'POST',
-						dataType:'JSON',
-						url:'/community/buildinginfo/checkdelete',
-						contentType: "application/json;charset=utf-8",
-						data:JSON.stringify(listbuildId),
-						success:function(result){
-							alert(result.msg);
-							app.get();
-						}
-					});
+                	if(listbuildId==''){
+                		alert("请选择要删除的项目！");
+                	}else{
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/buildinginfo/checkdelete',
+    						contentType: "application/json;charset=utf-8",
+    						data:JSON.stringify(listbuildId),
+    						success:function(result){
+    							alert(result.msg);
+    							app.get();
+    						}
+    					});
+                	}
                 },
                 //根据楼栋编号模糊查询楼栋信息
                 getbuildinfooflikebuildnumber : function(){

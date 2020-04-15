@@ -513,17 +513,21 @@
                 //批量删除
                 checkdelete : function(){
                 	var listfamilyId= app.arr;
-                	$.ajax({
-						type:'POST',
-						dataType:'JSON',
-						url:'/community/familyinfo/checkdelete',
-						contentType: "application/json;charset=utf-8",
-						data:JSON.stringify(listfamilyId),
-						success:function(result){
-							alert(result.msg);
-							app.get();
-						}
-					});
+                	if(listfamilyId==''){
+                		alert("请选择要删除的项目");
+                	}else{
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/familyinfo/checkdelete',
+    						contentType: "application/json;charset=utf-8",
+    						data:JSON.stringify(listfamilyId),
+    						success:function(result){
+    							alert(result.msg);
+    							app.get();
+    						}
+    					});
+                	}
                 }
 			},
 			watch:{//深度watcher

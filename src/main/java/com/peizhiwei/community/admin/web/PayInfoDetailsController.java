@@ -8,8 +8,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -68,6 +70,36 @@ public class PayInfoDetailsController {
 			rs.setMsg("缴费成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		return rs;
+	}
+	/**
+	 * 批量缴费
+	 * @param listpayId
+	 * @return
+	 */
+	@RequestMapping("/batchpaid")
+	@ResponseBody
+	public JspResult batchupdate(@RequestBody int[] listpayId) {
+		JspResult rs = new JspResult();
+		List<PayInfoDetails> listpayinfodetails = new ArrayList<PayInfoDetails>();
+		try {
+			for(int i=0;i<listpayId.length;i++) {
+				PayMethod payMethod = new PayMethod();
+				PayInfoDetails payinfo = new PayInfoDetails();
+				payinfo.setPayId(listpayId[i]);
+				payinfo.setPayTime(new Date());
+				payMethod.setMethodId(payinfodetailsservice.getpaymethodid("现金"));
+				payinfo.setPayMethod(payMethod);
+				listpayinfodetails.add(payinfo);
+			}
+			payinfodetailsservice.batchpaid(listpayinfodetails);//批量缴费
+			payinfosumservice.updatepayinfosum();//更新缴费汇总信息
+			rs.setFlag(true);
+			rs.setMsg("已全部缴费！");
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}

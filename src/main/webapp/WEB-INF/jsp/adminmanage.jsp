@@ -18,14 +18,14 @@
         </div>
     	<div class="row">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2">新增</button>
-			<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">一键删除</button>
+			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
 		</div>
 		<div class="row">
 			<table class="col-xs-12 col-sm-12 col-md-12 table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">
-							<input type="checkbox">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">姓名</th>
@@ -42,7 +42,7 @@
 				<tbody>
 					<tr v-for="(list,index) in listadmininfo">
 						<td>
-							<input type="checkbox">
+							<input type="checkbox" v-model="arr" :value="list.adminId">
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.adminName}}</td>
@@ -211,7 +211,9 @@
 			data : {
 				listadmininfo:[],//所有管理员信息
 				changeid:0,//要修改的管理员信息的id
-				oldadminNumber:''//修改管理员信息时，该管理员原先的编号
+				oldadminNumber:'',//修改管理员信息时，该管理员原先的编号
+				checked:false,
+    			arr:[]
 			},
 			mounted : function() {
 				this.get();
@@ -313,8 +315,50 @@
 							console.log("请求失败处理");
 						}
 					});
-				}
-			}
+				},
+				checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.listadmininfo.forEach( (item) => {
+                            this.arr.push(item.adminId);
+                        })
+                    }
+                },
+                //批量删除
+                checkdelete : function(){
+                	var listadminId= app.arr;
+                	if(listadminId==''){
+                		alert("请选择要删除的项目！");
+                	}else{
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/adminmanage/checkdelete',
+    						contentType: "application/json;charset=utf-8",
+    						data:JSON.stringify(listadminId),
+    						success:function(result){
+    							alert(result.msg);
+    							app.checked=false;
+    							app.get();
+    						}
+    					});
+                	}
+                }
+			},
+			watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.listadmininfo.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
 		});
 	</script>
   </body>

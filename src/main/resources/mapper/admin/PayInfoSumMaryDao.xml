@@ -5,7 +5,7 @@
 <mapper namespace="com.peizhiwei.community.admin.dao.PayInfoSumDao">
 	<!-- 获取所有汇总信息 -->
 	<select id="getallpayinfosum" resultType="com.peizhiwei.community.admin.entity.PayInfoSum">
-		SELECT s.*,b.build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,i.house_unit as `houseOwner.houseInfo.houseUnit`,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		SELECT s.*,b.build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,i.house_unit as `houseOwner.houseInfo.houseUnit`,o.owner_id as `houseOwner.ownerId`,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`
 		FROM pay_info_sum s
 		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
 		LEFT JOIN house_info i ON i.house_id=o.house_id
@@ -27,11 +27,19 @@
 	<!-- 一键缴费 -->
 	<update id="updatepayinfodetailsstate" parameterType="com.peizhiwei.community.admin.entity.PayInfoDetails">
 		UPDATE `pay_info_details` 
-		SET `pay_time` = #{payTime}, `pay_state` = 1,`method_id` = #{methodId}
-		WHERE `owner_id` = #{ownerId}
+		SET `pay_time` = #{payTime}, `pay_state` = 1,`method_id` = #{payMethod.methodId}
+		WHERE `owner_id` = #{houseOwner.ownerId}
 	</update>
 	<!-- 根据业主id删除该业主的缴费汇总信息 -->
 	<delete id="deletepayinfosumofowner" parameterType="int">
 		delete from pay_info_sum where owner_id=#{ownerId}
 	</delete>
+	<!-- 批量缴费 -->
+	<update id="batchpaid" parameterType="java.util.List">
+		<foreach collection="listpayinfodetails" item="item" separator=";">
+			UPDATE `pay_info_details` 
+			SET `pay_time` = #{item.payTime}, `pay_state` = 1,`method_id` = #{item.payMethod.methodId}
+			WHERE `owner_id` = #{item.houseOwner.ownerId}
+		</foreach>
+	</update>
 </mapper>

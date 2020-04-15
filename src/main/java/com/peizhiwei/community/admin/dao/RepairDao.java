@@ -48,4 +48,9 @@ public interface RepairDao {
 	 * @return
 	 */
 	List<Repair> getrepairinfolike(@Param("ownerName")String ownerName,@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("repairGoods")String repairGoods);
+	/**
+	 * 批量删除报修信息
+	 * @param listrepairId
+	 */
+	void checkdelete(int[] listrepairId);
 }

@@ -28,14 +28,14 @@
             </form>
         </div>
         <div class="row">
-			<button type="button" class="btn btn-danger">一键删除</button>
+			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
 		</div>
 		<div class="row">
 			<table class="table table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">报修人</th>
@@ -55,7 +55,7 @@
 				<tbody>
 					<tr v-for="(list,index) in listrepairinfo">
 						<td>
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="arr" :value="list.repairId">
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.houseOwner.ownerName}}</td>
@@ -90,6 +90,8 @@
 			el : '#app',
 			data : {
 				listrepairinfo:[],//所有报修信息
+				checked:false,
+    			arr:[]
 			},
 			mounted : function() {
 				this.get();
@@ -173,8 +175,49 @@
 							app.listrepairinfo = result;
 						}
 					});
-    			}
-			}
+    			},
+    			checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.listrepairinfo.forEach( (item) => {
+                            this.arr.push(item.repairId);
+                        })
+                    }
+                },
+                //批量删除
+                checkdelete : function(){
+                	var lisrepairId= app.arr;
+                	if(lisrepairId==''){
+                		alert("请选择要删除的项目！");
+                	}else{
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/repairinfo/checkdelete',
+    						contentType: "application/json;charset=utf-8",
+    						data:JSON.stringify(lisrepairId),
+    						success:function(result){
+    							alert(result.msg);
+    							app.get();
+    						}
+    					});
+                	}
+                }
+			},
+			watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.listrepairinfo.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
 		});
 	</script>
   </body>

@@ -10,7 +10,7 @@
 		LEFT JOIN house_info i ON i.owner_id=o.owner_id
 		LEFT JOIN parking p ON p.owner_id=o.owner_id
 		LEFT JOIN building_info b ON b.build_id=i.build_id
-		WHERE o.owner_id=#{ownerId}
+		WHERE o.owner_id=#{ownerId} LIMIT 1
 	</select>
 	<!-- 业主修改个人信息 -->
 	<update id="changeownerinfo" parameterType="com.peizhiwei.community.admin.entity.HouseOwner">

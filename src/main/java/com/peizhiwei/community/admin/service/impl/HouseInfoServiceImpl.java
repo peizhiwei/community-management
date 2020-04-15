@@ -1,6 +1,8 @@
 package com.peizhiwei.community.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import com.peizhiwei.community.admin.dao.HouseInfoDao;
 import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.entity.HouseType;
 import com.peizhiwei.community.admin.service.HouseInfoService;
+import com.peizhiwei.community.util.Pager;
 
 /**
  * 房间信息的相关操作
@@ -24,12 +27,18 @@ public class HouseInfoServiceImpl implements HouseInfoService {
 	@Autowired
 	private HouseInfoDao houseinfodao;
 	/**
-	 * 获取所有房间信息
+	 * 分页查询获取所有房间信息
 	 */
 	@Override
-	public List<HouseInfo> getallhouseinfo() {
-		List<HouseInfo> listhouseinfo = houseinfodao.getallhouseinfo();
-		return listhouseinfo;
+	public Pager<HouseInfo> getallhouseinfo(int page,int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		Pager<HouseInfo> pager = new Pager<HouseInfo>();
+		List<HouseInfo> listhouseinfo = houseinfodao.getallhouseinfo(params);
+		pager.setRows(listhouseinfo);
+		pager.setTotal(houseinfodao.count());
+		return pager;
 	}
 	/**
 	 * 获取所有房型信息

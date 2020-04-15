@@ -40,4 +40,9 @@ public interface PayInfoDetailsService {
 	 * @param ownerId
 	 */
 	void deletepayinfodetailsofowner(int ownerId);
+	/**
+	 * ÅúÁ¿½É·Ñ
+	 * @param listpayinfodetails
+	 */
+	void batchpaid(List<PayInfoDetails> listpayinfodetails);
 }

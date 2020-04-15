@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -162,6 +163,20 @@ public class AdminManageController {
 		adminmanageservice.deleteadmininfo(adminId);
 		rs.setFlag(true);
 		rs.setMsg("删除成功！");
+		return rs;
+	}
+	/**
+	 * 批量删除管理员
+	 * @param listadminId
+	 * @return
+	 */
+	@RequestMapping("/checkdelete")
+	@ResponseBody
+	public JspResult checkdelete(@RequestBody int[] listadminId) {
+		JspResult rs = new JspResult();
+		adminmanageservice.checkdelete(listadminId);
+		rs.setFlag(true);
+		rs.setMsg("已全部删除！");
 		return rs;
 	}
 }

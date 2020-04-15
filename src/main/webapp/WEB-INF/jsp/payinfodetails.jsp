@@ -17,14 +17,14 @@
             <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;缴费管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;缴费详情</span></h5>
         </div>
         <div class="row">
-			<button type="button" class="btn btn-success">一键缴费</button>
+			<button type="button" class="btn btn-success" @click="batchpaid()">批量缴费</button>
 		</div>
 		<div class="row">
-			<table class="col-xs-12 col-sm-12 col-md-12 table table-bordered table-hover text-center" style="background-color: white;">
+			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">业主</th>
@@ -44,7 +44,7 @@
 				<tbody>
 					<tr v-for="(list,index) in listpayinfo">
 						<td>
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="arr" :value="list.payId">
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.houseOwner.ownerName}}</td>
@@ -75,7 +75,9 @@
 		var app = new Vue({
 			el : '#app',
 			data : {
-				listpayinfo:[]//所有支付方式
+				listpayinfo:[],//所有支付方式
+				checked:false,
+    			arr:[]
 			},
 			mounted : function() {
 				this.get();
@@ -109,8 +111,49 @@
 							console.log("请求失败处理");
 						}
 					});
-				}
-			}
+				},
+				checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.listpayinfo.forEach( (item) => {
+                            this.arr.push(item.payId);
+                        })
+                    }
+                },
+                //批量缴费
+                batchpaid : function(){
+                	var listpayId= app.arr;
+                	if(listpayId==''){
+                		alert("请选择要缴费的项目！");
+                	}else{
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/payinfodetails/batchpaid',
+    						contentType: "application/json;charset=utf-8",
+    						data:JSON.stringify(listpayId),
+    						success:function(result){
+    							alert(result.msg);
+    							app.get();
+    						}
+    					});
+                	}
+                }
+			},
+			watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.listpayinfo.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
 		});
 	</script>
   </body>

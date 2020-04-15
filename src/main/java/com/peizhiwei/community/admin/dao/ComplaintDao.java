@@ -48,4 +48,9 @@ public interface ComplaintDao {
 	 */
 	List<Complaint> getcomplaintinfolike(@Param("ownerName")String ownerName,@Param("buildNumber")String buildNumber,
 			@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("complaintReason")String complaintReason);
+	/**
+	 * 批量删除投诉信息
+	 * @param listcomplaint
+	 */
+	void checkdelete(String[] listcomplaint);
 }

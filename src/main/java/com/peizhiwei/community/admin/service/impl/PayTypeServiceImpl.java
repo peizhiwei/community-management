@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.peizhiwei.community.admin.dao.PayTypeDao;
 import com.peizhiwei.community.admin.entity.PayType;
 import com.peizhiwei.community.admin.service.PayTypeService;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class PayTypeServiceImpl implements PayTypeService {
 	@Autowired
 	PayTypeDao paytypedao;
@@ -54,5 +56,26 @@ public class PayTypeServiceImpl implements PayTypeService {
 	public int selectpaytypeid(String payTypeName) {
 		int payTypeId = paytypedao.selectpaytypeid(payTypeName);
 		return payTypeId;
+	}
+	/**
+	 * 批量删除缴费类别
+	 */
+	@Override
+	public void checkdelete(List<Integer> listpayTypeId) {
+		paytypedao.checkdelete(listpayTypeId);
+	}
+	/**
+	 * 根据缴费类别id查询缴费信息中是否已存在该类别的缴费
+	 */
+	@Override
+	public boolean selectpaytypeofpayinfo(int payTypeId) {
+		return paytypedao.selectpaytypeofpayinfo(payTypeId);
+	}
+	/**
+	 * 根据缴费类别id查询类别名称
+	 */
+	@Override
+	public String selectpaytypenameaccordingtypeid(int payTypeId) {
+		return paytypedao.selectpaytypenameaccordingtypeid(payTypeId);
 	}
 }

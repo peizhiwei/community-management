@@ -56,5 +56,13 @@ public class PayInfoServiceImpl implements PayInfoService {
 	public void insertpayinfodetailslist(List<PayInfoDetails> list) {
 		payinfodao.insertpayinfodetailslist(list);
 	}
+	/**
+	 * 批量删除缴费信息
+	 */
+	@Override
+	public void checkdelete(int[] listpayInfoId) {
+		payinfodao.batchdeletepaydetailsofpayinfo(listpayInfoId);//批量删除缴费详情
+		payinfodao.checkdelete(listpayInfoId);//批量删除缴费信息
+	}
 
 }

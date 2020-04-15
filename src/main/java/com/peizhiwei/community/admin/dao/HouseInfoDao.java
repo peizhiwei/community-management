@@ -1,9 +1,9 @@
 package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.entity.HouseType;
@@ -12,7 +12,8 @@ public interface HouseInfoDao {
 	/**
 	 * 获取所有房间信息
 	 */
-	List<HouseInfo> getallhouseinfo();
+	List<HouseInfo> getallhouseinfo(Map<String, Object> params);
+	long count();
 	/**
 	 * 查询所有房型
 	 */

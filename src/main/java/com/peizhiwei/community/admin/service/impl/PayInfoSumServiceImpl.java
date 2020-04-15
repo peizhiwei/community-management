@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.peizhiwei.community.admin.dao.PayInfoSumDao;
 import com.peizhiwei.community.admin.entity.HouseOwner;
@@ -15,6 +17,7 @@ import com.peizhiwei.community.admin.service.HouseOwnerService;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 import com.peizhiwei.community.admin.service.PayInfoSumService;
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class PayInfoSumServiceImpl implements PayInfoSumService {
 	@Autowired
 	PayInfoSumDao payinfosumdao;
@@ -56,7 +59,8 @@ public class PayInfoSumServiceImpl implements PayInfoSumService {
 			}
 			payinfosumdao.updatepayinfosum(payinfsumlist);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 	}
 	/**
@@ -80,6 +84,13 @@ public class PayInfoSumServiceImpl implements PayInfoSumService {
 	@Override
 	public void deletepayinfosumofowner(int ownerId) {
 		payinfosumdao.deletepayinfosumofowner(ownerId);
+	}
+	/**
+	 * ÅúÁ¿½É·Ñ
+	 */
+	@Override
+	public void batchpaid(List<PayInfoDetails> listpayinfodetails) {
+		payinfosumdao.batchpaid(listpayinfodetails);
 	}
 
 }

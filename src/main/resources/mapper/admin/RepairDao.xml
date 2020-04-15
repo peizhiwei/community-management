@@ -49,4 +49,11 @@
 		left join admin a on a.admin_id=r.admin_id
 		WHERE owner_name LIKE #{ownerName} AND build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} AND repair_goods LIKE #{repairGoods}
 	</select>
+	<!-- 批量删除报修信息 -->
+	<delete id="checkdelete">
+		delete from repair where repair_id in
+		<foreach collection="array" item="repairId" open="(" separator="," close=")">
+			#{repairId}
+		</foreach>
+	</delete>
 </mapper>

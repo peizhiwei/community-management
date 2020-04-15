@@ -67,4 +67,11 @@ public class RepairServiceImpl implements RepairService {
 		List<Repair> listrepair = repairdao.getrepairinfolike(ownerName, buildNumber, houseUnit, houseNumber, repairGoods);
 		return listrepair;
 	}
+	/**
+	 * 批量删除报修信息
+	 */
+	@Override
+	public void checkdelete(int[] listrepairId) {
+		repairdao.checkdelete(listrepairId);
+	}
 }

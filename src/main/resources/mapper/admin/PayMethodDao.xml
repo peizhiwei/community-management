@@ -7,24 +7,4 @@
 	<select id="getallpaymethodinfo" resultType="com.peizhiwei.community.admin.entity.PayMethod">
 		SELECT * FROM pay_method
 	</select>
-	<!-- 修改支付方式 -->
-	<update id="updatepaymethodinfo" parameterType="com.peizhiwei.community.admin.entity.PayMethod">
-		UPDATE `pay_method` 
-		SET `method_name` = #{methodName},`method_remarks` = #{methodRemarks}
-		WHERE `method_id` = #{methodId}
-	</update>
-	<!-- 删除支付方式 -->
-	<delete id="deletepaymethodinfo" parameterType="int">
-		delete from pay_method
-		where method_id=#{methodId}
-	</delete>
-	<!-- 新增支付方式 -->
-	<insert id="insertpaymethodinfo" parameterType="com.peizhiwei.community.admin.entity.PayMethod">
-		INSERT INTO `pay_method`(`method_name`,`method_remarks`) 
-		VALUES (#{methodName},#{methodRemarks})
-	</insert>
-	<!-- 查询支付方式是否已存在 -->
-	<select id="selectpaymethodname" parameterType="String" resultType="boolean">
-		select count(method_id) from pay_method where method_name=#{methodName}
-	</select>
 </mapper>

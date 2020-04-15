@@ -99,10 +99,6 @@
 										style="color: rgb(167, 177, 194); text-decoration: none;">缴费类别</a>
 								</div>
 								<div style="margin-top: 12px;">
-									<a href="/community/in/paymethod" target="iframe_a"
-										style="color: rgb(167, 177, 194); text-decoration: none;">缴费方式</a>
-								</div>
-								<div style="margin-top: 12px;">
 									<a href="/community/in/payinfo" target="iframe_a"
 										style="color: rgb(167, 177, 194); text-decoration: none;">缴费信息</a>
 								</div>

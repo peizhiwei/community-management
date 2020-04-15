@@ -17,14 +17,14 @@
             <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;缴费管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;汇总</span></h5>
         </div>
         <div class="row">
-			<button type="button" class="btn btn-success">一键缴费</button>
+			<button type="button" class="btn btn-success" @click="batchpaid()">批量缴费</button>
 		</div>
 		<div class="row">
-			<table class="col-xs-12 col-sm-12 col-md-12 table table-bordered table-hover text-center" style="background-color: white;">
+			<table class="table table-striped table-bordered table-hover text-center" style="background-color: white;">
 				<thead>
 					<tr>
 						<th class="text-center">
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="checked" @click="checkedAll()">
 						</th>
 						<th class="text-center">序号</th>
 						<th class="text-center">楼栋号</th>
@@ -40,7 +40,7 @@
 				<tbody>
 					<tr v-for="(list,index) in listpaysuminfo">
 						<td>
-							<input type="checkbox" value="">
+							<input type="checkbox" v-model="arr" :value="list.houseOwner.ownerId">
 						</td>
 						<td>{{index+1}}</td>
 						<td>{{list.houseOwner.houseInfo.buildInfo.buildNumber}}</td>
@@ -51,8 +51,8 @@
 						<td>{{list.payInfoSumPaid==null?0:list.payInfoSumPaid}}</td>
 						<td>{{list.payInfoSumPayable-list.payInfoSumPaid}}</td>
 						<td>
-							<button type="button" class="btn btn-success btn-sm" v-if="list.payState==1" disabled="disabled">已缴费</button>
-							<button type="button" class="btn btn-success btn-sm" v-else @click="Paid(list.payId)">一键缴费</button>
+							<button type="button" class="btn btn-success btn-sm" v-if="list.payInfoSumPayable==list.payInfoSumPaid" disabled="disabled">一键缴费</button>
+							<button type="button" class="btn btn-success btn-sm" v-else @click="Paid(list.houseOwner.ownerId)">一键缴费</button>
 						</td>
 					</tr>
 				</tbody>
@@ -67,7 +67,9 @@
 		var app = new Vue({
 			el : '#app',
 			data : {
-				listpaysuminfo:[]//所有汇总信息
+				listpaysuminfo:[],//所有汇总信息
+				checked:false,
+    			arr:[]
 			},
 			mounted : function() {
 				this.get();
@@ -87,12 +89,12 @@
 					});
 				},
 				//点击已缴费按钮，修改缴费状态为已缴费，由管理员操作的缴费方式默认为现金
-				Paid:function(payId){
+				Paid:function(ownerId){
 					$.ajax({
 						url : '/community/payinfosum/updatepaystate',
 						type : 'POST',
 						dataType : 'JSON',
-						data:{"payId":payId},
+						data:{"ownerId":ownerId},
 						success : function(result) {
 							alert(result.msg);
 							app.get();
@@ -101,8 +103,49 @@
 							console.log("请求失败处理");
 						}
 					});
-				}
-			}
+				},
+				checkedAll : function(){
+                    if(this.checked){//实现反选
+                        this.arr=[];
+                    }else{//实现全选
+                        this.arr=[];
+                        this.listpaysuminfo.forEach( (item) => {
+                            this.arr.push(item.houseOwner.ownerId);
+                        })
+                    }
+                },
+                //批量缴费
+                batchpaid : function(){
+                	var listownerId= app.arr;
+                	if(listownerId==''){
+                		alert("请选择要缴费的项目！");
+                	}else{
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/payinfosum/batchpaid',
+    						contentType: "application/json;charset=utf-8",
+    						data:JSON.stringify(listownerId),
+    						success:function(result){
+    							alert(result.msg);
+    							app.get();
+    						}
+    					});
+                	}
+                }
+			},
+			watch:{//深度watcher
+                arr:{
+                    handler:function(val,oldval){
+                        if(this.arr.length==this.listpaysuminfo.length){
+                            this.checked=true;
+                        }else{
+                            this.checked=false;
+                        }
+                    },
+                    deep:true
+                }
+            }
 		});
 	</script>
   </body>

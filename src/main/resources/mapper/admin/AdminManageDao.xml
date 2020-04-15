@@ -32,4 +32,11 @@
 	<delete id="deleteadmininfo" parameterType="int">
 		DELETE FROM admin WHERE admin_id=#{adminId}
 	</delete>
+	<!-- 批量删除管理员 -->
+	<delete id="checkdelete">
+		delete from admin where admin_id in
+		<foreach collection="array" item="adminId" open="(" separator="," close=")">
+			#{adminId}
+		</foreach>
+	</delete>
 </mapper>

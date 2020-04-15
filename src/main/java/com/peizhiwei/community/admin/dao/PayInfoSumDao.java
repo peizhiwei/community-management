@@ -39,4 +39,9 @@ public interface PayInfoSumDao {
 	 * @param ownerId
 	 */
 	void deletepayinfosumofowner(int ownerId);
+	/**
+	 * ÅúÁ¿½É·Ñ
+	 * @param listpayinfodetails
+	 */
+	void batchpaid(@Param("listpayinfodetails") List<PayInfoDetails> listpayinfodetails);
 }

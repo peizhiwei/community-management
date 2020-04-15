@@ -16,6 +16,18 @@ public interface PayTypeDao {
 	 */
 	void updatepaytypeinfo(PayType paytype);
 	/**
+	 * 根据缴费类别id查询缴费信息中是否存在该类别的缴费 
+	 * @param payTypeId
+	 * @return
+	 */
+	boolean selectpaytypeofpayinfo(int payTypeId);
+	/**
+	 * 根据缴费类别id查询缴费类别名称
+	 * @param payTypeId
+	 * @return
+	 */
+	String selectpaytypenameaccordingtypeid(int payTypeId);
+	/**
 	 * 删除类别信息
 	 * @param payTypeId
 	 */
@@ -37,4 +49,9 @@ public interface PayTypeDao {
 	 * @return
 	 */
 	int selectpaytypeid(String payTypeName);
+	/**
+	 * 批量删除缴费类别
+	 * @param listpayTypeId
+	 */
+	void checkdelete(List<Integer> listpayTypeId);
 }
