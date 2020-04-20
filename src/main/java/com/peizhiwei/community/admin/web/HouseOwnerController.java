@@ -24,6 +24,7 @@ import com.peizhiwei.community.admin.service.HouseInfoService;
 import com.peizhiwei.community.admin.service.HouseOwnerService;
 import com.peizhiwei.community.admin.service.PayInfoSumService;
 import com.peizhiwei.community.owner.service.OwnerSelfMessageService;
+import com.peizhiwei.community.util.Pager;
 
 @RequestMapping("houseownerinfo")
 @Controller
@@ -44,7 +45,16 @@ public class HouseOwnerController {
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
 	}
-	
+	/**
+	 * 分页查询，获取所有业主信息
+	 * @return
+	 */
+	@RequestMapping("pagegetallhouseownerinfo")
+	@ResponseBody
+	public Pager<HouseOwner> pagegetallhouseownerinfo(int page,int size){
+		Pager<HouseOwner> pagerhouseownerinfo=houseownerservice.pagegetallhouseownerinfo(page, size);
+		return pagerhouseownerinfo;
+	}
 	/**
 	 * 获取所有业主信息
 	 * @return
@@ -183,23 +193,29 @@ public class HouseOwnerController {
 				houseownerinfo.setOwnerIdCard(ownerIdCard);
 				houseownerinfo.setOwnerNativePlace(ownerNativePlace);
 				houseownerinfo.setOwnerWorkPlace(ownerWorkPlace);
-				houseownerservice.inserthouseownerinfo(houseownerinfo);//添加业主
-				//添加业主时，在房间信息表中添加业主id,入住时间（默认为系统当前时间）
-				HouseInfo updatehouseinfo= new HouseInfo();
-				updatehouseinfo.setHouseInTime(new Date());
-				updatehouseinfo.setHouseId(houseinfoservice.selecthouseid(buildNumber, houseUnit, houseNumber));
-				HouseOwner houseowner=new HouseOwner();
-				houseowner.setOwnerId(houseownerinfo.getOwnerId());//获取刚刚添加的业主id
-				updatehouseinfo.setHouseOwner(houseowner);
-				houseinfoservice.updatehouseinfoofownerid(updatehouseinfo);
-				//添加业主的同时在缴费信息汇总表中添加该业主的缴费汇总信息
-				PayInfoSum payinfosum = new PayInfoSum();
-				HouseOwner paysumfoowner = new HouseOwner();
-				paysumfoowner.setOwnerId(houseownerinfo.getOwnerId());//刚刚添加的业主id
-				payinfosum.setHouseOwner(paysumfoowner);
-				payinfosumservice.insertpayinfosum(payinfosum);
-				rs.setFlag(true);
-				rs.setMsg("添加成功");
+				if(houseownerservice.checkhouseisnull(buildNumber, houseUnit, houseNumber)==0) {//该房间无人居住
+					houseownerservice.inserthouseownerinfo(houseownerinfo);//添加业主
+					//添加业主时，在房间信息表中添加业主id,入住时间（默认为系统当前时间）
+					HouseInfo updatehouseinfo= new HouseInfo();
+					updatehouseinfo.setHouseInTime(new Date());
+					updatehouseinfo.setHouseId(houseinfoservice.selecthouseid(buildNumber, houseUnit, houseNumber));
+					HouseOwner houseowner=new HouseOwner();
+					houseowner.setOwnerId(houseownerinfo.getOwnerId());//获取刚刚添加的业主id
+					updatehouseinfo.setHouseOwner(houseowner);
+					houseinfoservice.updatehouseinfoofownerid(updatehouseinfo);
+					//添加业主的同时在缴费信息汇总表中添加该业主的缴费汇总信息
+					PayInfoSum payinfosum = new PayInfoSum();
+					HouseOwner paysumfoowner = new HouseOwner();
+					paysumfoowner.setOwnerId(houseownerinfo.getOwnerId());//刚刚添加的业主id
+					payinfosum.setHouseOwner(paysumfoowner);
+					payinfosumservice.insertpayinfosum(payinfosum);
+					rs.setFlag(true);
+					rs.setMsg("添加成功");
+				}else {//该房间有人居住
+					rs.setFlag(false);
+					rs.setMsg("该房间已有人居住，请重新选择！");
+				}
+				
 			}else {
 				rs.setFlag(false);
 				rs.setMsg("手机号已存在，请重新输入！");
@@ -239,15 +255,16 @@ public class HouseOwnerController {
 	 */
 	@RequestMapping("/gethouseownerinfolike")
 	@ResponseBody
-	public List<HouseOwner> gethouseownerinfolike(
+	public Pager<HouseOwner> gethouseownerinfolike(
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
 			@RequestParam(value = "houseUnit",required = false)String houseUnit,
 			@RequestParam(value = "houseNumber",required = false)String houseNumber,
 			@RequestParam(value = "ownerName",required = false)String ownerName,
-			@RequestParam(value = "ownerPhone",required = false)String ownerPhone){
-		List<HouseOwner> listhouseowner = new ArrayList<HouseOwner>();
-		listhouseowner = houseownerservice.gethouseownerinfolike(buildNumber, houseUnit, houseNumber, ownerName, ownerPhone);
-		return listhouseowner;
+			@RequestParam(value = "ownerPhone",required = false)String ownerPhone,
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size){
+		Pager<HouseOwner> pagehouseowner = houseownerservice.gethouseownerinfolike(buildNumber, houseUnit, houseNumber, ownerName, ownerPhone, page, size);
+		return pagehouseowner;
 	}
 	/**
 	 * 批量删除业主

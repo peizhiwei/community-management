@@ -4,11 +4,16 @@ import java.util.List;
 
 import com.peizhiwei.community.admin.entity.BuildingInfo;
 import com.peizhiwei.community.admin.entity.HouseInfo;
+import com.peizhiwei.community.util.Pager;
 
 public interface BuildingInfoService {
 	/**
-	 * 查询楼栋的所有信息
+	 * 分页查询楼栋的所有信息
 	 * @return
+	 */
+	Pager<BuildingInfo> pagegetallbuildinginfo(int page,int size);
+	/**
+	 * 查询所有楼栋信息
 	 */
 	List<BuildingInfo> getallbuildinginfo();
 	/**
@@ -52,5 +57,5 @@ public interface BuildingInfoService {
 	 * @param buildNumber
 	 * @return
 	 */
-	List<BuildingInfo> selectlikebuildinginfo(String buildNumber);
+	Pager<BuildingInfo> selectlikebuildinginfo(String buildNumber,int page,int size);
 }

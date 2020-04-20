@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.peizhiwei.community.admin.entity.BuildingInfo;
 import com.peizhiwei.community.admin.entity.HouseInfo;
-import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.HouseType;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.service.HouseInfoService;
@@ -36,16 +34,24 @@ public class HouseInfoController {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
 	}
 	/**
-	 * 获取所有房间信息
+	 * 获取所有房间信息,分页
 	 * @return
+	 */
+	@RequestMapping("/pagegetallhouseinfo")
+	@ResponseBody
+	public Pager<HouseInfo> pagegetallhouseinfo(int page,int size){
+		Pager<HouseInfo> listhouseinfo = houseinfoservice.pagegetallhouseinfo(page,size);
+		return listhouseinfo;
+	}
+	/**
+	 * 获取所有房间信息
 	 */
 	@RequestMapping("/getallhouseinfo")
 	@ResponseBody
-	public Pager<HouseInfo> getallhouseinfo(int page,int size){
-		Pager<HouseInfo> listhouseinfo = houseinfoservice.getallhouseinfo(page,size);
+	public List<HouseInfo> getallhouseinfo(){
+		List<HouseInfo> listhouseinfo = houseinfoservice.getallhouseinfo();
 		return listhouseinfo;
 	}
-	
 	/**
 	 * 根据楼号，查询该楼所有的房间信息
 	 * @param buildNumber
@@ -114,12 +120,14 @@ public class HouseInfoController {
 	 */
 	@RequestMapping("/gethouseinfolike")
 	@ResponseBody
-	public List<HouseInfo> gethouseinfolike(
+	public Pager<HouseInfo> gethouseinfolike(
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
 			@RequestParam(value = "houseUnit",required = false)String houseUnit,
 			@RequestParam(value = "houseNumber",required = false)String houseNumber,
-			@RequestParam(value = "ownerName",required = false)String ownerName){
-		List<HouseInfo> listhouseinfo = houseinfoservice.selecthouseinfolike(buildNumber, houseUnit, houseNumber, ownerName);
+			@RequestParam(value = "ownerName",required = false)String ownerName,
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size){
+		Pager<HouseInfo> listhouseinfo = houseinfoservice.selecthouseinfolike(buildNumber, houseUnit, houseNumber, ownerName,page,size);
 		return listhouseinfo;
 	}
 }

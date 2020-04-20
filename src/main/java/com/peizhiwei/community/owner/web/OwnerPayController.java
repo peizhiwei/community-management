@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +57,8 @@ public class OwnerPayController {
 			int ownerId = owner.getOwnerId();
 			listpayinfodetails = ownerpayservice.getpayinfodetails(ownerId);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return listpayinfodetails;
 	}
@@ -99,7 +101,8 @@ public class OwnerPayController {
 			rs.setFlag(true);
 			rs.setMsg("½É·Ñ³É¹¦£¡");
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}

@@ -60,7 +60,8 @@ public class PayInfoSumController {
 			rs.setFlag(true);
 			rs.setMsg("½É·Ñ³É¹¦£¡");
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}

@@ -1,13 +1,18 @@
 package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.peizhiwei.community.admin.entity.Family;
 
 public interface FamilyDao {
+	/**
+	 * 分页查询家庭成员信息
+	 */
+	List<Family> pagegetallfamilyinfo(Map<String, Object> params);
+	long count();
 	/**
 	 * 查询所有家庭成员信心
 	 */
@@ -66,7 +71,7 @@ public interface FamilyDao {
 	 */
 	int selectowneridaccording_bn_hu_hn(@Param("buildNumber")String buildNumber,@Param("houseUnit")int houseUnit,@Param("houseNumber")String houseNumber);
 	/**
-	 * 模糊查询家庭成员信息(楼栋编号，单元号，房间号，业主姓名，成员姓名)
+	 * 分页，模糊查询家庭成员信息(楼栋编号，单元号，房间号，业主姓名，成员姓名)
 	 * @param buildNumber
 	 * @param houseUnit
 	 * @param houseNumber
@@ -74,7 +79,17 @@ public interface FamilyDao {
 	 * @param familyName
 	 * @return
 	 */
-	List<Family> getfamilyinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName,@Param("familyName")String familyName);
+	List<Family> getfamilyinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName,@Param("familyName")String familyName,@Param("params")Map<String, Object> params);
+	/**
+	 * 模糊查询记录总数
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @param ownerName
+	 * @param familyName
+	 * @return
+	 */
+	long likecount(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName,@Param("familyName")String familyName);
 	/**
 	 * 批量删除家庭成员信息
 	 * @param listfamilyId

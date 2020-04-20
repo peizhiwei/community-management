@@ -1,6 +1,7 @@
 package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -9,8 +10,16 @@ import com.peizhiwei.community.admin.entity.HouseInfo;
 
 public interface BuildingInfoDao {
 	/**
-	 * 查询所有楼栋信息
+	 * 分页查询所有楼栋信息
 	 * @return
+	 */
+	List<BuildingInfo> pagegetallbuildinginfo(Map<String, Object> params);
+	/**
+	 * 查询楼栋总数
+	 */
+	long count();
+	/**
+	 * 查询所有楼栋信息
 	 */
 	List<BuildingInfo> getallbuildinginfo();
 	/**
@@ -61,5 +70,10 @@ public interface BuildingInfoDao {
 	 * @param buildNumber
 	 * @return
 	 */
-	List<BuildingInfo> selectlikebuildinginfo(String buildNumber);
+	List<BuildingInfo> selectlikebuildinginfo(@Param("buildNumber")String buildNumber,@Param("params")Map<String, Object> params);
+	/**
+	 * 模糊查询的总记录数
+	 * @return
+	 */
+	long likecount(@Param("buildNumber")String buildNumber);
 }

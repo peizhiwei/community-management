@@ -1,6 +1,8 @@
 package com.peizhiwei.community.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,19 +12,35 @@ import com.peizhiwei.community.admin.dao.BuildingInfoDao;
 import com.peizhiwei.community.admin.entity.BuildingInfo;
 import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.service.BuildingInfoService;
+import com.peizhiwei.community.util.Pager;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class BuildingInfoServiceImpl implements BuildingInfoService {
 	@Autowired
 	private BuildingInfoDao buildinginfodao;
-
+	/**
+	 * 分页查询所有楼栋信息
+	 */
+	@Override
+	public Pager<BuildingInfo> pagegetallbuildinginfo(int page,int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<BuildingInfo> buildinginfolist = buildinginfodao.pagegetallbuildinginfo(params);
+		Pager<BuildingInfo> pager = new Pager<BuildingInfo>();
+		pager.setRows(buildinginfolist);
+		pager.setTotal(buildinginfodao.count());
+		return pager;
+	}
+	/**
+	 * 查询所有楼栋信息
+	 */
 	@Override
 	public List<BuildingInfo> getallbuildinginfo() {
-		List<BuildingInfo> buildinginfolist = buildinginfodao.getallbuildinginfo();
-		return buildinginfolist;
+		List<BuildingInfo> listbuildinginfo = buildinginfodao.getallbuildinginfo();
+		return listbuildinginfo;
 	}
-
 	/**
 	 * 根据楼房编号判断数据库中是否已存在该编号,存在返回true,不存在返回false
 	 */
@@ -108,10 +126,14 @@ public class BuildingInfoServiceImpl implements BuildingInfoService {
 	 * 根据楼栋编号模糊查询楼栋信息
 	 */
 	@Override
-	public List<BuildingInfo> selectlikebuildinginfo(String buildNumber) {
-		List<BuildingInfo> listbuildinginfo = buildinginfodao.selectlikebuildinginfo(buildNumber);
-		return listbuildinginfo;
+	public Pager<BuildingInfo> selectlikebuildinginfo(String buildNumber,int page,int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<BuildingInfo> listbuildinginfo = buildinginfodao.selectlikebuildinginfo(buildNumber,params);
+		Pager<BuildingInfo> pager = new Pager<BuildingInfo>();
+		pager.setRows(listbuildinginfo);
+		pager.setTotal(buildinginfodao.likecount(buildNumber));
+		return pager;
 	}
-	
-
 }

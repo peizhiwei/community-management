@@ -20,7 +20,6 @@ import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.entity.PayInfo;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
-import com.peizhiwei.community.admin.entity.PayInfoSum;
 import com.peizhiwei.community.admin.entity.PayType;
 import com.peizhiwei.community.admin.service.HouseOwnerService;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;

@@ -6,7 +6,6 @@ package com.peizhiwei.community.admin.service;
  */
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -19,7 +18,11 @@ public interface HouseInfoService {
 	 * 获取所有房间信息
 	 * @return
 	 */
-	Pager<HouseInfo> getallhouseinfo(int page,int size);
+	Pager<HouseInfo> pagegetallhouseinfo(int page,int size);
+	/**
+	 * 获取所有房间信息
+	 */
+	List<HouseInfo> getallhouseinfo();
 	/**
 	 * 获取所有房型信息
 	 * @return
@@ -43,7 +46,7 @@ public interface HouseInfoService {
 	 * @param houseUnit
 	 * @return
 	 */
-	int selecthouseid(@Param("buildNumber")String buildNumber,@Param("houseUnit")int houseUnit,@Param("houseNumber")String houseNumber);
+	int selecthouseid(String buildNumber,int houseUnit,String houseNumber);
 	/**
 	 * 新增业主时，在房间信息表中添加业主id,入住时间（默认为系统当前时间）
 	 * @param houseinfo
@@ -59,6 +62,6 @@ public interface HouseInfoService {
 	 * @param houseinfo(楼栋编号，单元号，房间号，业主姓名)
 	 * @return
 	 */
-	List<HouseInfo> selecthouseinfolike(String buildNumber,String houseUnit,String houseNumber,String ownerName);
+	Pager<HouseInfo> selecthouseinfolike(String buildNumber,String houseUnit,String houseNumber,String ownerName,int page,int size);
 
 }

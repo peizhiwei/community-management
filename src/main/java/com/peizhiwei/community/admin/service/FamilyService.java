@@ -1,10 +1,16 @@
 package com.peizhiwei.community.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.peizhiwei.community.admin.entity.Family;
+import com.peizhiwei.community.util.Pager;
 
 public interface FamilyService {
+	/**
+	 * 分页查询家庭成员信息
+	 */
+	Pager<Family> pagegetallfamilyinfo(int page,int size);
 	/**
 	 * 查询所有家庭成员信息
 	 */
@@ -63,7 +69,7 @@ public interface FamilyService {
 	 */
 	int selectowneridaccording_bn_hu_hn(String buildNumber,int houseUnit,String houseNumber);
 	/**
-	 * 模糊查询家庭成员信息(楼栋编号，单元号，房间号，业主姓名，成员姓名)
+	 * 分页，模糊查询家庭成员信息(楼栋编号，单元号，房间号，业主姓名，成员姓名)
 	 * @param buildNumber
 	 * @param houseUnit
 	 * @param houseNumber
@@ -71,7 +77,7 @@ public interface FamilyService {
 	 * @param familyName
 	 * @return
 	 */
-	List<Family> getfamilyinfolike(String buildNumber,String houseUnit,String houseNumber,String ownerName,String familyName);
+	Pager<Family> getfamilyinfolike(String buildNumber,String houseUnit,String houseNumber,String ownerName,String familyName,int page,int size);
 	/**
 	 * 批量删除家庭成员信息
 	 * @param listfamilyId

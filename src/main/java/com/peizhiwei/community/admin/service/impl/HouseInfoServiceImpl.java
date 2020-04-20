@@ -30,15 +30,23 @@ public class HouseInfoServiceImpl implements HouseInfoService {
 	 * 分页查询获取所有房间信息
 	 */
 	@Override
-	public Pager<HouseInfo> getallhouseinfo(int page,int size) {
+	public Pager<HouseInfo> pagegetallhouseinfo(int page,int size) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("page", (page-1)*size);
 		params.put("size", size);
 		Pager<HouseInfo> pager = new Pager<HouseInfo>();
-		List<HouseInfo> listhouseinfo = houseinfodao.getallhouseinfo(params);
+		List<HouseInfo> listhouseinfo = houseinfodao.pagegetallhouseinfo(params);
 		pager.setRows(listhouseinfo);
 		pager.setTotal(houseinfodao.count());
 		return pager;
+	}
+	/**
+	 * 获取所有房间信息
+	 */
+	@Override
+	public List<HouseInfo> getallhouseinfo() {
+		List<HouseInfo> listhouseinfo = houseinfodao.getallhouseinfo();
+		return listhouseinfo;
 	}
 	/**
 	 * 获取所有房型信息
@@ -88,8 +96,15 @@ public class HouseInfoServiceImpl implements HouseInfoService {
 	 * 模糊查询房间信息(楼栋编号，单元号，房间号，业主姓名)
 	 */
 	@Override
-	public List<HouseInfo> selecthouseinfolike(String buildNumber,String houseUnit,String houseNumber,String ownerName) {
-		List<HouseInfo> listhouseinfo = houseinfodao.selecthouseinfolike(buildNumber, houseUnit, houseNumber, ownerName);
-		return listhouseinfo;
+	public Pager<HouseInfo> selecthouseinfolike(String buildNumber,String houseUnit,String houseNumber,String ownerName,int page,int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		Pager<HouseInfo> pager = new Pager<HouseInfo>();
+		List<HouseInfo> listhouseinfo = houseinfodao.selecthouseinfolike(buildNumber, houseUnit, houseNumber, ownerName,params);
+		pager.setRows(listhouseinfo);
+		pager.setTotal(houseinfodao.likecount(buildNumber, houseUnit, houseNumber, ownerName));
+		return pager;
 	}
+	
 }

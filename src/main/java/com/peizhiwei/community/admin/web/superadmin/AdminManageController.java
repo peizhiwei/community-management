@@ -92,7 +92,8 @@ public class AdminManageController {
 				rs.setMsg("您输入的编号已存在，请重新输入！");
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}

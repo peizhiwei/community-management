@@ -23,6 +23,7 @@ import com.peizhiwei.community.admin.entity.HouseType;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.service.BuildingInfoService;
 import com.peizhiwei.community.admin.service.HouseInfoService;
+import com.peizhiwei.community.util.Pager;
 
 @Controller
 @RequestMapping("/buildinginfo")
@@ -38,6 +39,17 @@ public class BuildingInfoController {
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
+	/**
+	 * 分页获取楼栋的所有信息
+	 * @return
+	 */
+	@RequestMapping("/pagegetallbuildinginfo")
+	@ResponseBody
+	public Pager<BuildingInfo> pagegetallbuidinginfo(int page,int size) {
+		Pager<BuildingInfo> pagebuildinginfo=new Pager<BuildingInfo>();
+		pagebuildinginfo = buildinginfoservice.pagegetallbuildinginfo(page, size);
+		return pagebuildinginfo;
 	}
 	/**
 	 * 获取楼栋的所有信息
@@ -233,8 +245,10 @@ public class BuildingInfoController {
 	 */
 	@RequestMapping("/selectlikebuildinginfo")
 	@ResponseBody
-	public List<BuildingInfo> selectlikebuildinginfo(String buildNumber){
-		List<BuildingInfo> listbuildinfo = buildinginfoservice.selectlikebuildinginfo(buildNumber);
-		return listbuildinfo;
+	public Pager<BuildingInfo> selectlikebuildinginfo(@RequestParam(value = "buildNumber",required = false)String buildNumber,
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size){
+		Pager<BuildingInfo> pagebuildinfo = buildinginfoservice.selectlikebuildinginfo(buildNumber,page,size);
+		return pagebuildinfo;
 	}
 }

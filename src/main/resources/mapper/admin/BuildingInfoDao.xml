@@ -3,6 +3,17 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.peizhiwei.community.admin.dao.BuildingInfoDao">
+	<!-- 分页查询所有楼栋信息 -->
+	<select id="pagegetallbuildinginfo" resultType="com.peizhiwei.community.admin.entity.BuildingInfo">
+		SELECT *
+		FROM building_info
+		ORDER BY build_number
+		limit #{page},#{size}
+	</select>
+	<!-- 查询楼栋总数 -->
+	<select id="count" resultType="long">
+		select count(1) from building_info
+	</select>
 	<!-- 查询所有楼栋信息 -->
 	<select id="getallbuildinginfo" resultType="com.peizhiwei.community.admin.entity.BuildingInfo">
 		SELECT *
@@ -60,7 +71,12 @@
 		select build_number from building_info where build_id=#{buildId}
 	</select>
 	<!-- 根据楼栋编号模糊查找楼栋信息 -->
-	<select id="selectlikebuildinginfo" parameterType="String" resultType="com.peizhiwei.community.admin.entity.BuildingInfo">
-		SELECT * FROM building_info WHERE build_number LIKE #{buildNumber} ORDER BY build_number
+	<select id="selectlikebuildinginfo" resultType="com.peizhiwei.community.admin.entity.BuildingInfo">
+		SELECT * FROM building_info WHERE build_number LIKE #{buildNumber} ORDER BY build_number limit #{params.page},#{params.size}
+	</select>
+	<!-- 模糊查询的总记录数 -->
+	<select id="likecount" resultType="long">
+		SELECT count(1) FROM building_info
+		WHERE build_number LIKE #{buildNumber} ORDER BY build_number
 	</select>
 </mapper>

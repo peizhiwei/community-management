@@ -10,10 +10,14 @@ import com.peizhiwei.community.admin.entity.HouseType;
 
 public interface HouseInfoDao {
 	/**
+	 * 分页查询，获取所有房间信息
+	 */
+	List<HouseInfo> pagegetallhouseinfo(Map<String, Object> params);
+	long count();
+	/**
 	 * 获取所有房间信息
 	 */
-	List<HouseInfo> getallhouseinfo(Map<String, Object> params);
-	long count();
+	List<HouseInfo> getallhouseinfo();
 	/**
 	 * 查询所有房型
 	 */
@@ -43,10 +47,14 @@ public interface HouseInfoDao {
 	 */
 	void updatehouseinfoofowner(int ownerId);
 	/**
-	 * 模糊查询房间信息
+	 * 模糊查询房间信息，分页查询
 	 * @param houseinfo(楼栋编号，单元号，房间号，业主姓名)
 	 * @return
 	 */
-	List<HouseInfo> selecthouseinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName);
-	
+	List<HouseInfo> selecthouseinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName,@Param("params")Map<String, Object> params);
+	/**
+	 * 模糊查询的总记录数
+	 * @return
+	 */
+	long likecount(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName);
 }

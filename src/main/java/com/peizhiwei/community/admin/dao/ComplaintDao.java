@@ -3,7 +3,6 @@ package com.peizhiwei.community.admin.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.peizhiwei.community.admin.entity.Complaint;
 

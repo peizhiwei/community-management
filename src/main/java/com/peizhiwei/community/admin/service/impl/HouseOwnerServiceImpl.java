@@ -1,6 +1,8 @@
 package com.peizhiwei.community.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.peizhiwei.community.admin.service.HouseOwnerService;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 import com.peizhiwei.community.admin.service.PayInfoSumService;
 import com.peizhiwei.community.admin.service.RepairService;
+import com.peizhiwei.community.util.Pager;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class HouseOwnerServiceImpl implements HouseOwnerService {
@@ -35,6 +38,21 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 	PayInfoDetailsService payinfodetailsservice;
 	@Autowired
 	PayInfoSumService payinfosumservice;
+	
+	/**
+	 * 分页查询，获取所有业主信息
+	 */
+	@Override
+	public Pager<HouseOwner> pagegetallhouseownerinfo(int page,int size){
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<HouseOwner> listhouseowner = houseownerdao.pagegetallhouseownerinfo(params);
+		Pager<HouseOwner> pager = new Pager<HouseOwner>();
+		pager.setRows(listhouseowner);
+		pager.setTotal(houseownerdao.count());
+		return pager;
+	}
 	
 	/**
 	 * 获取所有业主信息
@@ -76,6 +94,13 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 		return listhousenumber;
 	}
 	/**
+	 * 根据楼栋编号，单元号，房间号查询该房间是否有人居住
+	 */
+	@Override
+	public int checkhouseisnull(String buildNumber, int houseUnit, String houseNumber) {
+		return houseownerdao.checkhouseisnull(buildNumber, houseUnit, houseNumber);
+	}
+	/**
 	 * 新增业主
 	 */
 	@Override
@@ -114,9 +139,16 @@ public class HouseOwnerServiceImpl implements HouseOwnerService {
 	 * 模糊查询业主信息
 	 */
 	@Override
-	public List<HouseOwner> gethouseownerinfolike(String buildNumber, String houseUnit, String houseNumber,
-			String ownerName, String ownerPhone) {
-		List<HouseOwner> listhouseowner = houseownerdao.gethouseownerinfolike(buildNumber, houseUnit, houseNumber, ownerName, ownerPhone);
-		return listhouseowner;
+	public Pager<HouseOwner> gethouseownerinfolike(String buildNumber, String houseUnit, String houseNumber,
+			String ownerName, String ownerPhone,int page,int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<HouseOwner> listhouseowner = houseownerdao.gethouseownerinfolike(buildNumber, houseUnit, houseNumber, ownerName, ownerPhone,params);
+		Pager<HouseOwner> pager = new Pager<HouseOwner>();
+		pager.setRows(listhouseowner);
+		pager.setTotal(houseownerdao.likecount(buildNumber, houseUnit, houseNumber, ownerName, ownerPhone));
+		return pager;
 	}
+	
 }

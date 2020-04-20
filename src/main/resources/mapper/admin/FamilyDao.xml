@@ -3,6 +3,19 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.peizhiwei.community.admin.dao.FamilyDao">
+	<!-- 分类查询家庭成员信息 -->
+	<select id="pagegetallfamilyinfo" resultType="com.peizhiwei.community.admin.entity.Family">
+		SELECT f.*,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`,
+		build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`
+		FROM family f
+		LEFT JOIN house_owner o ON f.owner_id=o.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		limit #{page},#{size}
+	</select>
+	<select id="count" resultType="long">
+		select count(1) from family
+	</select>
 	<!-- 查询所有家庭成员信息 -->
 	<select id="getallfamilyinfo" resultType="com.peizhiwei.community.admin.entity.Family">
 		SELECT f.*,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`,
@@ -69,6 +82,16 @@
 	<select id="getfamilyinfolike" resultType="com.peizhiwei.community.admin.entity.Family">
 		SELECT f.*,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`,
 		build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`
+		FROM family f
+		LEFT JOIN house_owner o ON f.owner_id=o.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} AND owner_name LIKE #{ownerName} AND family_name LIKE #{familyName}
+		limit #{params.page},#{params.size}
+	</select>
+	<!-- 模糊查询的总记录数 -->
+	<select id="likecount" resultType="long">
+		SELECT count(1)
 		FROM family f
 		LEFT JOIN house_owner o ON f.owner_id=o.owner_id
 		LEFT JOIN house_info i ON i.house_id=o.house_id

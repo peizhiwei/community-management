@@ -3,7 +3,21 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.peizhiwei.community.admin.dao.HouseInfoDao">
-	<!-- 查询所有的房间信息，并按房间号升序排序 -->
+	<!-- 分页查询所有的房间信息，并按房间号升序排序 -->
+	<select id="pagegetallhouseinfo" resultType="com.peizhiwei.community.admin.entity.HouseInfo">
+		SELECT h.*,b.build_number as `buildInfo.buildNumber`,o.owner_name as `houseOwner.ownerName`,
+			   t.house_type_name as `houseType.houseTypeName`
+		FROM house_info h
+		LEFT JOIN building_info b on h.build_id=b.build_id
+		LEFT JOIN house_owner o on h.owner_id=o.owner_id
+		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
+		ORDER BY house_state DESC,house_id,build_id,house_unit,house_number
+		limit #{page},#{size}
+	</select>
+	<select id="count" resultType="long">
+		select count(1) from house_info
+	</select>
+	<!-- 查询所有房间信息 -->
 	<select id="getallhouseinfo" resultType="com.peizhiwei.community.admin.entity.HouseInfo">
 		SELECT h.*,b.build_number as `buildInfo.buildNumber`,o.owner_name as `houseOwner.ownerName`,
 			   t.house_type_name as `houseType.houseTypeName`
@@ -11,11 +25,7 @@
 		LEFT JOIN building_info b on h.build_id=b.build_id
 		LEFT JOIN house_owner o on h.owner_id=o.owner_id
 		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
-		ORDER BY house_state DESC,build_id,house_unit,house_number
-		limit #{page},#{size}
-	</select>
-	<select id="count" resultType="long">
-		select count(1) from house_info
+		ORDER BY house_state DESC,house_id,build_id,house_unit,house_number
 	</select>
 	<!-- 更新房间信息 -->
 	<update id="updatehouseinfo" parameterType="com.peizhiwei.community.admin.entity.HouseInfo">
@@ -65,6 +75,16 @@
 		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
 		WHERE b.build_number LIKE #{buildNumber} AND h.house_unit LIKE #{houseUnit}
 		AND	h.house_number LIKE #{houseNumber} AND IFNULL(o.owner_name,'') LIKE #{ownerName}
-		ORDER BY build_id,house_unit,house_number
+		ORDER BY house_id,build_id,house_unit,house_number
+		limit #{params.page},#{params.size}
+	</select>
+	<!-- 模糊查询的总记录数 -->
+	<select id="likecount" resultType="long">
+		SELECT count(1) FROM house_info h
+		LEFT JOIN building_info b on h.build_id=b.build_id
+		LEFT JOIN house_owner o on h.owner_id=o.owner_id
+		LEFT JOIN house_type t on h.house_type_id=t.house_type_id
+		WHERE b.build_number LIKE #{buildNumber} AND h.house_unit LIKE #{houseUnit}
+		AND	h.house_number LIKE #{houseNumber} AND IFNULL(o.owner_name,'') LIKE #{ownerName}
 	</select>
 </mapper>

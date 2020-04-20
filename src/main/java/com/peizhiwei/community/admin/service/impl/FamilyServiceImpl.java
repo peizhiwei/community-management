@@ -1,6 +1,8 @@
 package com.peizhiwei.community.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,11 +11,26 @@ import org.springframework.transaction.annotation.Transactional;
 import com.peizhiwei.community.admin.dao.FamilyDao;
 import com.peizhiwei.community.admin.entity.Family;
 import com.peizhiwei.community.admin.service.FamilyService;
+import com.peizhiwei.community.util.Pager;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class FamilyServiceImpl implements FamilyService {
 	@Autowired
 	FamilyDao familydao;
+	/**
+	 * 分页查询家庭成员信息
+	 */
+	@Override
+	public Pager<Family> pagegetallfamilyinfo(int page, int size) {
+		Map<String,Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<Family> listfamily = familydao.pagegetallfamilyinfo(params);
+		Pager<Family> pager = new Pager<Family>();
+		pager.setRows(listfamily);
+		pager.setTotal(familydao.count());
+		return pager;
+	}
 	/**
 	 * 查询所有家庭成员信息
 	 */
@@ -93,10 +110,16 @@ public class FamilyServiceImpl implements FamilyService {
 	 * 模糊查询家庭成员信息(楼栋号，单元号，房间号，业主姓名，成员姓名)
 	 */
 	@Override
-	public List<Family> getfamilyinfolike(String buildNumber, String houseUnit, String houseNumber, String ownerName,
-			String familyName) {
-		List<Family> listfamily = familydao.getfamilyinfolike(buildNumber, houseUnit, houseNumber, ownerName, familyName);
-		return listfamily;
+	public Pager<Family> getfamilyinfolike(String buildNumber, String houseUnit, String houseNumber, String ownerName,
+			String familyName,int page,int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<Family> listfamily = familydao.getfamilyinfolike(buildNumber, houseUnit, houseNumber, ownerName, familyName,params);
+		Pager<Family> pager = new Pager<Family>();
+		pager.setRows(listfamily);
+		pager.setTotal(familydao.likecount(buildNumber, houseUnit, houseNumber, ownerName, familyName));
+		return pager;
 	}
 	/**
 	 * 批量删除家庭成员信息
@@ -105,5 +128,4 @@ public class FamilyServiceImpl implements FamilyService {
 	public void checkdelete(String[] listfamilyId) {
 		familydao.checkdelete(listfamilyId);
 	}
-
 }

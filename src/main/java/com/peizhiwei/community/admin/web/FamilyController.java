@@ -21,6 +21,7 @@ import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.service.FamilyService;
 import com.peizhiwei.community.admin.service.HouseOwnerService;
+import com.peizhiwei.community.util.Pager;
 
 @RequestMapping("/familyinfo")
 @Controller
@@ -37,6 +38,17 @@ public class FamilyController {
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
+	
+	/**
+	 * 分页查询所有家庭成员信息
+	 * @return
+	 */
+	@RequestMapping("/pagegetallfamilyinfo")
+	@ResponseBody
+	public Pager<Family> pagegetallfamilyinfo(int page,int size){
+		Pager<Family> pagefamilyinfo = familyservice.pagegetallfamilyinfo(page, size);
+		return pagefamilyinfo;
 	}
 	
 	/**
@@ -217,20 +229,21 @@ public class FamilyController {
 		return rs;
 	}
 	/**
-	 * 模糊查询家庭成员信息
+	 * 分页，模糊查询家庭成员信息
 	 * @return
 	 */
 	@RequestMapping("/getfamilyinfolike")
 	@ResponseBody
-	public List<Family> getfamilyinfolike(
+	public Pager<Family> getfamilyinfolike(
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
 			@RequestParam(value = "houseUnit",required = false)String houseUnit,
 			@RequestParam(value = "houseNumber",required = false)String houseNumber,
 			@RequestParam(value = "ownerName",required = false)String ownerName,
-			@RequestParam(value = "familyName",required = false)String familyName){
-		List<Family> listfamily = new ArrayList<Family>();
-		listfamily = familyservice.getfamilyinfolike(buildNumber, houseUnit, houseNumber, ownerName, familyName);
-		return listfamily;
+			@RequestParam(value = "familyName",required = false)String familyName,
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size){
+		Pager<Family> pagefamily = familyservice.getfamilyinfolike(buildNumber, houseUnit, houseNumber, ownerName, familyName, page, size);
+		return pagefamily;
 	}
 	/**
 	 * 批量删除家庭成员信息

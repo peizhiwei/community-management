@@ -148,7 +148,8 @@ public class ParkingController {
 			rs.setFlag(true);
 			rs.setMsg("Ìí¼Ó³É¹¦£¡");
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
 	}

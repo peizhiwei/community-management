@@ -2,7 +2,6 @@ package com.peizhiwei.community.admin.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.Complaint;
 

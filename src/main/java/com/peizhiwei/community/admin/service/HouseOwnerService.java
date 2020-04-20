@@ -1,12 +1,19 @@
 package com.peizhiwei.community.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.HouseOwner;
+import com.peizhiwei.community.util.Pager;
 
 public interface HouseOwnerService {
+	/**
+	 * 分页查询，获取所有业主信息
+	 * @return
+	 */
+	Pager<HouseOwner> pagegetallhouseownerinfo(int page,int size);
 	/**
 	 * 获取所有业主信息
 	 * @return
@@ -38,6 +45,14 @@ public interface HouseOwnerService {
 	 */
 	List<String> getallnullhousehousenumber(String buildNumber,int houseUnit);
 	/**
+	 * 根据楼栋编号，单元号，房间号，查询该房间是否已有人居住
+	 * @param buildNumber
+	 * @param houseUnit
+	 * @param houseNumber
+	 * @return
+	 */
+	int checkhouseisnull(String buildNumber,int houseUnit,String houseNumber);
+	/**
 	 * 新增业主信息
 	 * @param houseownerinfo
 	 */
@@ -56,6 +71,6 @@ public interface HouseOwnerService {
 	 * @param ownerPhone
 	 * @return
 	 */
-	List<HouseOwner> gethouseownerinfolike(@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,
-			@Param("houseNumber")String houseNumber,@Param("ownerName")String ownerName,@Param("ownerPhone")String ownerPhone);
+	Pager<HouseOwner> gethouseownerinfolike(String buildNumber,String houseUnit,
+			String houseNumber,String ownerName,String ownerPhone,int page,int size);
 }

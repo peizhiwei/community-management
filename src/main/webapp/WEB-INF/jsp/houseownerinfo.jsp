@@ -240,6 +240,29 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="col-md-12" style="padding-top: 20px;">
+					<h4>总记录数：{{total}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总页数：{{pagetotal}}</h4>
+				</div>
+			</div>
+			<div class="col-md-6 text-right">
+				<nav aria-label="Page navigation">
+					<ul class="pagination">
+						<li @click="firstpage()"><a href="#"><span aria-hidden="true">首页</span></a></li>
+						<li><a href="#" @click="previous()"><span>上一页</span></a></li>
+						
+						<li v-for="n in pageRange" v-if="n==page&&state==1" class="active"><span>{{n}}</span></li>
+						<li v-else-if="state==1" @click="tiaozhuan(n)"><a href="#">{{n}}</a></li>
+						<li v-for="n_like in pageRange" v-if="n_like==likepage&&state==0" class="active"><span>{{n_like}}</span></li>
+						<li v-else-if="state==0" @click="tiaozhuan(n_like)"><a href="#">{{n_like}}</a></li>
+						
+						<li><a href="#" aria-label="Next" @click="next()"><span aria-hidden="true">下一页</span></a></li>
+						<li @click="lastpage()"><a href="#"><span aria-hidden="true">尾页</span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
 	</div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
@@ -257,24 +280,143 @@
 				listhouseunit:[],//所属楼栋中还有空房间的单元号
 				listhousenumber:[],//根据楼栋号,单元号查出的所有空房间的房间号
 				checked:false,
-				arr:[]
+				arr:[],
+				page:1,//当前页
+				size:6,//每页记录条数
+				total:0,//记录总数
+				pagetotal:0,//总页数
+				begin:1,//起始页
+				end:1,//显示的最大页
+				pageRange:[],//页码显示的范围
+				state:1,//1表示执行get方法，查询所有房间信息，0表示执行gethouseinfolike方法，模糊查询房间信息
+				likepage:1,//当前页
+				likesize:6//每页记录条数
 			},
 			mounted : function() {
 				this.get();
 			},
 			methods : {
 				get : function() {
+					var page = this.page;
+					var size = this.size;
 					$.ajax({
-						url : '/community/houseownerinfo/getallhouseownerinfo',
+						url : '/community/houseownerinfo/pagegetallhouseownerinfo',
 						type : 'GET',
 						dataType : 'JSON',
+						data:{"page":page,"size":size},
 						success : function(result) {
-							app.listhouseownerinfo = result;
+							app.listhouseownerinfo = result.rows;
+							app.total = result.total;
+							app.pagetotal=Math.ceil((app.total)/app.size);//向上取整
+							if((app.page-1)%5==0){
+								app.begin=app.page;
+								app.end = app.page+4;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									if(current>app.pagetotal)break;
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
+							if(app.page%5==0){
+								app.begin=app.page-4;
+								app.end=app.page;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
 						},
 						error : function() {
 							console.log("请求失败处理");
 						}
 					});
+				},
+				//跳转到第一页，首页
+				firstpage : function(){
+					if(app.state==1){
+						if(app.page==1){
+							alert("已经是第一页了！");
+						}else{
+							app.page=1;
+							app.get();
+						}
+					}else{
+						if(app.likepage==1){
+							alert("已经是第一页了！");
+						}else{
+							app.likepage=1;
+							app.getownerinfolike();
+						}
+					}
+				},
+				//点击上一页
+				previous : function(){
+					if(app.state==1){
+						if(app.page==1){
+							alert("已经是第一页了！");
+						}else{
+							app.page -=1;
+							app.get();
+						}
+					}else{
+						if(app.likepage==1){
+							alert("已经是第一页了！");
+						}else{
+							app.likepage-=1;
+							app.getownerinfolike();
+						}
+					}
+					
+				},
+				//跳转页面
+				tiaozhuan : function(n){
+					if(app.state==1){
+						app.page=n;
+						app.get();
+					}else{
+						app.likepage=n;
+						app.getownerinfolike();
+					}
+				},
+				//点击下一页
+				next : function(){
+					if(app.state==1){
+						if(app.page==app.pagetotal){
+							alert("已经是最后一页了！");	
+						}else{
+							app.page+=1;
+							app.get();
+						}
+					}else{
+						if(app.likepage==app.pagetotal){
+							alert("已经是最后一页了！");
+						}else{
+							app.likepage+=1;
+							app.getownerinfolike();
+						}
+					}
+				},
+				//跳转到最后一页，尾页
+				lastpage : function(){
+					if(app.state==1){
+						if(app.page==app.pagetotal){
+							alert("已经是最后一页了！");
+						}else{
+							app.page=app.pagetotal;
+							app.get();
+						}
+					}else{
+						if(app.likepage==app.pagetotal){
+							alert("已经是最后一页了！");
+						}else{
+							app.likepage=app.pagetotal;
+							app.getownerinfolike();
+						}
+					}
 				},
 				//点击修改按钮，显示业主信息在模态框中
 				change:function(ownerId,ownerName,ownerSex,ownerPhone,ownerBirthday,ownerIdCard,ownerNativePlace,ownerWorkPlace){
@@ -454,19 +596,45 @@
 				},
 				//模糊查询业主信息
 				getownerinfolike : function(){
+					app.state=0;
 					var buildNumber = $("#likebuildnumber").val();
 					var houseUnit = $("#likehouseunit").val();
 					var houseNumber = $("#likehousenumber").val();
 					var ownerName = $("#likeownername").val();
 					var ownerPhone = $("#likeownerphone").val();
+					var page = this.likepage;
+					var size = this.likesize;
 					$.ajax({
 						url:'/community/houseownerinfo/gethouseownerinfolike',
 						type:'POST',
 						dataType:'JSON',
 						data:{"buildNumber":"%"+buildNumber+"%","houseUnit":"%"+houseUnit+"%","houseNumber":"%"+houseNumber+"%",
-							"ownerName":"%"+ownerName+"%","ownerPhone":"%"+ownerPhone+"%"},
+							"ownerName":"%"+ownerName+"%","ownerPhone":"%"+ownerPhone+"%","page":page,"size":size},
 						success : function(result) {
-							app.listhouseownerinfo = result;
+							app.listhouseownerinfo = result.rows;
+							app.total = result.total;
+							app.pagetotal=Math.ceil(app.total/app.likesize);//向上取整
+							if((app.likepage-1)%5==0){
+								app.begin=app.likepage;
+								app.end = app.likepage+4;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									if(current>app.pagetotal)break;
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
+							if(app.likepage%5==0){
+								app.begin=app.likepage-4;
+								app.end=app.likepage;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
 						}
 					});
 				},
