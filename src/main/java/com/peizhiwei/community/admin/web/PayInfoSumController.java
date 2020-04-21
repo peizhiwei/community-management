@@ -18,6 +18,7 @@ import com.peizhiwei.community.admin.entity.PayInfoSum;
 import com.peizhiwei.community.admin.entity.PayMethod;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 import com.peizhiwei.community.admin.service.PayInfoSumService;
+import com.peizhiwei.community.util.Pager;
 
 @Controller
 @RequestMapping("/payinfosum")
@@ -26,6 +27,16 @@ public class PayInfoSumController {
 	PayInfoSumService payinfosumservice;
 	@Autowired
 	PayInfoDetailsService payinfodetailsservice;
+	/**
+	 * 分页获取所有汇总信息
+	 * @return
+	 */
+	@RequestMapping("/pagegetallpayinfosum")
+	@ResponseBody
+	public Pager<PayInfoSum> pagegetallpayinfosum(int page,int size){
+		Pager<PayInfoSum> pagepayinfosum = payinfosumservice.pagegetallpayinfosum(page, size);
+		return pagepayinfosum;
+	}
 	/**
 	 * 获取所有汇总信息
 	 * @return

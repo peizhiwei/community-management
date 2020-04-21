@@ -1,6 +1,8 @@
 package com.peizhiwei.community.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,11 +10,26 @@ import org.springframework.stereotype.Service;
 import com.peizhiwei.community.admin.dao.RepairDao;
 import com.peizhiwei.community.admin.entity.Repair;
 import com.peizhiwei.community.admin.service.RepairService;
+import com.peizhiwei.community.util.Pager;
 
 @Service
 public class RepairServiceImpl implements RepairService {
 	@Autowired
 	RepairDao repairdao;
+	/**
+	 * 分页查询所有报修信息
+	 */
+	@Override
+	public Pager<Repair> pagegetallrepairinfo(int page, int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<Repair> listrepair = repairdao.pagegetallrepairinfo(params);
+		Pager<Repair> pager = new Pager<Repair>();
+		pager.setRows(listrepair);
+		pager.setTotal(repairdao.count());
+		return pager;
+	}
 	/**
 	 * 获取所有报修信息
 	 */
@@ -59,13 +76,19 @@ public class RepairServiceImpl implements RepairService {
 		repairdao.deleterepairofowner(ownerId);
 	}
 	/**
-	 * 模糊查询报修信息，(报修人，楼栋编号，单元号，房间号，报修物品)
+	 * 分页，模糊查询报修信息，(报修人，楼栋编号，单元号，房间号，报修物品)
 	 */
 	@Override
-	public List<Repair> getrepairinfolike(String ownerName, String buildNumber, String houseUnit, String houseNumber,
-			String repairGoods) {
-		List<Repair> listrepair = repairdao.getrepairinfolike(ownerName, buildNumber, houseUnit, houseNumber, repairGoods);
-		return listrepair;
+	public Pager<Repair> getrepairinfolike(String ownerName, String buildNumber, String houseUnit, String houseNumber,
+			String repairGoods,int page,int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<Repair> listrepair = repairdao.getrepairinfolike(ownerName, buildNumber, houseUnit, houseNumber, repairGoods, params);
+		Pager<Repair> pager = new Pager<Repair>();
+		pager.setRows(listrepair);
+		pager.setTotal(repairdao.likecount(ownerName, buildNumber, houseUnit, houseNumber, repairGoods));
+		return pager;
 	}
 	/**
 	 * 批量删除报修信息
@@ -74,4 +97,5 @@ public class RepairServiceImpl implements RepairService {
 	public void checkdelete(int[] listrepairId) {
 		repairdao.checkdelete(listrepairId);
 	}
+	
 }

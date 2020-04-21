@@ -4,9 +4,15 @@ import java.util.List;
 
 
 import com.peizhiwei.community.admin.entity.Complaint;
+import com.peizhiwei.community.admin.entity.Parking;
+import com.peizhiwei.community.util.Pager;
 
 
 public interface ComplaintService {
+	/**
+	 * 分页查询所有投诉信息
+	 */
+	Pager<Complaint> pagegetallcomplaintinfo(int page,int size);
 	/**
 	 * 获取所有投诉信息
 	 * @return
@@ -46,7 +52,7 @@ public interface ComplaintService {
 	 * @param complaintReason
 	 * @return
 	 */
-	List<Complaint> getcomplaintinfolike(String ownerName,String buildNumber,String houseUnit,String houseNumber,String complaintReason);
+	Pager<Complaint> getcomplaintinfolike(String ownerName,String buildNumber,String houseUnit,String houseNumber,String complaintReason,int page,int size);
 	/**
 	 * 批量删除投诉信息
 	 * @param listcomplaint

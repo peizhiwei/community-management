@@ -21,6 +21,7 @@ import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.entity.Parking;
 import com.peizhiwei.community.admin.service.FamilyService;
 import com.peizhiwei.community.admin.service.ParkingService;
+import com.peizhiwei.community.util.Pager;
 
 @Controller
 @RequestMapping("/parkinginfo")
@@ -37,6 +38,17 @@ public class ParkingController {
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
+	
+	/**
+	 * 分页获取所有停车位信息
+	 * @return
+	 */
+	@RequestMapping("/pagegetallparkinginfo")
+	@ResponseBody
+	public Pager<Parking> pagegetallparkinginfo(int page,int size){
+		Pager<Parking> pageparking = parkingservice.pagegetallparkinginfo(page, size);
+		return pageparking;
 	}
 	
 	/**
@@ -154,7 +166,7 @@ public class ParkingController {
 		return rs;
 	}
 	/**
-	 * 模糊查询停车位信息(车位号，业主名，楼栋号，单元号，房间号)
+	 * 分页模糊查询停车位信息(车位号，业主名，楼栋号，单元号，房间号)
 	 * @param parkingNumber
 	 * @param ownerName
 	 * @param buildNumber
@@ -164,13 +176,15 @@ public class ParkingController {
 	 */
 	@RequestMapping("/getparkinginfolike")
 	@ResponseBody
-	public List<Parking> getparkinginfolike(
+	public Pager<Parking> getparkinginfolike(
 			@RequestParam(value = "parkingNumber",required = false)String parkingNumber,
 			@RequestParam(value = "ownerName",required = false)String ownerName,
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
 			@RequestParam(value = "houseUnit",required = false)String houseUnit,
-			@RequestParam(value = "houseNumber",required = false)String houseNumber){
-		List<Parking> listparking = parkingservice.getparkinginfolike(parkingNumber, ownerName, buildNumber, houseUnit, houseNumber);
-		return listparking;
+			@RequestParam(value = "houseNumber",required = false)String houseNumber,
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size){
+		Pager<Parking> pageparking = parkingservice.getparkinginfolike(parkingNumber, ownerName, buildNumber, houseUnit, houseNumber, page, size);
+		return pageparking;
 	}
 }

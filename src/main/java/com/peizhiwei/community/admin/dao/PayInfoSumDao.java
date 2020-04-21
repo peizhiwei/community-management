@@ -7,6 +7,7 @@ package com.peizhiwei.community.admin.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -14,6 +15,12 @@ import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.entity.PayInfoSum;
 
 public interface PayInfoSumDao {
+	/**
+	 * 分页获取所有汇总信息
+	 * @return
+	 */
+	List<PayInfoSum> pagegetallpayinfosum(Map<String, Object> params);
+	long count();
 	/**
 	 * 获取所有汇总信息
 	 * @return

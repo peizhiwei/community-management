@@ -6,8 +6,14 @@ import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.PayInfo;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
+import com.peizhiwei.community.util.Pager;
 
 public interface PayInfoService {
+	/**
+	 * 分页获取所有的缴费信息
+	 * @return
+	 */
+	Pager<PayInfo> pagegetallpayinfo(int page,int size);
 	/**
 	 * 获取所有的缴费信息
 	 * @return

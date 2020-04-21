@@ -21,6 +21,7 @@ import com.peizhiwei.community.admin.entity.Admin;
 import com.peizhiwei.community.admin.entity.Complaint;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.service.ComplaintService;
+import com.peizhiwei.community.util.Pager;
 
 @RequestMapping("/complaintinfo")
 @Controller
@@ -34,6 +35,16 @@ public class ComplaintController {
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
+	/**
+	 * 分页获取所有投诉信息
+	 * @return
+	 */
+	@RequestMapping("/pagegetallcomplaintinfo")
+	@ResponseBody
+	public Pager<Complaint> pagegetallcomplaintinfo(int page,int size){
+		Pager<Complaint> listcomplaint = complaintservice.pagegetallcomplaintinfo(page, size);
+		return listcomplaint;
 	}
 	/**
 	 * 获取所有投诉信息
@@ -125,14 +136,16 @@ public class ComplaintController {
 	 */
 	@RequestMapping("/getcomplaintinfolike")
 	@ResponseBody
-	public List<Complaint> getcomplaintinfolike(
+	public Pager<Complaint> getcomplaintinfolike(
 			@RequestParam(value = "ownerName",required = false)String ownerName,
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
 			@RequestParam(value = "houseUnit",required = false)String houseUnit,
 			@RequestParam(value = "houseNumber",required = false)String houseNumber,
-			@RequestParam(value = "complaintReason",required = false)String complaintReason){
-		List<Complaint> listcomplaintinfo = complaintservice.getcomplaintinfolike(ownerName, buildNumber, houseUnit, houseNumber, complaintReason);
-		return listcomplaintinfo;
+			@RequestParam(value = "complaintReason",required = false)String complaintReason,
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size){
+		Pager<Complaint> pagecomplaintinfo = complaintservice.getcomplaintinfolike(ownerName, buildNumber, houseUnit, houseNumber, complaintReason, page, size);
+		return pagecomplaintinfo;
 	}
 	/**
 	 * 批量删除投诉信息

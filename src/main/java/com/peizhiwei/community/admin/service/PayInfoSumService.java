@@ -5,8 +5,14 @@ import java.util.List;
 
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.entity.PayInfoSum;
+import com.peizhiwei.community.util.Pager;
 
 public interface PayInfoSumService {
+	/**
+	 * 获取所有汇总信息
+	 * @return
+	 */
+	Pager<PayInfoSum> pagegetallpayinfosum(int page,int size);
 	/**
 	 * 获取所有汇总信息
 	 * @return

@@ -4,8 +4,14 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
+import com.peizhiwei.community.util.Pager;
 
 public interface PayInfoDetailsService {
+	/**
+	 * 获取所有缴费信息
+	 * @return
+	 */
+	Pager<PayInfoDetails> pagegetallpayinfo(int page,int size);
 	/**
 	 * 获取所有缴费信息
 	 * @return

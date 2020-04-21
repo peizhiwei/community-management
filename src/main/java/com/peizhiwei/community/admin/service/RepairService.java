@@ -4,8 +4,16 @@ import java.util.List;
 
 
 import com.peizhiwei.community.admin.entity.Repair;
+import com.peizhiwei.community.util.Pager;
 
 public interface RepairService {
+	/**
+	 * 分页查询所有报修信息
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	Pager<Repair> pagegetallrepairinfo(int page,int size);
 	/**
 	 * 获取所有报修信息
 	 * @return
@@ -47,7 +55,7 @@ public interface RepairService {
 	 * @param repairGoods
 	 * @return
 	 */
-	List<Repair> getrepairinfolike(String ownerName,String buildNumber,String houseUnit,String houseNumber,String repairGoods);
+	Pager<Repair> getrepairinfolike(String ownerName,String buildNumber,String houseUnit,String houseNumber,String repairGoods,int page,int size);
 	/**
 	 * 批量删除报修信息
 	 * @param listrepairId

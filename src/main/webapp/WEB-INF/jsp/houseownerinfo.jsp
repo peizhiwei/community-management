@@ -249,16 +249,16 @@
 			<div class="col-md-6 text-right">
 				<nav aria-label="Page navigation">
 					<ul class="pagination">
-						<li @click="firstpage()"><a href="#"><span aria-hidden="true">首页</span></a></li>
-						<li><a href="#" @click="previous()"><span>上一页</span></a></li>
+						<li @click="firstpage()"><a style="cursor:pointer;"><span aria-hidden="true">首页</span></a></li>
+						<li><a style="cursor:pointer;" @click="previous()"><span>上一页</span></a></li>
 						
 						<li v-for="n in pageRange" v-if="n==page&&state==1" class="active"><span>{{n}}</span></li>
-						<li v-else-if="state==1" @click="tiaozhuan(n)"><a href="#">{{n}}</a></li>
+						<li v-else-if="state==1" @click="tiaozhuan(n)"><a style="cursor:pointer;">{{n}}</a></li>
 						<li v-for="n_like in pageRange" v-if="n_like==likepage&&state==0" class="active"><span>{{n_like}}</span></li>
-						<li v-else-if="state==0" @click="tiaozhuan(n_like)"><a href="#">{{n_like}}</a></li>
+						<li v-else-if="state==0" @click="tiaozhuan(n_like)"><a style="cursor:pointer;">{{n_like}}</a></li>
 						
-						<li><a href="#" aria-label="Next" @click="next()"><span aria-hidden="true">下一页</span></a></li>
-						<li @click="lastpage()"><a href="#"><span aria-hidden="true">尾页</span></a></li>
+						<li><a style="cursor:pointer;" aria-label="Next" @click="next()"><span aria-hidden="true">下一页</span></a></li>
+						<li @click="lastpage()"><a style="cursor:pointer;"><span aria-hidden="true">尾页</span></a></li>
 					</ul>
 				</nav>
 			</div>
@@ -407,6 +407,18 @@
 							alert("已经是最后一页了！");
 						}else{
 							app.page=app.pagetotal;
+							if(app.page%5!=0&&(app.page-1)%5!=0){
+								//跳转到最后一页，可能并不是完整的五个页码
+								app.begin=(Math.floor(app.page/5))*5+1;//向下取整。例如：第七页，从第六页开始查询
+								app.end=app.page;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									if(current>app.pagetotal)break;
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
 							app.get();
 						}
 					}else{
@@ -414,6 +426,18 @@
 							alert("已经是最后一页了！");
 						}else{
 							app.likepage=app.pagetotal;
+							if(app.likepage%5!=0&&(app.likepage-1)%5!=0){
+								//跳转到最后一页，可能并不是完整的五个页码
+								app.begin=(Math.floor(app.likepage/5))*5+1;//例如：第七页，从第六页开始查询
+								app.end=app.likepage;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									if(current>app.pagetotal)break;
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
 							app.getownerinfolike();
 						}
 					}

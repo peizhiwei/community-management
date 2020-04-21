@@ -3,6 +3,21 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.peizhiwei.community.admin.dao.ComplaintDao">
+	<!-- 分页查询所有投诉信息 -->
+	<select id="pagegetallcomplaintinfo" resultType="com.peizhiwei.community.admin.entity.Complaint">
+		SELECT c.*,h.owner_name as `houseOwner.ownerName`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_phone as `houseOwner.ownerPhone`,
+				i.house_number as `houseOwner.houseInfo.houseNumber`,
+				a.admin_name as `admin.adminName` 
+		FROM complaint c
+		LEFT JOIN house_owner h ON h.owner_id=c.owner_id
+		LEFT JOIN admin a ON a.admin_id=c.admin_id
+		LEFT JOIN house_info i ON i.owner_id=h.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		limit #{page},#{size}
+	</select>
+	<select id="count" resultType="long">
+		select count(1) from complaint
+	</select>
  	<!-- 获取所有投诉信息 -->
 	<select id="getallcomplaintinfo" resultType="com.peizhiwei.community.admin.entity.Complaint">
 		SELECT c.*,h.owner_name as `houseOwner.ownerName`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_phone as `houseOwner.ownerPhone`,
@@ -44,6 +59,17 @@
 		SELECT c.*,h.owner_name as `houseOwner.ownerName`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_phone as `houseOwner.ownerPhone`,
 				i.house_number as `houseOwner.houseInfo.houseNumber`,
 				a.admin_name as `admin.adminName` 
+		FROM complaint c
+		LEFT JOIN house_owner h ON h.owner_id=c.owner_id
+		LEFT JOIN admin a ON a.admin_id=c.admin_id
+		LEFT JOIN house_info i ON i.owner_id=h.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE owner_name LIKE #{ownerName} AND build_number LIKE #{buildNumber} AND house_unit LIKE #{houseUnit} AND house_number LIKE #{houseNumber} AND complaint_reason LIKE #{complaintReason}
+		limit #{params.page},#{params.size}
+	</select>
+	<!-- 模糊查询的总记录数 -->
+	<select id="likecount" resultType="long">
+		SELECT count(1)
 		FROM complaint c
 		LEFT JOIN house_owner h ON h.owner_id=c.owner_id
 		LEFT JOIN admin a ON a.admin_id=c.admin_id

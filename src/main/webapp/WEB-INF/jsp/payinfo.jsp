@@ -138,6 +138,29 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="col-md-12" style="padding-top: 20px;">
+					<h4>总记录数：{{total}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总页数：{{pagetotal}}</h4>
+				</div>
+			</div>
+			<div class="col-md-6 text-right">
+				<nav aria-label="Page navigation">
+					<ul class="pagination">
+						<li @click="firstpage()"><a style="cursor:pointer;"><span aria-hidden="true">首页</span></a></li>
+						<li><a style="cursor:pointer;" @click="previous()"><span>上一页</span></a></li>
+						
+						<li v-for="n in pageRange" v-if="n==page&&state==1" class="active"><span>{{n}}</span></li>
+						<li v-else-if="state==1" @click="tiaozhuan(n)"><a style="cursor:pointer;">{{n}}</a></li>
+						<li v-for="n_like in pageRange" v-if="n_like==likepage&&state==0" class="active"><span>{{n_like}}</span></li>
+						<li v-else-if="state==0" @click="tiaozhuan(n_like)"><a style="cursor:pointer;">{{n_like}}</a></li>
+						
+						<li><a style="cursor:pointer;" aria-label="Next" @click="next()"><span aria-hidden="true">下一页</span></a></li>
+						<li @click="lastpage()"><a style="cursor:pointer;"><span aria-hidden="true">尾页</span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
 	</div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
@@ -152,19 +175,55 @@
 				listpaytype:[],//所有缴费类型
 				changeid:0,//点击修改按钮的那一项id
 				checked:false,
-    			arr:[]
+    			arr:[],
+    			page:1,//当前页
+				size:6,//每页记录条数
+				total:0,//记录总数
+				pagetotal:0,//总页数
+				begin:1,//起始页
+				end:1,//显示的最大页
+				pageRange:[],//页码显示的范围
+				state:1,//1表示执行get方法，查询所有房间信息，0表示执行gethouseinfolike方法，模糊查询房间信息
+				likepage:1,//当前页
+				likesize:6//每页记录条数
 			},
 			mounted : function() {
 				this.get();
 			},
 			methods : {
 				get : function() {
+					var page = this.page;
+					var size = this.size;
 					$.ajax({
-						url : '/community/payinfo/getallpayinfo',
+						url : '/community/payinfo/pagegetallpayinfo',
 						type : 'GET',
 						dataType : 'JSON',
+						data:{"page":page,"size":size},
 						success : function(result) {
-							app.listpayinfo = result;
+							app.listpayinfo = result.rows;
+							app.total = result.total;
+							app.pagetotal=Math.ceil(app.total/app.size);//向上取整
+							if((app.page-1)%5==0){
+								app.begin=app.page;
+								app.end = app.page+4;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									if(current>app.pagetotal)break;
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
+							if(app.page%5==0){
+								app.begin=app.page-4;
+								app.end=app.page;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
 						},							
 						error : function() {
 							console.log("请求失败处理");
@@ -183,6 +242,70 @@
 							console.log("请求失败处理");
 						}
 					});
+				},
+				//跳转到第一页，首页
+				firstpage : function(){
+					if(app.state==1){
+						if(app.page==1){
+							alert("已经是第一页了！");
+						}else{
+							app.page=1;
+							app.get();
+						}
+					}
+				},
+				//点击上一页
+				previous : function(){
+					if(app.state==1){
+						if(app.page==1){
+							alert("已经是第一页了！");
+						}else{
+							app.page -=1;
+							app.get();
+						}
+					}
+					
+				},
+				//跳转页面
+				tiaozhuan : function(n){
+					if(app.state==1){
+						app.page=n;
+						app.get();
+					}
+				},
+				//点击下一页
+				next : function(){
+					if(app.state==1){
+						if(app.page==app.pagetotal){
+							alert("已经是最后一页了！");	
+						}else{
+							app.page+=1;
+							app.get();
+						}
+					}
+				},
+				//跳转到最后一页，尾页
+				lastpage : function(){
+					if(app.state==1){
+						if(app.page==app.pagetotal){
+							alert("已经是最后一页了！");
+						}else{
+							app.page=app.pagetotal;
+							if(app.page%5!=0&&(app.page-1)%5!=0){
+								//跳转到最后一页，可能并不是完整的五个页码
+								app.begin=(Math.floor(app.page/5))*5+1;//向下取整。例如：第七页，从第六页开始查询
+								app.end=app.page;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									if(current>app.pagetotal)break;
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
+							app.get();
+						}
+					}
 				},
 				//发布缴费信息确定按钮
 				addpayinfo:function(){

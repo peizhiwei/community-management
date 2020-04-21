@@ -20,6 +20,7 @@ import com.peizhiwei.community.admin.entity.Admin;
 import com.peizhiwei.community.admin.entity.JspResult;
 import com.peizhiwei.community.admin.entity.Repair;
 import com.peizhiwei.community.admin.service.RepairService;
+import com.peizhiwei.community.util.Pager;
 
 @Controller
 @RequestMapping("/repairinfo")
@@ -34,6 +35,16 @@ public class RepairController {
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
+	/**
+	 * 分页获取所有的报修信息
+	 * @return
+	 */
+	@RequestMapping("/pagegetallrepairinfo")
+	@ResponseBody
+	public Pager<Repair> pagegetallrepairinfo(int page,int size){
+		Pager<Repair> listrepairinfo = repairservice.pagegetallrepairinfo(page, size);
+		return listrepairinfo;
 	}
 	/**
 	 * 获取所有的报修信息
@@ -120,13 +131,15 @@ public class RepairController {
 	 */
 	@RequestMapping("/getrepairinfolike")
 	@ResponseBody
-	public List<Repair> getrepairinfolike(
+	public Pager<Repair> getrepairinfolike(
 			@RequestParam(value = "ownerName",required = false)String ownerName,
 			@RequestParam(value = "buildNumber",required = false)String buildNumber,
 			@RequestParam(value = "houseUnit",required = false)String houseUnit,
 			@RequestParam(value = "houseNumber",required = false)String houseNumber,
-			@RequestParam(value = "repairGoods",required = false)String repairGoods){
-		List<Repair> listrepair = repairservice.getrepairinfolike(ownerName, buildNumber, houseUnit, houseNumber, repairGoods);
+			@RequestParam(value = "repairGoods",required = false)String repairGoods,
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size){
+		Pager<Repair> listrepair = repairservice.getrepairinfolike(ownerName, buildNumber, houseUnit, houseNumber, repairGoods,page,size);
 		return listrepair;
 	}
 	/**

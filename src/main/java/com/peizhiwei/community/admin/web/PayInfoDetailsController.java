@@ -20,6 +20,7 @@ import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.entity.PayMethod;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 import com.peizhiwei.community.admin.service.PayInfoSumService;
+import com.peizhiwei.community.util.Pager;
 
 @Controller
 @RequestMapping("/payinfodetails")
@@ -36,6 +37,16 @@ public class PayInfoDetailsController {
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
+	/**
+	 * 分页获取所有缴费信息
+	 * @return
+	 */
+	@RequestMapping("/pagegetallpayinfodetails")
+	@ResponseBody
+	public Pager<PayInfoDetails> pagegetallpayinfo(int page,int size){
+		Pager<PayInfoDetails> pagepayinfodetails = payinfodetailsservice.pagegetallpayinfo(page, size);
+		return pagepayinfodetails;
 	}
 	/**
 	 * 获取所有缴费信息

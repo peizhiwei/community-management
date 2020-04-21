@@ -3,6 +3,18 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.peizhiwei.community.admin.dao.ParkingDao">
+	<!-- 分页查询所有停车位信息 -->
+	<select id="pagegetallparkinginfo" resultType="com.peizhiwei.community.admin.entity.Parking">
+		select p.*,o.owner_name as `houseOwner.ownerName`,o.owner_phone as `houseOwner.ownerPhone`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		from parking p
+		left join house_owner o on p.owner_id=o.owner_id
+		left join house_info i on i.owner_id=o.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		limit #{page},#{size}
+	</select>
+	<select id="count" resultType="long">
+		select count(1) from parking
+	</select>
 	<!-- 获取所有停车位信息 -->
 	<select id="getallparkinginfo" resultType="com.peizhiwei.community.admin.entity.Parking">
 		select p.*,o.owner_name as `houseOwner.ownerName`,o.owner_phone as `houseOwner.ownerPhone`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,i.house_number as `houseOwner.houseInfo.houseNumber`
@@ -51,9 +63,19 @@
       	)
     	</foreach>
 	</insert>
-	<!-- 模糊查询停车位信息，(车位号，业主名，楼栋号，单元号，房间号) -->
+	<!-- 分页模糊查询停车位信息，(车位号，业主名，楼栋号，单元号，房间号) -->
 	<select id="getparkinginfolike" resultType="com.peizhiwei.community.admin.entity.Parking">
 		select p.*,o.owner_name as `houseOwner.ownerName`,o.owner_phone as `houseOwner.ownerPhone`,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		from parking p
+		left join house_owner o on p.owner_id=o.owner_id
+		left join house_info i on i.owner_id=o.owner_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE parking_number LIKE #{parkingNumber} AND IFNULL(owner_name,'') LIKE #{ownerName} AND IFNULL(build_number,'') LIKE #{buildNumber} AND IFNULL(house_unit,'') LIKE #{houseUnit} AND IFNULL(house_number,'') LIKE #{houseNumber}
+		limit #{params.page},#{params.size}
+	</select>
+	<!-- 模糊查询的总记录数 -->
+	<select id="likecount" resultType="long">
+		SELECT count(1)
 		from parking p
 		left join house_owner o on p.owner_id=o.owner_id
 		left join house_info i on i.owner_id=o.owner_id

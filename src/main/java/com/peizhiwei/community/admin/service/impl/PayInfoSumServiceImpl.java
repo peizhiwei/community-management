@@ -2,7 +2,9 @@ package com.peizhiwei.community.admin.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.peizhiwei.community.admin.entity.PayInfoSum;
 import com.peizhiwei.community.admin.service.HouseOwnerService;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 import com.peizhiwei.community.admin.service.PayInfoSumService;
+import com.peizhiwei.community.util.Pager;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class PayInfoSumServiceImpl implements PayInfoSumService {
@@ -64,6 +67,20 @@ public class PayInfoSumServiceImpl implements PayInfoSumService {
 		}
 	}
 	/**
+	 * 分页获取所有缴费汇总信息
+	 */
+	@Override
+	public Pager<PayInfoSum> pagegetallpayinfosum(int page, int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<PayInfoSum> listpayinfosum = payinfosumdao.pagegetallpayinfosum(params);
+		Pager<PayInfoSum> pager = new Pager<PayInfoSum>();
+		pager.setRows(listpayinfosum);
+		pager.setTotal(payinfosumdao.count());
+		return pager;
+	}
+	/**
 	 * 获取所有缴费汇总信息
 	 */
 	@Override
@@ -92,5 +109,4 @@ public class PayInfoSumServiceImpl implements PayInfoSumService {
 	public void batchpaid(List<PayInfoDetails> listpayinfodetails) {
 		payinfosumdao.batchpaid(listpayinfodetails);
 	}
-
 }

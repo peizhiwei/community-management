@@ -1,12 +1,18 @@
 package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.Complaint;
 
 public interface ComplaintDao {
+	/**
+	 * 分页查询所有投诉信息
+	 */
+	List<Complaint> pagegetallcomplaintinfo(Map<String, Object> params);
+	long count();
 	/**
 	 * 获取所有投诉信息
 	 * @return
@@ -46,6 +52,8 @@ public interface ComplaintDao {
 	 * @return
 	 */
 	List<Complaint> getcomplaintinfolike(@Param("ownerName")String ownerName,@Param("buildNumber")String buildNumber,
+			@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("complaintReason")String complaintReason,@Param("params")Map<String, Object> params);
+	long likecount(@Param("ownerName")String ownerName,@Param("buildNumber")String buildNumber,
 			@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("complaintReason")String complaintReason);
 	/**
 	 * 批量删除投诉信息

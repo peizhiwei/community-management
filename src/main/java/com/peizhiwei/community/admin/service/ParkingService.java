@@ -3,8 +3,13 @@ package com.peizhiwei.community.admin.service;
 import java.util.List;
 
 import com.peizhiwei.community.admin.entity.Parking;
+import com.peizhiwei.community.util.Pager;
 
 public interface ParkingService {
+	/**
+	 * 分页查询所有停车位信息
+	 */
+	Pager<Parking> pagegetallparkinginfo(int page,int size);
 	/**
 	 * 获取所有停车位信息
 	 * @return
@@ -38,7 +43,7 @@ public interface ParkingService {
 	void insertparkinginfo(List<Parking> parkinglist);
 	
 	/**
-	 * 模糊查询，(车位号，业主名，楼栋号，单元号，房间号)
+	 * 分页模糊查询，(车位号，业主名，楼栋号，单元号，房间号)
 	 * @param parkingNumber
 	 * @param ownerName
 	 * @param buildNumber
@@ -46,5 +51,5 @@ public interface ParkingService {
 	 * @param houseNumber
 	 * @return
 	 */
-	List<Parking> getparkinginfolike(String parkingNumber,String ownerName,String buildNumber,String houseUnit,String houseNumber);
+	Pager<Parking> getparkinginfolike(String parkingNumber,String ownerName,String buildNumber,String houseUnit,String houseNumber,int page,int size);
 }

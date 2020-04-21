@@ -2,12 +2,19 @@ package com.peizhiwei.community.admin.dao;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 
 public interface PayInfoDetailsDao {
+	/**
+	 * 分页获取所有缴费信息
+	 * @return
+	 */
+	List<PayInfoDetails> pagegetallpayinfo(Map<String, Object> params);
+	long count();
 	/**
 	 * 获取所有缴费信息
 	 * @return

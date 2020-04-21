@@ -1,12 +1,21 @@
 package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.Repair;
+import com.peizhiwei.community.util.Pager;
 
 public interface RepairDao {
+	/**
+	 * 分页查询所有报修信息
+	 * @param params
+	 * @return
+	 */
+	List<Repair> pagegetallrepairinfo(Map<String, Object>params);
+	long count();
 	/**
 	 * 获取所有报修信息
 	 * @return
@@ -47,7 +56,8 @@ public interface RepairDao {
 	 * @param repairGoods
 	 * @return
 	 */
-	List<Repair> getrepairinfolike(@Param("ownerName")String ownerName,@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("repairGoods")String repairGoods);
+	List<Repair> getrepairinfolike(@Param("ownerName")String ownerName,@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("repairGoods")String repairGoods,@Param("params")Map<String, Object>params);
+	long likecount(@Param("ownerName")String ownerName,@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("repairGoods")String repairGoods);
 	/**
 	 * 批量删除报修信息
 	 * @param listrepairId

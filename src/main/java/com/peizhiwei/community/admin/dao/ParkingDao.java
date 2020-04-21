@@ -1,12 +1,20 @@
 package com.peizhiwei.community.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.Parking;
 
 public interface ParkingDao {
+	/**
+	 * 分页查询停车位总记录数
+	 * @param params
+	 * @return
+	 */
+	List<Parking> pagegetallparkinginfo(Map<String, Object> params);
+	long count();
 	/**
 	 * 获取所有停车位信息
 	 * @return
@@ -39,7 +47,7 @@ public interface ParkingDao {
 	 */
 	void insertparkinginfo(@Param("parkinglist")List<Parking> parkinglist);
 	/**
-	 * 模糊查询，(车位号，业主名，楼栋号，单元号，房间号)
+	 * 分页模糊查询，(车位号，业主名，楼栋号，单元号，房间号)
 	 * @param parkingNumber
 	 * @param ownerName
 	 * @param buildNumber
@@ -48,5 +56,7 @@ public interface ParkingDao {
 	 * @return
 	 */
 	List<Parking> getparkinginfolike(@Param("parkingNumber")String parkingNumber,@Param("ownerName")String ownerName,
+			@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber,@Param("params")Map<String, Object>params);
+	long likecount(@Param("parkingNumber")String parkingNumber,@Param("ownerName")String ownerName,
 			@Param("buildNumber")String buildNumber,@Param("houseUnit")String houseUnit,@Param("houseNumber")String houseNumber);
 }

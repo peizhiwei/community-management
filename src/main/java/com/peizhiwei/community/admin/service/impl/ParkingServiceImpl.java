@@ -1,6 +1,8 @@
 package com.peizhiwei.community.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +11,26 @@ import org.springframework.transaction.annotation.Transactional;
 import com.peizhiwei.community.admin.dao.ParkingDao;
 import com.peizhiwei.community.admin.entity.Parking;
 import com.peizhiwei.community.admin.service.ParkingService;
+import com.peizhiwei.community.util.Pager;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ParkingServiceImpl implements ParkingService {
 	@Autowired
 	ParkingDao parkingdao;
-	
+	/**
+	 * 分页查询所有停车位信息
+	 */
+	@Override
+	public Pager<Parking> pagegetallparkinginfo(int page, int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<Parking> listparking = parkingdao.pagegetallparkinginfo(params);
+		Pager<Parking> pageparking = new Pager<Parking>();
+		pageparking.setRows(listparking);
+		pageparking.setTotal(parkingdao.count());
+		return pageparking;
+	}	
 	/**
 	 * 获取所有停车位信息
 	 */
@@ -69,12 +85,18 @@ public class ParkingServiceImpl implements ParkingService {
 		parkingdao.takebackownerofparking(ownerId);
 	}
 	/**
-	 * 模糊查询车位信息，(车位号，业主名，楼栋号，单元号，房间号)
+	 * 分页模糊查询车位信息，(车位号，业主名，楼栋号，单元号，房间号)
 	 */
 	@Override
-	public List<Parking> getparkinginfolike(String parkingNumber, String ownerName, String buildNumber,String houseUnit, String houseNumber) {
-		List<Parking> listparking = parkingdao.getparkinginfolike(parkingNumber, ownerName, buildNumber, houseUnit, houseNumber);
-		return listparking;
+	public Pager<Parking> getparkinginfolike(String parkingNumber, String ownerName, String buildNumber,String houseUnit, String houseNumber,int page, int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<Parking> listparking = parkingdao.getparkinginfolike(parkingNumber, ownerName, buildNumber, houseUnit, houseNumber, params);
+		Pager<Parking> pager = new Pager<Parking>();
+		pager.setRows(listparking);
+		pager.setTotal(parkingdao.likecount(parkingNumber, ownerName, buildNumber, houseUnit, houseNumber));
+		return pager;
 	}
 	
 }
