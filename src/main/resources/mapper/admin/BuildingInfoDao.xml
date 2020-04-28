@@ -72,7 +72,7 @@
 	</select>
 	<!-- 根据楼栋编号模糊查找楼栋信息 -->
 	<select id="selectlikebuildinginfo" resultType="com.peizhiwei.community.admin.entity.BuildingInfo">
-		SELECT * FROM building_info WHERE build_number LIKE #{buildNumber} ORDER BY build_number limit #{params.page},#{params.size}
+		SELECT * FROM building_info WHERE build_number = #{buildNumber} ORDER BY build_number limit #{params.page},#{params.size}
 	</select>
 	<!-- 模糊查询的总记录数 -->
 	<select id="likecount" resultType="long">

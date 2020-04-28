@@ -13,9 +13,11 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.peizhiwei.community.admin.entity.JspResult;
+import com.peizhiwei.community.admin.entity.PayInfo;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.entity.PayMethod;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;
@@ -113,5 +115,51 @@ public class PayInfoDetailsController {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
+	}
+	/**
+	 * 根据缴费项目查询缴费信息
+	 * @param page
+	 * @param size
+	 * @param payTypeName
+	 * @return
+	 */
+	@RequestMapping("/selectpayinfoaccordingpaytypename")
+	@ResponseBody
+	public Pager<PayInfoDetails> selectpayinfoaccordingpaytypename(int page,int size,String payTypeName){
+		Pager<PayInfoDetails> listpayinfo = payinfodetailsservice.selectpayinfoaccordingpaytypename(page,size,payTypeName);
+		return listpayinfo;
+	}
+	/**
+	 * 根据年月查询缴费信息
+	 * @param page
+	 * @param size
+	 * @param payInfoStartTime
+	 * @return
+	 */
+	@RequestMapping("/selectpayinfoaccordingpayintostarttime")
+	@ResponseBody
+	public Pager<PayInfoDetails> selectpayinfoaccordingpayintostarttime(@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size,
+			@RequestParam(value = "payInfoStartTime",required = false)String payInfoStartTime){
+		String year = payInfoStartTime.substring(0, payInfoStartTime.indexOf("年"));
+		String month = payInfoStartTime.substring(payInfoStartTime.indexOf("年")+1, payInfoStartTime.indexOf("月"));
+		Pager<PayInfoDetails> listpayinfo = payinfodetailsservice.selectpayinfoaccordingpayintostarttime(page, size, year, month);
+		return listpayinfo;
+	}
+	/**
+	 * 根据缴费状态查询缴费详情
+	 * @param page
+	 * @param size
+	 * @param payState
+	 * @return
+	 */
+	@RequestMapping("/selectpayinfoaccordingpaystate")
+	@ResponseBody
+	public Pager<PayInfoDetails> selectpayinfoaccordingpaystate(
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size,
+			@RequestParam(value = "payState",required = false)String payState){
+		Pager<PayInfoDetails> listpayinfodetails = payinfodetailsservice.selectpayinfoaccordingpaystate(page, size, payState);
+		return listpayinfodetails;
 	}
 }

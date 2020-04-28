@@ -67,4 +67,32 @@
 			#{payInfoId}
 		</foreach>
 	</delete>
+	<!-- 根据缴费项目查询缴费信息 -->
+	<select id="selectpayinfoaccordingpaytypename" resultType="com.peizhiwei.community.admin.entity.PayInfo">
+		SELECT i.*,t.pay_type_name as `payType.payTypeName`
+		FROM pay_info i
+		LEFT JOIN pay_type t ON t.pay_type_id=i.pay_type_id
+		WHERE pay_type_name=#{payTypeName}
+		limit #{params.page},#{params.size}
+	</select>
+	<select id="likecount" resultType="long">
+		SELECT count(1)
+		from pay_info pi
+		LEFT JOIN pay_type pt ON pi.pay_type_id=pt.pay_type_id
+		WHERE pay_type_name=#{payTypeName}
+	</select>
+	<!-- 根据年月查询缴费信息 -->
+	<select id="selectpayinfoaccordingpayintostarttime" resultType="com.peizhiwei.community.admin.entity.PayInfo">
+		SELECT i.*,t.pay_type_name as `payType.payTypeName`
+		FROM pay_info i
+		LEFT JOIN pay_type t ON t.pay_type_id=i.pay_type_id
+		WHERE YEAR(pay_info_start_time)=#{year} AND MONTH(pay_info_start_time)=#{month}
+		limit #{params.page},#{params.size}
+	</select>
+	<select id="likecount2" resultType="long">
+		SELECT count(1)
+		from pay_info pi
+		LEFT JOIN pay_type pt ON pi.pay_type_id=pt.pay_type_id
+		WHERE YEAR(pay_info_start_time)=#{year} AND MONTH(pay_info_start_time)=#{month}
+	</select>
 </mapper>

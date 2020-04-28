@@ -56,4 +56,19 @@ public interface PayInfoDao {
 	 * @param listpayInfoId
 	 */
 	void batchdeletepaydetailsofpayinfo(int[] listpayInfoId);
+	/**
+	 * 根据缴费项目查询缴费信息
+	 * @param payTypeName
+	 * @return
+	 */
+	List<PayInfo> selectpayinfoaccordingpaytypename(@Param("params")Map<String, Object> params,@Param("payTypeName")String payTypeName);
+	long likecount(String payTypeName);
+	/**
+	 * 根据年月查询缴费信息
+	 * @param params
+	 * @param payInfoStartTime
+	 * @return
+	 */
+	List<PayInfo> selectpayinfoaccordingpayintostarttime(@Param("params")Map<String, Object> params,@Param("year")String year,@Param("month")String month);
+	long likecount2(@Param("year")String year,@Param("month")String month);
 }

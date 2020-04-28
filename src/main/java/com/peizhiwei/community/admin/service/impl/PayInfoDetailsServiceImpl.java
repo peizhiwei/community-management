@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.peizhiwei.community.admin.dao.PayInfoDetailsDao;
+import com.peizhiwei.community.admin.entity.PayInfo;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.service.PayInfoDetailsService;
 import com.peizhiwei.community.util.Pager;
@@ -85,5 +86,47 @@ public class PayInfoDetailsServiceImpl implements PayInfoDetailsService {
 	@Override
 	public void batchpaid(List<PayInfoDetails> listpayinfodetails) {
 		payinfodetailsfodao.batchpaid(listpayinfodetails);
+	}
+	/**
+	 * 根据缴费项目查询缴费信息
+	 */
+	@Override
+	public Pager<PayInfoDetails> selectpayinfoaccordingpaytypename(int page,int size,String payTypeName) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<PayInfoDetails> listpayinfo = payinfodetailsfodao.selectpayinfoaccordingpaytypename(params,payTypeName);
+		Pager<PayInfoDetails> pager = new Pager<PayInfoDetails>();
+		pager.setRows(listpayinfo);
+		pager.setTotal(payinfodetailsfodao.likecount(payTypeName));
+		return pager;
+	}
+	/**
+	 * 根据年月查询缴费信息
+	 */
+	@Override
+	public Pager<PayInfoDetails> selectpayinfoaccordingpayintostarttime(int page, int size, String year,String month) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<PayInfoDetails> listpayinfo = payinfodetailsfodao.selectpayinfoaccordingpayintostarttime(params, year, month);
+		Pager<PayInfoDetails> pager = new Pager<PayInfoDetails>();
+		pager.setRows(listpayinfo);
+		pager.setTotal(payinfodetailsfodao.likecount2(year, month));
+		return pager;
+	}
+	/**
+	 * 根据缴费状态查询缴费详情
+	 */
+	@Override
+	public Pager<PayInfoDetails> selectpayinfoaccordingpaystate(int page, int size, String payState) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<PayInfoDetails> listpayinfo = payinfodetailsfodao.selectpayinfoaccordingpaystate(params, payState);
+		Pager<PayInfoDetails> pager = new Pager<PayInfoDetails>();
+		pager.setRows(listpayinfo);
+		pager.setTotal(payinfodetailsfodao.likecount3(payState));
+		return pager;
 	}
 }

@@ -16,6 +16,32 @@
             <h1>缴费详情</h1>
             <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;缴费管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;缴费详情</span></h5>
         </div>
+        <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
+            <h4 data-toggle="collapse" href="#collapseExample">筛选</h4><hr>
+            <form id="collapseExample" class="form-inline collapse" style="padding-bottom: 25px;">
+            	<select required="required" class="form-control" id="screen" @click="screen()">
+            		<option value="0">请选择筛选条件</option>
+					<option value="1">缴费项目</option>
+					<option value="2">发布时间</option>
+					<option value="3">缴费状态</option>
+				</select>
+				<!-- 缴费项目 -->
+				<select v-if="selectstate==1" required="required" class="form-control" id="selectpayname" v-for="list in listpaytype">
+					<option>{{list.payTypeName}}</option>
+				</select>
+				<!-- 发布时间 -->
+				<input type="text" v-if="selectstate==2" id="selectTime" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy年MM月'})" class="form-control"/>
+                <!-- 缴费状态 -->
+                <select v-if="selectstate==3" required="required" class="form-control" id="selectpaystate">
+                	<option value="0">未缴费</option>
+					<option value="1">已缴费</option>
+				</select>
+                <!-- 业主 -->
+                
+                <button type="button" class="btn btn-default" v-if="selectstate==0" disabled="disabled">查询</button>
+                <button type="button" class="btn btn-default" @click="getpayinfodetailsselect()" v-else>查询</button>
+            </form>
+        </div>
         <div class="row">
 			<button type="button" class="btn btn-success" @click="batchpaid()">批量缴费</button>
 		</div>
@@ -94,6 +120,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script src="../static/js/vue.min.js"></script>
+    <script src="../static/datepicker/WdatePicker.js"></script>
     <script>
 		var app = new Vue({
 			el : '#app',
@@ -101,6 +128,8 @@
 				listpayinfo:[],//所有支付方式
 				checked:false,
     			arr:[],
+    			listpaytype:[],//所有缴费项目
+    			selectstate:0,//0,查询按钮灰色状态，1，缴费类别，2发布时间，3缴费状态，4业主
     			page:1,//当前页
 				size:6,//每页记录条数
 				total:0,//记录总数
@@ -154,6 +183,19 @@
 							console.log("请求失败处理");
 						}
 					});
+					//查询所有缴费类别
+					$.ajax({
+						url : '/community/paytypeinfo/getallpaytypeinfo',
+						type : 'GET',
+						dataType : 'JSON',
+						async:true,
+						success : function(result) {
+							app.listpaytype = result;
+						},							
+						error : function() {
+							console.log("请求失败处理");
+						}
+					});
 				},
 				//跳转到第一页，首页
 				firstpage : function(){
@@ -163,6 +205,13 @@
 						}else{
 							app.page=1;
 							app.get();
+						}
+					}else{
+						if(app.likepage==1){
+							alert("已经是第一页了！");
+						}else{
+							app.likepage=1;
+							app.getpayinfodetailsselect();
 						}
 					}
 				},
@@ -175,6 +224,13 @@
 							app.page -=1;
 							app.get();
 						}
+					}else{
+						if(app.likepage==1){
+							alert("已经是第一页了！");
+						}else{
+							app.likepage-=1;
+							app.getpayinfodetailsselect();
+						}
 					}
 					
 				},
@@ -183,6 +239,9 @@
 					if(app.state==1){
 						app.page=n;
 						app.get();
+					}else{
+						app.likepage=n;
+						app.getpayinfodetailsselect();
 					}
 				},
 				//点击下一页
@@ -193,6 +252,13 @@
 						}else{
 							app.page+=1;
 							app.get();
+						}
+					}else{
+						if(app.likepage==app.pagetotal){
+							alert("已经是最后一页了！");
+						}else{
+							app.likepage+=1;
+							app.getpayinfodetailsselect();
 						}
 					}
 				},
@@ -216,6 +282,25 @@
 								}
 							}
 							app.get();
+						}
+					}else{
+						if(app.likepage==app.pagetotal){
+							alert("已经是最后一页了！");
+						}else{
+							app.likepage=app.pagetotal;
+							if(app.likepage%5!=0&&(app.likepage-1)%5!=0){
+								//跳转到最后一页，可能并不是完整的五个页码
+								app.begin=(Math.floor(app.likepage/5))*5+1;//例如：第七页，从第六页开始查询
+								app.end=app.likepage;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									if(current>app.pagetotal)break;
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
+							app.getpayinfodetailsselect();
 						}
 					}
 				},
@@ -262,6 +347,136 @@
     							app.get();
     						}
     					});
+                	}
+                },
+              	//筛选条件下拉框
+                screen : function(){
+                	var state=$("#screen").val();
+                	if(state==0) app.selectstate=0;
+                	else if(state==1) app.selectstate=1;
+                	else if(state==2) app.selectstate=2;
+                	else if(state==3) app.selectstate=3;
+                	else if(state==4) app.selectstate=4;
+                },
+              	//查询
+                getpayinfodetailsselect : function(){
+                	if(app.selectstate==1){//缴费项目
+                		app.state=0;
+                		var payTypeName = $("#selectpayname").val();
+                		var page = this.likepage;
+    					var size = this.likesize;
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/payinfodetails/selectpayinfoaccordingpaytypename',
+    						data:{"payTypeName":payTypeName,"page":page,"size":size},
+    						success:function(result){
+    							app.listpayinfo = result.rows;
+    							app.total = result.total;
+    							app.pagetotal=Math.ceil(app.total/app.likesize);//向上取整
+    							if((app.likepage-1)%5==0){//下一页，到6,11,16,……页
+    								app.begin=app.likepage;
+    								app.end = app.likepage+4;
+    								var current=app.begin;
+    								app.pageRange=[];
+    								for(var i=0;i<=app.end-app.begin;i++){
+    									if(current>app.pagetotal)break;
+    									app.pageRange[i]=current;
+    									current++;
+    								}
+    							}else if(app.likepage%5==0){//上一页，从6，11,16到5,10,15……页
+    								app.begin=app.likepage-4;
+    								app.end=app.likepage;
+    								var current=app.begin;
+    								app.pageRange=[];
+    								for(var i=0;i<=app.end-app.begin;i++){
+    									app.pageRange[i]=current;
+    									current++;
+    								}
+    							}
+    							
+    						}
+    					});
+                	}else if(app.selectstate==2){//发布时间
+                		if($("#selectTime").val()==''){
+                			alert("请选择时间");
+                		}else{
+                			app.state=0;
+                    		var payInfoStartTime = $("#selectTime").val();
+                    		var page = this.likepage;
+        					var size = this.likesize;
+                    		$.ajax({
+        						type:'POST',
+        						dataType:'JSON',
+        						url:'/community/payinfodetails/selectpayinfoaccordingpayintostarttime',
+        						data:{"payInfoStartTime":payInfoStartTime,"page":page,"size":size},
+        						success:function(result){
+        							app.listpayinfo = result.rows;
+        							app.total = result.total;
+        							app.pagetotal=Math.ceil(app.total/app.likesize);//向上取整
+        							if((app.likepage-1)%5==0){//下一页，到6,11,16,……页
+        								app.begin=app.likepage;
+        								app.end = app.likepage+4;
+        								var current=app.begin;
+        								app.pageRange=[];
+        								for(var i=0;i<=app.end-app.begin;i++){
+        									if(current>app.pagetotal)break;
+        									app.pageRange[i]=current;
+        									current++;
+        								}
+        							}else if(app.likepage%5==0){//上一页，从6，11,16到5,10,15……页
+        								app.begin=app.likepage-4;
+        								app.end=app.likepage;
+        								var current=app.begin;
+        								app.pageRange=[];
+        								for(var i=0;i<=app.end-app.begin;i++){
+        									app.pageRange[i]=current;
+        									current++;
+        								}
+        							}
+        							
+        						}
+        					});
+                		}
+                		
+                	}else if(app.selectstate==3){//缴费状态
+                		app.state=0;
+                		var payState = $("#selectpaystate").val();
+                		var page = this.likepage;
+    					var size = this.likesize;
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/payinfodetails/selectpayinfoaccordingpaystate',
+    						data:{"payState":payState,"page":page,"size":size},
+    						success:function(result){
+    							app.listpayinfo = result.rows;
+    							app.total = result.total;
+    							app.pagetotal=Math.ceil(app.total/app.likesize);//向上取整
+    							if((app.likepage-1)%5==0){//下一页，到6,11,16,……页
+    								app.begin=app.likepage;
+    								app.end = app.likepage+4;
+    								var current=app.begin;
+    								app.pageRange=[];
+    								for(var i=0;i<=app.end-app.begin;i++){
+    									if(current>app.pagetotal)break;
+    									app.pageRange[i]=current;
+    									current++;
+    								}
+    							}else if(app.likepage%5==0){//上一页，从6，11,16到5,10,15……页
+    								app.begin=app.likepage-4;
+    								app.end=app.likepage;
+    								var current=app.begin;
+    								app.pageRange=[];
+    								for(var i=0;i<=app.end-app.begin;i++){
+    									app.pageRange[i]=current;
+    									current++;
+    								}
+    							}
+    							
+    						}
+    					});
+                		
                 	}
                 }
 			},

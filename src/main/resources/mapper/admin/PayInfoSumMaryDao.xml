@@ -10,6 +10,7 @@
 		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
 		LEFT JOIN house_info i ON i.house_id=o.house_id
 		LEFT JOIN building_info b ON b.build_id=i.build_id
+		ORDER BY pay_info_sum_payable-pay_info_sum_paid DESC
 		limit #{page},#{size}
 	</select>
 	<select id="count" resultType="long">
@@ -22,6 +23,7 @@
 		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
 		LEFT JOIN house_info i ON i.house_id=o.house_id
 		LEFT JOIN building_info b ON b.build_id=i.build_id
+		ORDER BY pay_info_sum_payable-pay_info_sum_paid
 	</select>
 	<!-- 添加业主时添加该业主的缴费汇总信息 -->
 	<insert id="insertpayinfosum" parameterType="com.peizhiwei.community.admin.entity.PayInfoSum">
@@ -54,4 +56,40 @@
 			WHERE `owner_id` = #{item.houseOwner.ownerId}
 		</foreach>
 	</update>
+	<!-- 查询所有欠费的缴费汇总信息 -->
+	<select id="selectpayinfodetailsaccordingispaid"  resultType="com.peizhiwei.community.admin.entity.PayInfoSum">
+		SELECT s.*,b.build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,i.house_unit as `houseOwner.houseInfo.houseUnit`,o.owner_id as `houseOwner.ownerId`,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		FROM pay_info_sum s
+		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE pay_info_sum_payable>pay_info_sum_paid
+		limit #{page},#{size}
+	</select>
+	<select id="likecount" resultType="long">
+		select count(1)
+		FROM pay_info_sum s
+		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE pay_info_sum_payable>pay_info_sum_paid
+	</select>
+	<!-- 查询所有不欠费的缴费汇总信息 -->
+	<select id="selectpayinfodetailsaccordingnotpaid"  resultType="com.peizhiwei.community.admin.entity.PayInfoSum">
+		SELECT s.*,b.build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,i.house_unit as `houseOwner.houseInfo.houseUnit`,o.owner_id as `houseOwner.ownerId`,o.owner_name as `houseOwner.ownerName`,i.house_number as `houseOwner.houseInfo.houseNumber`
+		FROM pay_info_sum s
+		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE pay_info_sum_payable=pay_info_sum_paid
+		limit #{page},#{size}
+	</select>
+	<select id="likecount2" resultType="long">
+		select count(1)
+		FROM pay_info_sum s
+		LEFT JOIN house_owner o ON o.owner_id=s.owner_id
+		LEFT JOIN house_info i ON i.house_id=o.house_id
+		LEFT JOIN building_info b ON b.build_id=i.build_id
+		WHERE pay_info_sum_payable=pay_info_sum_paid
+	</select>
 </mapper>

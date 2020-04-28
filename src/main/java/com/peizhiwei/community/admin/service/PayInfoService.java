@@ -1,6 +1,7 @@
 package com.peizhiwei.community.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -44,4 +45,17 @@ public interface PayInfoService {
 	 * @param listpayInfoId
 	 */
 	void checkdelete(int[] listpayInfoId);
+	/**
+	 * 根据缴费项目查询缴费信息
+	 * @param payTypeName
+	 * @return
+	 */
+	Pager<PayInfo> selectpayinfoaccordingpaytypename(int page,int size,String payTypeName);
+	/**
+	 * 根据年月查询缴费信息
+	 * @param params
+	 * @param payInfoStartTime
+	 * @return
+	 */
+	Pager<PayInfo> selectpayinfoaccordingpayintostarttime(int page,int size,String year,String month);
 }

@@ -17,8 +17,8 @@
             <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;楼房信息管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;楼栋信息</span></h5>
         </div>
         <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
-            <h4>查询条件</h4><hr>
-            <form class="form-inline" style="padding-bottom: 25px;">
+            <h4 data-toggle="collapse" href="#collapseExample">查询条件</h4><hr>
+            <form id="collapseExample" class="form-inline collapse" style="padding-bottom: 25px;">
                 <input type="text" class="form-control" id="likebuildnumber" placeholder="请输入楼栋编号">
                 <button type="button" class="btn btn-default" @click="getbuildinfooflikebuildnumber()">查询</button>
             </form>
@@ -527,7 +527,7 @@
 						type:'POST',
 						dataType:'JSON',
 						url:'/community/buildinginfo/selectlikebuildinginfo',
-						data:{"buildNumber":"%"+buildNumber+"%","page":page,"size":size},
+						data:{"buildNumber":buildNumber,"page":page,"size":size},
 						success:function(result){
 							app.infolist = result.rows;
 							app.total = result.total;

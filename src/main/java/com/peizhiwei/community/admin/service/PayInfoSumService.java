@@ -1,7 +1,7 @@
 package com.peizhiwei.community.admin.service;
 
 import java.util.List;
-
+import java.util.Map;
 
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.admin.entity.PayInfoSum;
@@ -43,4 +43,14 @@ public interface PayInfoSumService {
 	 * @param listpayinfodetails
 	 */
 	void batchpaid(List<PayInfoDetails> listpayinfodetails);
+	/**
+	 * 查询所有欠费的缴费汇总信息
+	 * @return
+	 */
+	Pager<PayInfoSum> selectpayinfodetailsaccordingispaid(int page,int size);
+	/**
+	 * 查询所有不欠费的缴费汇总信息
+	 * @return
+	 */
+	Pager<PayInfoSum> selectpayinfodetailsaccordingnotpaid(int page,int size);
 }

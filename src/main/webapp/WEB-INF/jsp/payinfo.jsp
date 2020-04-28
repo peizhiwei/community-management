@@ -16,6 +16,22 @@
             <h1>缴费信息</h1>
             <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;缴费管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;缴费信息</span></h5>
         </div>
+        <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
+            <h4 data-toggle="collapse" href="#collapseExample">筛选</h4><hr>
+            <form id="collapseExample" class="form-inline collapse" style="padding-bottom: 25px;">
+            	<select required="required" class="form-control" id="screen" @click="screen()">
+            		<option value="0">请选择筛选条件</option>
+					<option value="1">缴费项目</option>
+					<option value="2">发布时间</option>
+				</select>
+				<select v-if="selectstate==1" required="required" class="form-control" id="selectpayname" v-for="list in listpaytype">
+					<option>{{list.payTypeName}}</option>
+				</select>
+				<input type="text" v-if="selectstate==2" id="selectTime" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy年MM月'})" class="form-control"/>
+                <button type="button" class="btn btn-default" v-if="selectstate==0" disabled="disabled">查询</button>
+                <button type="button" class="btn btn-default" @click="getpayintoselect()" v-else>查询</button>
+            </form>
+        </div>
         <div class="row">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#addpaymethod">发布缴费信息</button>
 			<button type="button" class="btn btn-danger" @click="checkdelete()">批量删除</button>
@@ -176,6 +192,7 @@
 				changeid:0,//点击修改按钮的那一项id
 				checked:false,
     			arr:[],
+    			selectstate:0,//0,查询按钮灰色状态，1，缴费类别，2发布时间
     			page:1,//当前页
 				size:6,//每页记录条数
 				total:0,//记录总数
@@ -252,6 +269,13 @@
 							app.page=1;
 							app.get();
 						}
+					}else{
+						if(app.likepage==1){
+							alert("已经是第一页了！");
+						}else{
+							app.likepage=1;
+							app.getpayintoselect();
+						}
 					}
 				},
 				//点击上一页
@@ -263,6 +287,13 @@
 							app.page -=1;
 							app.get();
 						}
+					}else{
+						if(app.likepage==1){
+							alert("已经是第一页了！");
+						}else{
+							app.likepage-=1;
+							app.getpayintoselect();
+						}
 					}
 					
 				},
@@ -271,6 +302,9 @@
 					if(app.state==1){
 						app.page=n;
 						app.get();
+					}else{
+						app.likepage=n;
+						app.getpayintoselect();
 					}
 				},
 				//点击下一页
@@ -281,6 +315,13 @@
 						}else{
 							app.page+=1;
 							app.get();
+						}
+					}else{
+						if(app.likepage==app.pagetotal){
+							alert("已经是最后一页了！");
+						}else{
+							app.likepage+=1;
+							app.getpayintoselect();
 						}
 					}
 				},
@@ -304,6 +345,25 @@
 								}
 							}
 							app.get();
+						}
+					}else{
+						if(app.likepage==app.pagetotal){
+							alert("已经是最后一页了！");
+						}else{
+							app.likepage=app.pagetotal;
+							if(app.likepage%5!=0&&(app.likepage-1)%5!=0){
+								//跳转到最后一页，可能并不是完整的五个页码
+								app.begin=(Math.floor(app.likepage/5))*5+1;//例如：第七页，从第六页开始查询
+								app.end=app.likepage;
+								var current=app.begin;
+								app.pageRange=[];
+								for(var i=0;i<=app.end-app.begin;i++){
+									if(current>app.pagetotal)break;
+									app.pageRange[i]=current;
+									current++;
+								}
+							}
+							app.getpayintoselect();
 						}
 					}
 				},
@@ -400,6 +460,96 @@
     							app.get();
     						}
     					});
+                	}
+                },
+                //筛选条件下拉框
+                screen : function(){
+                	var state=$("#screen").val();
+                	if(state==0) app.selectstate=0;
+                	else if(state==1) app.selectstate=1;
+                	else if(state==2) app.selectstate=2;
+                },
+                //查询
+                getpayintoselect : function(){
+                	if(app.selectstate==1){
+                		app.state=0;
+                		var payTypeName = $("#selectpayname").val();
+                		var page = this.likepage;
+    					var size = this.likesize;
+                		$.ajax({
+    						type:'POST',
+    						dataType:'JSON',
+    						url:'/community/payinfo/selectpayinfoaccordingpaytypename',
+    						data:{"payTypeName":payTypeName,"page":page,"size":size},
+    						success:function(result){
+    							app.listpayinfo = result.rows;
+    							app.total = result.total;
+    							app.pagetotal=Math.ceil(app.total/app.likesize);//向上取整
+    							if((app.likepage-1)%5==0){//下一页，到6,11,16,……页
+    								app.begin=app.likepage;
+    								app.end = app.likepage+4;
+    								var current=app.begin;
+    								app.pageRange=[];
+    								for(var i=0;i<=app.end-app.begin;i++){
+    									if(current>app.pagetotal)break;
+    									app.pageRange[i]=current;
+    									current++;
+    								}
+    							}else if(app.likepage%5==0){//上一页，从6，11,16到5,10,15……页
+    								app.begin=app.likepage-4;
+    								app.end=app.likepage;
+    								var current=app.begin;
+    								app.pageRange=[];
+    								for(var i=0;i<=app.end-app.begin;i++){
+    									app.pageRange[i]=current;
+    									current++;
+    								}
+    							}
+    							
+    						}
+    					});
+                	}else if(app.selectstate==2){
+                		if($("#selectTime").val()==''){
+                			alert("请选择时间");
+                		}else{
+                			app.state=0;
+                    		var payInfoStartTime = $("#selectTime").val();
+                    		var page = this.likepage;
+        					var size = this.likesize;
+                    		$.ajax({
+        						type:'POST',
+        						dataType:'JSON',
+        						url:'/community/payinfo/selectpayinfoaccordingpayintostarttime',
+        						data:{"payInfoStartTime":payInfoStartTime,"page":page,"size":size},
+        						success:function(result){
+        							app.listpayinfo = result.rows;
+        							app.total = result.total;
+        							app.pagetotal=Math.ceil(app.total/app.likesize);//向上取整
+        							if((app.likepage-1)%5==0){//下一页，到6,11,16,……页
+        								app.begin=app.likepage;
+        								app.end = app.likepage+4;
+        								var current=app.begin;
+        								app.pageRange=[];
+        								for(var i=0;i<=app.end-app.begin;i++){
+        									if(current>app.pagetotal)break;
+        									app.pageRange[i]=current;
+        									current++;
+        								}
+        							}else if(app.likepage%5==0){//上一页，从6，11,16到5,10,15……页
+        								app.begin=app.likepage-4;
+        								app.end=app.likepage;
+        								var current=app.begin;
+        								app.pageRange=[];
+        								for(var i=0;i<=app.end-app.begin;i++){
+        									app.pageRange[i]=current;
+        									current++;
+        								}
+        							}
+        							
+        						}
+        					});
+                		}
+                		
                 	}
                 }
 			},

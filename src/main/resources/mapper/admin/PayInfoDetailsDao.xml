@@ -74,4 +74,88 @@
 	<delete id="deletepayinfodetailsofowner" parameterType="int">
 		delete from pay_info_details where owner_id=#{ownerId}
 	</delete>
+	<!-- 根据缴费项目查询缴费信息 -->
+	<select id="selectpayinfoaccordingpaytypename" resultType="com.peizhiwei.community.admin.entity.PayInfoDetails">
+		SELECT i.*,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_name as `houseOwner.ownerName`,hi.house_number as `houseOwner.houseInfo.houseNumber`,
+			   t.pay_type_name as `payInfo.payType.payTypeName`,pi.pay_info_money as `payInfo.payInfoMoney`,pi.pay_info_start_time as `payInfo.payInfoStartTime`,
+			   pi.pay_info_end_time as `payInfo.payInfoEndTime`,
+			   m.method_name as `payMethod.methodName`
+		FROM pay_info_details i
+		LEFT JOIN house_owner h ON h.owner_id=i.owner_id
+		LEFT JOIN house_info hi ON h.house_id=hi.house_id
+		LEFT JOIN building_info b ON b.build_id=hi.build_id
+		LEFT JOIN pay_method m ON m.method_id=i.method_id
+		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
+		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
+		WHERE pay_type_name=#{payTypeName}
+		order by i.pay_state,i.pay_info_id,hi.house_number
+		limit #{params.page},#{params.size}
+	</select>
+	<select id="likecount" resultType="long">
+		SELECT count(1)
+		FROM pay_info_details i
+		LEFT JOIN house_owner h ON h.owner_id=i.owner_id
+		LEFT JOIN house_info hi ON h.house_id=hi.house_id
+		LEFT JOIN building_info b ON b.build_id=hi.build_id
+		LEFT JOIN pay_method m ON m.method_id=i.method_id
+		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
+		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
+		WHERE pay_type_name=#{payTypeName}
+	</select>
+	<!-- 根据年月查询缴费信息 -->
+	<select id="selectpayinfoaccordingpayintostarttime" resultType="com.peizhiwei.community.admin.entity.PayInfoDetails">
+		SELECT i.*,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_name as `houseOwner.ownerName`,hi.house_number as `houseOwner.houseInfo.houseNumber`,
+			   t.pay_type_name as `payInfo.payType.payTypeName`,pi.pay_info_money as `payInfo.payInfoMoney`,pi.pay_info_start_time as `payInfo.payInfoStartTime`,
+			   pi.pay_info_end_time as `payInfo.payInfoEndTime`,
+			   m.method_name as `payMethod.methodName`
+		FROM pay_info_details i
+		LEFT JOIN house_owner h ON h.owner_id=i.owner_id
+		LEFT JOIN house_info hi ON h.house_id=hi.house_id
+		LEFT JOIN building_info b ON b.build_id=hi.build_id
+		LEFT JOIN pay_method m ON m.method_id=i.method_id
+		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
+		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
+		WHERE YEAR(pay_info_start_time)=#{year} AND MONTH(pay_info_start_time)=#{month}
+		order by i.pay_state,i.pay_info_id,hi.house_number
+		limit #{params.page},#{params.size}
+	</select>
+	<select id="likecount2" resultType="long">
+		SELECT count(1)
+		FROM pay_info_details i
+		LEFT JOIN house_owner h ON h.owner_id=i.owner_id
+		LEFT JOIN house_info hi ON h.house_id=hi.house_id
+		LEFT JOIN building_info b ON b.build_id=hi.build_id
+		LEFT JOIN pay_method m ON m.method_id=i.method_id
+		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
+		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
+		WHERE YEAR(pay_info_start_time)=#{year} AND MONTH(pay_info_start_time)=#{month}
+	</select>
+	<!-- 根据缴费状态查询缴费详情 -->
+	<select id="selectpayinfoaccordingpaystate" resultType="com.peizhiwei.community.admin.entity.PayInfoDetails">
+		SELECT i.*,build_number as `houseOwner.houseInfo.buildInfo.buildNumber`,house_unit as `houseOwner.houseInfo.houseUnit`,h.owner_name as `houseOwner.ownerName`,hi.house_number as `houseOwner.houseInfo.houseNumber`,
+			   t.pay_type_name as `payInfo.payType.payTypeName`,pi.pay_info_money as `payInfo.payInfoMoney`,pi.pay_info_start_time as `payInfo.payInfoStartTime`,
+			   pi.pay_info_end_time as `payInfo.payInfoEndTime`,
+			   m.method_name as `payMethod.methodName`
+		FROM pay_info_details i
+		LEFT JOIN house_owner h ON h.owner_id=i.owner_id
+		LEFT JOIN house_info hi ON h.house_id=hi.house_id
+		LEFT JOIN building_info b ON b.build_id=hi.build_id
+		LEFT JOIN pay_method m ON m.method_id=i.method_id
+		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
+		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
+		WHERE pay_state=#{payState}
+		order by i.pay_state,i.pay_info_id,hi.house_number
+		limit #{params.page},#{params.size}
+	</select>
+	<select id="likecount3" resultType="long">
+		SELECT count(1)
+		FROM pay_info_details i
+		LEFT JOIN house_owner h ON h.owner_id=i.owner_id
+		LEFT JOIN house_info hi ON h.house_id=hi.house_id
+		LEFT JOIN building_info b ON b.build_id=hi.build_id
+		LEFT JOIN pay_method m ON m.method_id=i.method_id
+		LEFT JOIN pay_info pi ON pi.pay_info_id=i.pay_info_id
+		LEFT JOIN pay_type t ON t.pay_type_id=pi.pay_type_id
+		WHERE pay_state=#{payState}
+	</select>
 </mapper>

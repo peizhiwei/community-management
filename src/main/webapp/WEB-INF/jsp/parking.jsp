@@ -17,8 +17,8 @@
             <h5><a href="#" onclick="top.location.href ='/community/admin/adminback'">首页&nbsp;&nbsp;</a>/<span>&nbsp;&nbsp;业主信息管理&nbsp;&nbsp;/</span><span>&nbsp;&nbsp;停车位</span></h5>
         </div>
         <div class="row" style="background-color: white;padding-left: 10px;margin-bottom: 20px;">
-            <h4>查询条件</h4><hr>
-            <form class="form-inline" style="padding-bottom: 25px;">
+            <h4 data-toggle="collapse" href="#collapseExample">查询条件</h4><hr>
+            <form id="collapseExample" class="form-inline collapse" style="padding-bottom: 25px;">
             	<input type="text" class="form-control" id="likeparkingnumber" placeholder="请输入车位号">
                 <input type="text" class="form-control" id="likeownername" placeholder="请输入业主姓名">
                 <input type="text" class="form-control" id="likebuildnumber" placeholder="请输入楼栋编号">

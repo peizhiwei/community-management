@@ -82,4 +82,32 @@ public class PayInfoServiceImpl implements PayInfoService {
 		payinfodao.batchdeletepaydetailsofpayinfo(listpayInfoId);//批量删除缴费详情
 		payinfodao.checkdelete(listpayInfoId);//批量删除缴费信息
 	}
+	/**
+	 * 根据缴费项目查询缴费信息
+	 */
+	@Override
+	public Pager<PayInfo> selectpayinfoaccordingpaytypename(int page,int size,String payTypeName) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<PayInfo> listpayinfo = payinfodao.selectpayinfoaccordingpaytypename(params,payTypeName);
+		Pager<PayInfo> pager = new Pager<PayInfo>();
+		pager.setRows(listpayinfo);
+		pager.setTotal(payinfodao.likecount(payTypeName));
+		return pager;
+	}
+	/**
+	 * 根据年月查询缴费信息
+	 */
+	@Override
+	public Pager<PayInfo> selectpayinfoaccordingpayintostarttime(int page, int size, String year,String month) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<PayInfo> listpayinfo = payinfodao.selectpayinfoaccordingpayintostarttime(params, year, month);
+		Pager<PayInfo> pager = new Pager<PayInfo>();
+		pager.setRows(listpayinfo);
+		pager.setTotal(payinfodao.likecount2(year, month));
+		return pager;
+	}
 }

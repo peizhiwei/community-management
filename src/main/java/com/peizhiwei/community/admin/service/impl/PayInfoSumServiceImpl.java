@@ -109,4 +109,32 @@ public class PayInfoSumServiceImpl implements PayInfoSumService {
 	public void batchpaid(List<PayInfoDetails> listpayinfodetails) {
 		payinfosumdao.batchpaid(listpayinfodetails);
 	}
+	/**
+	 * 查询所有欠费的缴费汇总信息
+	 */
+	@Override
+	public Pager<PayInfoSum> selectpayinfodetailsaccordingispaid(int page, int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<PayInfoSum> listpayinfosum = payinfosumdao.selectpayinfodetailsaccordingispaid(params);
+		Pager<PayInfoSum> pager = new Pager<PayInfoSum>();
+		pager.setRows(listpayinfosum);
+		pager.setTotal(payinfosumdao.likecount());
+		return pager;
+	}
+	/**
+	 * 查询所有不欠费的缴费汇总信息
+	 */
+	@Override
+	public Pager<PayInfoSum> selectpayinfodetailsaccordingnotpaid(int page, int size) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("page", (page-1)*size);
+		params.put("size", size);
+		List<PayInfoSum> listpayinfosum = payinfosumdao.selectpayinfodetailsaccordingnotpaid(params);
+		Pager<PayInfoSum> pager = new Pager<PayInfoSum>();
+		pager.setRows(listpayinfosum);
+		pager.setTotal(payinfosumdao.likecount2());
+		return pager;
+	}
 }

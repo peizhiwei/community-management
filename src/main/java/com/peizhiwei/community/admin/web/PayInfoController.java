@@ -195,4 +195,34 @@ public class PayInfoController {
 		rs.setMsg("已全部删除！");
 		return rs;
 	}
+	/**
+	 * 根据缴费项目查询缴费信息
+	 * @param page
+	 * @param size
+	 * @param payTypeName
+	 * @return
+	 */
+	@RequestMapping("/selectpayinfoaccordingpaytypename")
+	@ResponseBody
+	public Pager<PayInfo> selectpayinfoaccordingpaytypename(int page,int size,String payTypeName){
+		Pager<PayInfo> listpayinfo = payinfoservice.selectpayinfoaccordingpaytypename(page,size,payTypeName);
+		return listpayinfo;
+	}
+	/**
+	 * 根据年月查询缴费信息
+	 * @param page
+	 * @param size
+	 * @param payInfoStartTime
+	 * @return
+	 */
+	@RequestMapping("/selectpayinfoaccordingpayintostarttime")
+	@ResponseBody
+	public Pager<PayInfo> selectpayinfoaccordingpayintostarttime(@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size,
+			@RequestParam(value = "payInfoStartTime",required = false)String payInfoStartTime){
+		String year = payInfoStartTime.substring(0, payInfoStartTime.indexOf("年"));
+		String month = payInfoStartTime.substring(payInfoStartTime.indexOf("年")+1, payInfoStartTime.indexOf("月"));
+		Pager<PayInfo> listpayinfo = payinfoservice.selectpayinfoaccordingpayintostarttime(page, size, year, month);
+		return listpayinfo;
+	}
 }

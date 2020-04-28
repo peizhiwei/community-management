@@ -2,7 +2,11 @@ package com.peizhiwei.community.admin.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.peizhiwei.community.admin.entity.PayInfo;
 import com.peizhiwei.community.admin.entity.PayInfoDetails;
 import com.peizhiwei.community.util.Pager;
 
@@ -51,4 +55,24 @@ public interface PayInfoDetailsService {
 	 * @param listpayinfodetails
 	 */
 	void batchpaid(List<PayInfoDetails> listpayinfodetails);
+	/**
+	 * 根据缴费项目查询缴费信息
+	 * @param payTypeName
+	 * @return
+	 */
+	Pager<PayInfoDetails> selectpayinfoaccordingpaytypename(int page,int size,String payTypeName);
+	/**
+	 * 根据年月查询缴费信息
+	 * @param params
+	 * @param payInfoStartTime
+	 * @return
+	 */
+	Pager<PayInfoDetails> selectpayinfoaccordingpayintostarttime(int page,int size,String year,String month);
+	/**
+	 * 根据缴费状态查询缴费详情
+	 * @param params
+	 * @param payState
+	 * @return
+	 */
+	Pager<PayInfoDetails> selectpayinfoaccordingpaystate(int page,int size,String payState);
 }

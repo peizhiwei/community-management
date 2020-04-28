@@ -51,4 +51,16 @@ public interface PayInfoSumDao {
 	 * @param listpayinfodetails
 	 */
 	void batchpaid(@Param("listpayinfodetails") List<PayInfoDetails> listpayinfodetails);
+	/**
+	 * 查询所有欠费的缴费汇总信息
+	 * @return
+	 */
+	List<PayInfoSum> selectpayinfodetailsaccordingispaid(Map<String, Object> params);
+	long likecount();
+	/**
+	 * 查询所有不欠费的缴费汇总信息
+	 * @return
+	 */
+	List<PayInfoSum> selectpayinfodetailsaccordingnotpaid(Map<String, Object> params);
+	long likecount2();
 }

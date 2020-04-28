@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.peizhiwei.community.admin.entity.HouseOwner;
@@ -107,5 +108,26 @@ public class PayInfoSumController {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rs;
+	}
+	/**
+	 * 根据欠费情况查询缴费汇总信息
+	 * @param page
+	 * @param size
+	 * @param payState
+	 * @return
+	 */
+	@RequestMapping("/selectpayinfodetailsaccordingispaid")
+	@ResponseBody
+	public Pager<PayInfoSum> selectpayinfodetailsaccordingispaid(
+			@RequestParam(value = "page",required = false)int page,
+			@RequestParam(value = "size",required = false)int size,
+			@RequestParam(value = "payState",required = false)int payState){
+		Pager<PayInfoSum> listpayinfosum = new Pager<PayInfoSum>();
+		if(payState==0) {//查询欠费汇总信息
+			listpayinfosum=payinfosumservice.selectpayinfodetailsaccordingispaid(page, size);
+		}else if(payState==1) {//查询不欠费汇总信息
+			listpayinfosum = payinfosumservice.selectpayinfodetailsaccordingnotpaid(page, size);
+		}
+		return listpayinfosum;
 	}
 }
