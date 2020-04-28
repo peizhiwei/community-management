@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.Repair;
-import com.peizhiwei.community.util.Pager;
 
 public interface RepairDao {
 	/**

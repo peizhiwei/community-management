@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.peizhiwei.community.admin.dao.ComplaintDao;
 import com.peizhiwei.community.admin.entity.Complaint;
-import com.peizhiwei.community.admin.entity.Parking;
 import com.peizhiwei.community.admin.service.ComplaintService;
 import com.peizhiwei.community.util.Pager;
 

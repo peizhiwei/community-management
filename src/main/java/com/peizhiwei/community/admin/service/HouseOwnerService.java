@@ -1,9 +1,6 @@
 package com.peizhiwei.community.admin.service;
 
 import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
 
 import com.peizhiwei.community.admin.entity.HouseOwner;
 import com.peizhiwei.community.util.Pager;

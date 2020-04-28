@@ -7,8 +7,6 @@ package com.peizhiwei.community.admin.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.peizhiwei.community.admin.entity.HouseInfo;
 import com.peizhiwei.community.admin.entity.HouseType;
 import com.peizhiwei.community.util.Pager;
